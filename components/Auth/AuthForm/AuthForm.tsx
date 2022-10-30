@@ -1,9 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 import Select from '@components/Generic/Select';
-import scss from './AuthForm.module.scss';
-import { AuthFormProps } from './types';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useMutation } from '@apollo/client';
+import { LOGIN_MUTATION, SIGNUP_MUTATION } from '@gql/mutations';
+import { AuthFormProps, AuthFormInputs, SignupInputs } from './types';
 import { getFormTypeConfig } from './helpers';
+import scss from './AuthForm.module.scss';
 
 const signupOptions = [
   { id: 'RECRUITER', name: 'Recruiter' },
@@ -11,12 +14,45 @@ const signupOptions = [
 ];
 
 const AuthForm = ({ type }: AuthFormProps) => {
-  const signupHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<AuthFormInputs>();
+
+  const [loginAction] = useMutation(LOGIN_MUTATION);
+  const [signupAction] = useMutation(SIGNUP_MUTATION);
+
+  const signupHandler = async (data: AuthFormInputs) => {
+    const { passwordConfirmation, ...signupInput } = data as SignupInputs;
+    const {
+      data: { signup: result },
+    } = await signupAction({
+      variables: {
+        signupUserInput: {
+          ...signupInput,
+        },
+      },
+    });
+
+    console.log(result);
   };
 
-  const loginHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const loginHandler = async (data: AuthFormInputs) => {
+    const { email, password } = data;
+    const {
+      data: { login: result },
+    } = await loginAction({
+      variables: {
+        loginUserInput: {
+          email,
+          password,
+        },
+      },
+    });
+
+    console.log(result);
   };
 
   const {
@@ -30,6 +66,10 @@ const AuthForm = ({ type }: AuthFormProps) => {
     loginHandler,
     signupHandler,
   })[type];
+
+  const onSubmit: SubmitHandler<AuthFormInputs> = (data) => {
+    formHandler(data);
+  };
 
   return (
     <section className={scss.formRoot}>
@@ -48,11 +88,15 @@ const AuthForm = ({ type }: AuthFormProps) => {
                   action="#"
                   method="POST"
                   className="space-y-6"
-                  onSubmit={formHandler}
+                  onSubmit={handleSubmit(onSubmit)}
                 >
                   {type === 'signup' && (
                     <div className="space-y-2">
-                      <Select options={signupOptions} label="Sign up as" />
+                      <Select
+                        options={signupOptions}
+                        label="Sign up as"
+                        control={control}
+                      />
                     </div>
                   )}
                   <div>
@@ -65,12 +109,17 @@ const AuthForm = ({ type }: AuthFormProps) => {
                     <div className="mt-1">
                       <input
                         id="email"
-                        name="email"
                         type="email"
                         autoComplete="email"
-                        required
                         className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                        required
+                        {...register('email', { required: true })}
                       />
+                      {errors.email && (
+                        <div className="text-red-500 mt-1 text-sm">
+                          This field is required
+                        </div>
+                      )}
                     </div>
                   </div>
                   {type === 'signup' && (
@@ -83,12 +132,17 @@ const AuthForm = ({ type }: AuthFormProps) => {
                       </label>
                       <div className="mt-1">
                         <input
-                          id="firstName"
-                          name="firstName"
+                          id="firstname"
                           type="text"
-                          required
                           className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                          required
+                          {...register('firstname', { required: true })}
                         />
+                        {(errors as any).firstname && (
+                          <div className="text-red-500 mt-1 text-sm">
+                            This field is required
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -102,12 +156,17 @@ const AuthForm = ({ type }: AuthFormProps) => {
                     <div className="mt-1">
                       <input
                         id="password"
-                        name="password"
                         type="password"
                         autoComplete="current-password"
-                        required
                         className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                        required
+                        {...register('password', { required: true })}
                       />
+                      {errors.password && (
+                        <div className="text-red-500 mt-1 text-sm">
+                          This field is required
+                        </div>
+                      )}
                     </div>
                   </div>
                   {type === 'signup' && (
@@ -121,12 +180,19 @@ const AuthForm = ({ type }: AuthFormProps) => {
                       <div className="mt-1">
                         <input
                           id="password-confirm"
-                          name="password-confirm"
                           type="password"
                           autoComplete="current-password"
-                          required
                           className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                          required
+                          {...register('passwordConfirmation', {
+                            required: true,
+                          })}
                         />
+                        {(errors as any).passwordConfirmation && (
+                          <div className="text-red-500 mt-1 text-sm">
+                            This field is required
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

@@ -2,9 +2,24 @@ export type AuthFormProps = {
   type: 'login' | 'signup';
 };
 
+export type LoginInputs = {
+  email: string;
+  password: string;
+};
+
+export type SignupInputs = {
+  email: string;
+  firstname: string;
+  password: string;
+  passwordConfirmation: string;
+  type: 'RECRUITER' | 'CANDIDATE';
+};
+
+export type AuthFormInputs = LoginInputs | SignupInputs;
+
 export type FormTypeConfigProps = {
-  loginHandler: (event: React.FormEvent<HTMLFormElement>) => void;
-  signupHandler: (event: React.FormEvent<HTMLFormElement>) => void;
+  loginHandler: (inputs: AuthFormInputs) => void;
+  signupHandler: (inputs: AuthFormInputs) => void;
 };
 
 export type FormTypeFields = {
@@ -13,7 +28,7 @@ export type FormTypeFields = {
   footerText: string;
   footerLinkText: string;
   footerLink: string;
-  formHandler: (event: React.FormEvent<HTMLFormElement>) => void;
+  formHandler: (inputs: AuthFormInputs) => void;
 };
 
 export type FormTypeConfig = {
