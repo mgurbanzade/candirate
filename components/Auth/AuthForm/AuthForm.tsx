@@ -32,9 +32,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
 
   const signupHandler = async (data: AuthFormInputs) => {
     const { passwordConfirmation, ...signupInput } = data as SignupInputs; // eslint-disable-line @typescript-eslint/no-unused-vars
-    const {
-      data: { signup: result },
-    } = await signupAction({
+    const res = await signupAction({
       variables: {
         signupUserInput: {
           ...signupInput,
@@ -42,12 +40,14 @@ const AuthForm = ({ type }: AuthFormProps) => {
       },
     });
 
-    if (result.user.firstname) {
+    const firstname = res.data?.signup.user.firstname;
+
+    if (firstname) {
       router.push('/login');
       setNotification({
         isVisible: true,
         type: 'success',
-        title: `Welcome, ${result.user.firstname}!`,
+        title: `Welcome, ${firstname}!`,
         description: 'Please sign in to continue.',
       });
     }

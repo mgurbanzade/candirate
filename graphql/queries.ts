@@ -1,10 +1,10 @@
-import { gql } from '@apollo/client';
+import { graphql } from './types';
 
-export const GET_USERS = gql`
+export const GET_USERS = graphql(`
   query GetUsers {
     getAllUsers {
       firstname
       type
     }
   }
-`;
+`);

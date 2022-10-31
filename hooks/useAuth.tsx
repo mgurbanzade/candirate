@@ -13,7 +13,7 @@ type AuthContextType = {
   loginAction: (data: AuthFormInputs) => void;
   signOut: () => void;
   isSignedIn: () => boolean;
-  setAuthToken: (token: string) => void;
+  setAuthToken: (token: string | null) => void;
   createApolloClient: () => ApolloClient<any>;
 };
 
@@ -32,7 +32,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 const useProvideAuth = () => {
-  const [authToken, setAuthToken] = useState(null);
+  const [authToken, setAuthToken] = useState<string | null>(null);
   const router = useRouter();
 
   const isSignedIn = () => (authToken ? true : false);
