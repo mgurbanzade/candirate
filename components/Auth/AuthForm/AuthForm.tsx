@@ -1,11 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import Select from '@components/Generic/Select';
+import { useRouter } from 'next/router';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import Select from '@components/Generic/Select';
+import { useAuth, AuthContextType } from '@hooks/useAuth';
+import useNotification from '@hooks/useNotification';
 import { useMutation } from '@apollo/client';
-import { LOGIN_MUTATION, SIGNUP_MUTATION } from '@gql/mutations';
+import { SIGNUP_MUTATION } from '@gql/mutations';
 import { AuthFormProps, AuthFormInputs, SignupInputs } from './types';
 import { getFormTypeConfig } from './helpers';
+
 import scss from './AuthForm.module.scss';
 
 const signupOptions = [
@@ -14,6 +18,9 @@ const signupOptions = [
 ];
 
 const AuthForm = ({ type }: AuthFormProps) => {
+  const router = useRouter();
+  const { setNotification } = useNotification();
+  const { loginAction } = useAuth() as AuthContextType;
   const {
     register,
     handleSubmit,
@@ -21,11 +28,10 @@ const AuthForm = ({ type }: AuthFormProps) => {
     formState: { errors },
   } = useForm<AuthFormInputs>();
 
-  const [loginAction] = useMutation(LOGIN_MUTATION);
   const [signupAction] = useMutation(SIGNUP_MUTATION);
 
   const signupHandler = async (data: AuthFormInputs) => {
-    const { passwordConfirmation, ...signupInput } = data as SignupInputs;
+    const { passwordConfirmation, ...signupInput } = data as SignupInputs; // eslint-disable-line @typescript-eslint/no-unused-vars
     const {
       data: { signup: result },
     } = await signupAction({
@@ -36,23 +42,15 @@ const AuthForm = ({ type }: AuthFormProps) => {
       },
     });
 
-    console.log(result);
-  };
-
-  const loginHandler = async (data: AuthFormInputs) => {
-    const { email, password } = data;
-    const {
-      data: { login: result },
-    } = await loginAction({
-      variables: {
-        loginUserInput: {
-          email,
-          password,
-        },
-      },
-    });
-
-    console.log(result);
+    if (result.user.firstname) {
+      router.push('/login');
+      setNotification({
+        isVisible: true,
+        type: 'success',
+        title: `Welcome, ${result.user.firstname}!`,
+        description: 'Please sign in to continue.',
+      });
+    }
   };
 
   const {
@@ -63,7 +61,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
     footerLink,
     formHandler,
   } = getFormTypeConfig({
-    loginHandler,
+    loginHandler: loginAction,
     signupHandler,
   })[type];
 

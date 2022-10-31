@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint \"{components,graphql,pages,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{components,graphql,pages,hooks,test}/**/*.ts\" --fix",
     "format": "prettier --write \"pages/**/*.ts\" \"components/**/*.ts\" \"graphql/**/*.ts\""
   },
   "dependencies": {
