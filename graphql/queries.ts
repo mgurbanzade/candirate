@@ -8,3 +8,15 @@ export const GET_USERS = graphql(`
     }
   }
 `);
+
+export const GET_CURRENT_USER = graphql(`
+  query GetCurrentUser {
+    getCurrentUser {
+      user {
+        firstname
+        email
+        type
+      }
+    }
+  }
+`);
