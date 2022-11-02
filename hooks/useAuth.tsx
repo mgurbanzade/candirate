@@ -47,8 +47,9 @@ const useProvideAuth = () => {
 
   const createApolloClient = () => {
     const link = new HttpLink({
-      uri: 'http://localhost:3000/graphql',
+      uri: 'http://localhost:4000/graphql',
       headers: getAuthHeaders(),
+      credentials: 'include',
     });
 
     return new ApolloClient({
