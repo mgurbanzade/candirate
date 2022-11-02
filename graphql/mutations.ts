@@ -4,6 +4,7 @@ export const LOGIN_MUTATION = graphql(`
   mutation Login($loginUserInput: LoginUserInput!) {
     login(loginUserInput: $loginUserInput) {
       accessToken
+      refreshToken
       user {
         firstname
       }
