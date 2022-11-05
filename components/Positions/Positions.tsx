@@ -1,4 +1,5 @@
 import PositionsHeader from './PositionsHeader';
+import PositionsList from './PositionsList';
 
 const Positions = () => {
   return (
@@ -14,7 +15,10 @@ const Positions = () => {
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="px-4 py-8 sm:px-0">
             <div className="h-96 rounded-lg">
-              <PositionsHeader />
+              <div className="overflow-hidden bg-white shadow sm:rounded-md">
+                <PositionsHeader />
+                <PositionsList />
+              </div>
             </div>
           </div>
         </div>
