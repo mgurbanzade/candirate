@@ -3,20 +3,20 @@ import { AuthProvider } from '@hooks/useAuth';
 import Layout from '@components/Layout';
 import Notification from '@components/Notification';
 import { NotificationProvider } from '@hooks/useNotification';
-import '../styles/global.css';
 import { SessionProvider } from '@hooks/useSession';
+import '../styles/global.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <AuthProvider>
-        <SessionProvider>
-          <NotificationProvider>
+    <AuthProvider>
+      <SessionProvider>
+        <NotificationProvider>
+          <Layout>
             <Component {...pageProps} />
-            <Notification />
-          </NotificationProvider>
-        </SessionProvider>
-      </AuthProvider>
-    </Layout>
+          </Layout>
+          <Notification />
+        </NotificationProvider>
+      </SessionProvider>
+    </AuthProvider>
   );
 }
