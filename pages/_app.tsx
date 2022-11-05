@@ -5,15 +5,18 @@ import Notification from '@components/Notification';
 import { NotificationProvider } from '@hooks/useNotification';
 import { SessionProvider } from '@hooks/useSession';
 import '../styles/global.css';
+import { ModalProvider } from '@hooks/useModal';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <SessionProvider>
         <NotificationProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <ModalProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ModalProvider>
           <Notification />
         </NotificationProvider>
       </SessionProvider>
