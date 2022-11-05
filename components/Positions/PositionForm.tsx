@@ -1,4 +1,8 @@
+import useSession from '@hooks/useSession';
+import { useModal } from '@hooks/useModal';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useMutation } from '@apollo/client';
+import { CREATE_POSITION_MUTATION } from '@gql/mutations/positions';
 
 type PositionFromInputs = {
   title: string;
@@ -6,14 +10,30 @@ type PositionFromInputs = {
 };
 
 const PositionForm = () => {
+  const { setIsVisible } = useModal();
+  const [createPosition] = useMutation(CREATE_POSITION_MUTATION);
+  const { currentUser } = useSession();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<PositionFromInputs>();
 
-  const onSubmit: SubmitHandler<PositionFromInputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<PositionFromInputs> = async (data) => {
+    if (!currentUser?.id) return;
+
+    const res = await createPosition({
+      variables: {
+        createPositionInput: {
+          ...data,
+          postedById: currentUser.id,
+        },
+      },
+    });
+
+    if (res.data?.createPosition.title) {
+      setIsVisible(false);
+    }
   };
 
   return (

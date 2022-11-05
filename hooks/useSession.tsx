@@ -1,8 +1,9 @@
 import { createContext, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_CURRENT_USER, REFRESH } from '@gql/queries';
-import { LOGOUT_MUTATION } from '@gql/mutations';
+import { GET_CURRENT_USER } from '@gql/queries/users';
+import { REFRESH } from '@gql/queries/auth';
+import { LOGOUT_MUTATION } from '@gql/mutations/auth';
 import { User } from '@gql/types/graphql';
 
 type SessionContextType = {

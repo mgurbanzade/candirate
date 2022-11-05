@@ -1,4 +1,4 @@
-import { graphql } from './types';
+import { graphql } from '../types';
 
 export const GET_USERS = graphql(`
   query GetUsers {
@@ -13,18 +13,7 @@ export const GET_CURRENT_USER = graphql(`
   query GetCurrentUser {
     getCurrentUser {
       user {
-        firstname
-        email
-        type
-      }
-    }
-  }
-`);
-
-export const REFRESH = graphql(`
-  query Refresh {
-    refresh {
-      user {
+        id
         firstname
         email
         type

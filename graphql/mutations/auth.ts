@@ -1,4 +1,4 @@
-import { graphql } from './types';
+import { graphql } from '../types';
 
 export const LOGIN_MUTATION = graphql(`
   mutation Login($loginUserInput: LoginUserInput!) {

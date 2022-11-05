@@ -6,7 +6,7 @@ import {
   InMemoryCache,
   HttpLink,
 } from '@apollo/client';
-import { LOGIN_MUTATION } from '@gql/mutations';
+import { LOGIN_MUTATION } from '@gql/mutations/auth';
 import { AuthFormInputs } from '@components/Auth/AuthForm/types';
 
 type AuthContextType = {

@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAuth, AuthContextType } from '@hooks/useAuth';
 import { useMutation } from '@apollo/client';
-import { SIGNUP_MUTATION } from '@gql/mutations';
+import { SIGNUP_MUTATION } from '@gql/mutations/auth';
 import { AuthFormProps, AuthFormInputs, SignupInputs } from './types';
 import { getFormTypeConfig } from './helpers';
 
