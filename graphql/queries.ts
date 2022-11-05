@@ -20,3 +20,15 @@ export const GET_CURRENT_USER = graphql(`
     }
   }
 `);
+
+export const REFRESH = graphql(`
+  query Refresh {
+    refresh {
+      user {
+        firstname
+        email
+        type
+      }
+    }
+  }
+`);

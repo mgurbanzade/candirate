@@ -21,3 +21,11 @@ export const SIGNUP_MUTATION = graphql(`
     }
   }
 `);
+
+export const LOGOUT_MUTATION = graphql(`
+  mutation Logout {
+    logout {
+      success
+    }
+  }
+`);
