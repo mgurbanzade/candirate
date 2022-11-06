@@ -95,6 +95,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
                   {type === 'signup' && (
                     <div className="space-y-2">
                       <Select
+                        fieldName="type"
                         options={signupOptions}
                         label="Sign up as"
                         control={control}
