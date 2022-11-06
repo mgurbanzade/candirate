@@ -1,6 +1,6 @@
 import Modal from '@components/Generic/Modal';
 import { useModal } from '@hooks/useModal';
-import PositionForm from './PositionForm';
+import PositionModalForm from './PositionModalForm';
 
 const PositionsHeader = () => {
   const { setIsVisible } = useModal();
@@ -24,7 +24,7 @@ const PositionsHeader = () => {
         </div>
       </div>
       <Modal>
-        <PositionForm />
+        <PositionModalForm />
       </Modal>
     </div>
   );

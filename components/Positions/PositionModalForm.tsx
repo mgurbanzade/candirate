@@ -9,7 +9,7 @@ type PositionFromInputs = {
   description: string;
 };
 
-const PositionForm = () => {
+const PositionModalForm = () => {
   const { setIsVisible } = useModal();
   const [createPosition] = useMutation(CREATE_POSITION_MUTATION);
   const { currentUser } = useSession();
@@ -129,4 +129,4 @@ const PositionForm = () => {
   );
 };
 
-export default PositionForm;
+export default PositionModalForm;
