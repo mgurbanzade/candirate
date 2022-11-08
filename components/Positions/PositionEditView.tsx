@@ -1,14 +1,25 @@
+import debounce from 'lodash.debounce';
+import { useRef, useState } from 'react';
 import { Position } from '@gql/types/graphql';
-import { Control, UseFormRegister, FieldErrors } from 'react-hook-form';
+import { useAuth } from '@hooks/useAuth';
+import {
+  Control,
+  UseFormRegister,
+  UseFormSetValue,
+  FieldErrors,
+} from 'react-hook-form';
 
 import Select from '@components/Generic/Select';
 import FormErrorText from '@components/Generic/FormErrorText';
+import InputAutocomplete from '@components/Generic/InputAutocomplete';
+
+import { SEARCH_COMPANIES } from '@gql/queries/companies';
 
 type PositionFormInputs = {
   title: string;
   description: string;
-  salaryRate: string;
-  salaryRateType: string;
+  salaryRate: number;
+  salaryRateType: 'HOURLY' | 'MONTHLY' | 'YEARLY';
   companyId: number;
   type: 'FULLTIME' | 'PARTTIME';
 };
@@ -18,17 +29,18 @@ type PositionEditViewProps = {
   control: Control<PositionFormInputs, any>;
   register: UseFormRegister<PositionFormInputs>;
   errors: FieldErrors<PositionFormInputs>;
+  setValue: UseFormSetValue<PositionFormInputs>;
 };
 
 const salaryRateOptions = [
-  { id: 'hourly', name: 'Hourly' },
-  { id: 'monthly', name: 'Monthly' },
-  { id: 'yearly', name: 'Yearly' },
+  { id: 'HOURLY', name: 'Hourly' },
+  { id: 'MONTHLY', name: 'Monthly' },
+  { id: 'YEARLY', name: 'Yearly' },
 ];
 
 const employmentTypeOptions = [
-  { id: 'fulltime', name: 'Full time' },
-  { id: 'parttime', name: 'Part time' },
+  { id: 'FULLTIME', name: 'Full time' },
+  { id: 'PARTTIME', name: 'Part time' },
 ];
 
 const PositionEditView = ({
@@ -37,6 +49,30 @@ const PositionEditView = ({
   control,
   errors,
 }: PositionEditViewProps) => {
+  const [companies, setCompanies] = useState([]);
+  const auth = useAuth();
+
+  const debouncedSearch = useRef(
+    debounce(async (search: string) => {
+      if (!auth?.createApolloClient || !search.length) {
+        return setCompanies([]);
+      }
+
+      const client = auth.createApolloClient();
+
+      const result = await client.query({
+        query: SEARCH_COMPANIES as any,
+        variables: {
+          query: search,
+        },
+      });
+
+      if (result.data.searchCompanies) {
+        setCompanies(result.data.searchCompanies);
+      }
+    }, 300),
+  ).current;
+
   return (
     <section aria-labelledby="applicant-information-title">
       <div className="bg-white shadow sm:rounded-lg">
@@ -67,12 +103,13 @@ const PositionEditView = ({
             <div className="sm:col-span-1">
               <dt className="text-sm font-medium text-gray-500">Company</dt>
               <dd className="mt-1 text-sm text-gray-900">
-                <input
-                  type="text"
-                  id="companyId"
-                  className="block w-80 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  placeholder="ex: Amazon"
-                  {...register('companyId', { required: true })}
+                <InputAutocomplete
+                  fieldName="companyId"
+                  control={control}
+                  options={companies}
+                  onSearchHandler={debouncedSearch}
+                  dropdownClassnames="w-80"
+                  defaultValue={position?.company?.name || ''}
                 />
                 <FormErrorText field={errors.companyId} />
               </dd>
@@ -84,11 +121,12 @@ const PositionEditView = ({
                   <input
                     id="salaryRate"
                     type="number"
-                    min={0}
-                    defaultValue={position.salaryRate as number}
+                    min={1}
+                    defaultValue={position.salaryRate || 10}
                     className="block w-2/5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="ex: 3000"
+                    placeholder="ex: 30"
                     {...register('salaryRate', {
+                      valueAsNumber: true,
                       required: true,
                       min: 1,
                     })}

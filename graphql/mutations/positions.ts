@@ -8,3 +8,15 @@ export const CREATE_POSITION_MUTATION = graphql(`
     }
   }
 `);
+
+export const UPDATE_POSITION_MUTATION = graphql(`
+  mutation UpdatePosition(
+    $id: Int!
+    $updatePositionInput: UpdatePositionInput!
+  ) {
+    updatePosition(id: $id, updatePositionInput: $updatePositionInput) {
+      title
+      description
+    }
+  }
+`);

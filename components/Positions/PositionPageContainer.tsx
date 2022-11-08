@@ -1,33 +1,59 @@
 import { useState } from 'react';
-import { Position } from '@gql/types/graphql';
-import { useForm } from 'react-hook-form';
+import { useMutation, ApolloQueryResult } from '@apollo/client';
+import { Position, GetPositionQuery } from '@gql/types/graphql';
+import { UPDATE_POSITION_MUTATION } from '@gql/mutations/positions';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import PositionShowView from '@components/Positions/PositionShowView';
 import PositionEditView from '@components/Positions/PositionEditView';
 
 type PositionPageProps = {
   position: Position;
+  refetchPosition: (
+    variables?:
+      | Partial<{
+          id: number;
+        }>
+      | undefined,
+  ) => Promise<ApolloQueryResult<GetPositionQuery>>;
 };
 
 type PositionFormInputs = {
   title: string;
   description: string;
-  salaryRate: string;
-  salaryRateType: string;
+  salaryRate: number;
+  salaryRateType: 'HOURLY' | 'MONTHLY' | 'YEARLY';
   companyId: number;
   type: 'FULLTIME' | 'PARTTIME';
 };
 
-const PositionPage = ({ position }: PositionPageProps) => {
+const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   const [viewState, setViewState] = useState<'show' | 'edit'>('show');
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<PositionFormInputs>();
+  const [updatePosition] = useMutation(UPDATE_POSITION_MUTATION);
 
   const isEditView = viewState === 'edit';
-  const onSubmit = (data: PositionFormInputs) => console.log(data);
+  const onSubmit: SubmitHandler<PositionFormInputs> = async (data) => {
+    if (!position.id) return;
+    const res = await updatePosition({
+      variables: {
+        id: position.id,
+        updatePositionInput: {
+          ...data,
+        },
+      },
+    });
+
+    if (res.data?.updatePosition) {
+      setViewState('show');
+      refetchPosition();
+    }
+  };
 
   return (
     <main className="py-10">
@@ -68,6 +94,7 @@ const PositionPage = ({ position }: PositionPageProps) => {
               control={control}
               register={register}
               errors={errors}
+              setValue={setValue}
             />
           ) : (
             <PositionShowView position={position} />
