@@ -48,6 +48,7 @@ const PositionEditView = ({
   register,
   control,
   errors,
+  setValue,
 }: PositionEditViewProps) => {
   const [companies, setCompanies] = useState([]);
   const auth = useAuth();
@@ -108,8 +109,10 @@ const PositionEditView = ({
                   control={control}
                   options={companies}
                   onSearchHandler={debouncedSearch}
-                  dropdownClassnames="w-80"
                   defaultValue={position?.company?.name || ''}
+                  defaultId={position?.company?.id || ''}
+                  setValue={setValue}
+                  dropdownClassnames="w-80"
                 />
                 <FormErrorText field={errors.companyId} />
               </dd>

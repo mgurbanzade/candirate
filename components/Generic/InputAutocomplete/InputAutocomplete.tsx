@@ -1,11 +1,12 @@
 import { Fragment, useEffect, useState } from 'react';
+import cx from 'classnames';
 import { Controller } from 'react-hook-form';
 import { Listbox, Transition } from '@headlessui/react';
-
-const classNames = (...classes: string[]) => classes.filter(Boolean).join(' ');
+import { useMutation } from '@apollo/client';
+import { CREATE_COMPANY_MUTATION } from '@gql/mutations/companies';
 
 type OptionType = {
-  id: string;
+  id: number | string;
   name: string;
   __typename?: string;
 };
@@ -15,7 +16,9 @@ type InputAutocompleteProps = {
   fieldName: string;
   options: OptionType[];
   onSearchHandler: (value: any) => void;
+  setValue: any;
   defaultValue?: string;
+  defaultId?: number | string;
   wrapperClassnames?: string;
   dropdownClassnames?: string;
   label?: string;
@@ -26,18 +29,35 @@ const InputAutocomplete = ({
   options,
   control,
   defaultValue,
+  defaultId,
   onSearchHandler,
+  setValue,
   dropdownClassnames,
 }: InputAutocompleteProps) => {
   const [selected, setSelected] = useState(
-    options[0] || { id: null, name: null },
+    { id: defaultId, name: defaultValue } || { id: null, name: null },
   );
   const [searchValue, setSearchValue] = useState(defaultValue || '');
   const [open, setOpen] = useState(!!options.length);
+  const [createCompany] = useMutation(CREATE_COMPANY_MUTATION, {
+    onCompleted: (data) => {
+      if (!data?.createCompany.id || !data?.createCompany.name) return;
+      setValue('companyId', data.createCompany.id);
+      setSelected({
+        id: data.createCompany.id,
+        name: data.createCompany.name,
+      });
+      setSearchValue(data.createCompany.name);
+    },
+  });
+
+  const optionsToRender = options.length
+    ? options
+    : [{ id: 'create', name: `Create '${searchValue}'` }];
 
   useEffect(() => {
     if (selected.name !== searchValue)
-      setOpen(!!options.length && !!searchValue.length);
+      setOpen(!!optionsToRender.length && !!searchValue.length);
   }, [searchValue]);
 
   return (
@@ -55,6 +75,7 @@ const InputAutocomplete = ({
               name={fieldName}
               value={searchValue}
               onChange={(e) => {
+                console.log(selected);
                 setSearchValue(e.target.value);
                 onChange(e.target.value);
                 onSearchHandler(e.target.value);
@@ -74,10 +95,19 @@ const InputAutocomplete = ({
               <Listbox.Options
                 className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm ${dropdownClassnames}`}
               >
-                {options.map((option) => (
+                {optionsToRender.map((option) => (
                   <Listbox.Option
                     key={option.id}
                     onClick={() => {
+                      if (option.id === 'create') {
+                        createCompany({
+                          variables: {
+                            createCompanyInput: {
+                              name: searchValue,
+                            },
+                          },
+                        });
+                      }
                       setSelected(option);
                       setSearchValue(option.name);
                       setOpen(false);
@@ -87,10 +117,10 @@ const InputAutocomplete = ({
                   >
                     {({ selected }) => (
                       <span
-                        className={classNames(
-                          selected ? 'font-semibold' : 'font-normal',
-                          'block truncate',
-                        )}
+                        className={cx('block truncate', {
+                          'font-semibold': selected,
+                          'font-normal': !selected,
+                        })}
                       >
                         {option.name}
                       </span>
