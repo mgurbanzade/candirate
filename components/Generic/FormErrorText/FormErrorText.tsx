@@ -7,7 +7,7 @@ type FormErrorTextProps = {
 
 const FormErrorText = ({ field, text }: FormErrorTextProps) => {
   return field ? (
-    <div className="text-red-500 mt-1 text-sm">
+    <div className="text-red-500 mt-1 text-sm whitespace-nowrap">
       {text || 'This field is required'}
     </div>
   ) : null;

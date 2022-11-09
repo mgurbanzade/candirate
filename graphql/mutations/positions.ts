@@ -20,3 +20,13 @@ export const UPDATE_POSITION_MUTATION = graphql(`
     }
   }
 `);
+
+export const PUBLISH_POSITION_MUTATION = graphql(`
+  mutation PublishPosition($id: Int!) {
+    publishPosition(id: $id) {
+      id
+      title
+      isPublished
+    }
+  }
+`);

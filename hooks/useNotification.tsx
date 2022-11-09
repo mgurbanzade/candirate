@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 
-type Notificationtype = {
+export type NotificationType = {
   isVisible: boolean;
   type: 'success' | 'error' | 'info';
   title: string | null;
@@ -8,8 +8,8 @@ type Notificationtype = {
 };
 
 type NotificationContextType = {
-  notification: Notificationtype;
-  setNotification: React.Dispatch<React.SetStateAction<Notificationtype>>;
+  notification: NotificationType;
+  setNotification: React.Dispatch<React.SetStateAction<NotificationType>>;
 };
 
 type NotificationProviderProps = {
@@ -22,7 +22,7 @@ const NotificationContext = createContext<NotificationContextType>({
 });
 
 const useNotificationState = () => {
-  const [notification, setNotification] = useState<Notificationtype>({
+  const [notification, setNotification] = useState<NotificationType>({
     isVisible: false,
     type: 'info',
     title: null,

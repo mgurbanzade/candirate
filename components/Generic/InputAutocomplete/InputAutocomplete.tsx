@@ -75,7 +75,6 @@ const InputAutocomplete = ({
               name={fieldName}
               value={searchValue}
               onChange={(e) => {
-                console.log(selected);
                 setSearchValue(e.target.value);
                 onChange(e.target.value);
                 onSearchHandler(e.target.value);

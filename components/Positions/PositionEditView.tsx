@@ -121,19 +121,22 @@ const PositionEditView = ({
               <dt className="text-sm font-medium text-gray-500">Salary rate</dt>
               <dd className="mt-1 text-sm text-gray-900">
                 <div className="flex align-center justify-between w-80">
-                  <input
-                    id="salaryRate"
-                    type="number"
-                    min={1}
-                    defaultValue={position.salaryRate || 10}
-                    className="block w-2/5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="ex: 30"
-                    {...register('salaryRate', {
-                      valueAsNumber: true,
-                      required: true,
-                      min: 1,
-                    })}
-                  />
+                  <div className="w-2/5">
+                    <input
+                      id="salaryRate"
+                      type="number"
+                      min={1}
+                      defaultValue={position.salaryRate || 10}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      placeholder="ex: 30"
+                      {...register('salaryRate', {
+                        valueAsNumber: true,
+                        required: true,
+                        min: 1,
+                      })}
+                    />
+                    <FormErrorText field={errors.salaryRate} />
+                  </div>
                   <Select
                     fieldName="salaryRateType"
                     options={salaryRateOptions}
