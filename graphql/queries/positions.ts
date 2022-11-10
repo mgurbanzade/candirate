@@ -12,6 +12,7 @@ export const GET_POSITION = graphql(`
       isPublished
       salaryRate
       salaryRateType
+      authorId
       company {
         id
         name

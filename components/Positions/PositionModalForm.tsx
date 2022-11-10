@@ -26,7 +26,7 @@ const PositionModalForm = () => {
       variables: {
         createPositionInput: {
           ...data,
-          postedById: currentUser.id,
+          authorId: currentUser.id,
         },
       },
     });

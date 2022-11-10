@@ -7,7 +7,7 @@ export default function PositionsList() {
   const { data } = useQuery(GET_POSITIONS, {
     variables: {
       where: {
-        postedById: 1,
+        authorId: 1,
       },
     },
   });
