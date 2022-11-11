@@ -17,6 +17,11 @@ export const GET_POSITION = graphql(`
         id
         name
       }
+      applicants {
+        id
+        firstname
+      }
+      hasApplied
     }
   }
 `);

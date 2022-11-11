@@ -30,3 +30,11 @@ export const PUBLISH_POSITION_MUTATION = graphql(`
     }
   }
 `);
+
+export const APPLY_POSITION_MUTATION = graphql(`
+  mutation ApplyPosition($positionId: Int!, $userId: Int!) {
+    applyToPosition(positionId: $positionId, userId: $userId) {
+      id
+    }
+  }
+`);

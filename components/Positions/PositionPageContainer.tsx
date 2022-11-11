@@ -5,6 +5,7 @@ import { Position, GetPositionQuery } from '@gql/types/graphql';
 import {
   UPDATE_POSITION_MUTATION,
   PUBLISH_POSITION_MUTATION,
+  APPLY_POSITION_MUTATION,
 } from '@gql/mutations/positions';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import PositionShowView from '@components/Positions/PositionShowView';
@@ -46,6 +47,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   } = useForm<PositionFormInputs>();
   const [updatePosition] = useMutation(UPDATE_POSITION_MUTATION);
   const [publishPosition] = useMutation(PUBLISH_POSITION_MUTATION);
+  const [applyToPosition] = useMutation(APPLY_POSITION_MUTATION);
   const handleUpdate = async (position: Position, data: PositionFormInputs) => {
     if (!position.id) return;
     if (!isDirty) {
@@ -95,8 +97,41 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
     }
   };
 
+  const handleApply = async (position: Position) => {
+    if (!position.id || !session?.currentUser?.id) return;
+    try {
+      const res = await applyToPosition({
+        variables: {
+          positionId: position.id,
+          userId: session?.currentUser?.id,
+        },
+      });
+
+      if (res.data?.applyToPosition) {
+        refetchPosition();
+        setNotification({
+          type: 'success',
+          title: 'Sucess!',
+          description: 'Application sent successfully',
+          isVisible: true,
+        });
+      }
+    } catch (e: any) {
+      if (e.message) {
+        setNotification({
+          type: 'error',
+          title: 'Error',
+          description: e.message,
+          isVisible: true,
+        });
+      }
+    }
+  };
+
   const isEditView = viewState === 'edit';
+  const isUserAuthor = position.authorId === session.currentUser?.id;
   const onSubmit: SubmitHandler<PositionFormInputs> = async (data) => {
+    if (!isUserAuthor) return handleApply(position);
     return isEditView ? handleUpdate(position, data) : handlePublish(position);
   };
 
@@ -125,7 +160,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
           </div>
         </div>
         <div className="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
-          {position.authorId === session.currentUser ? (
+          {isUserAuthor ? (
             <div>
               {position.isPublished ? (
                 <button
@@ -159,7 +194,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
                   <button
                     type="button"
                     onClick={handleSubmit(onSubmit)}
-                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100 ml-3"
                   >
                     {isEditView ? 'Save' : 'Publish'}
                   </button>
@@ -171,9 +206,36 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
               <button
                 type="button"
                 onClick={handleSubmit(onSubmit)}
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                disabled={position.hasApplied || false}
+                className={cx(
+                  'inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
+                  {
+                    'shadow-none bg-transparent hover:bg-transparent text-green-500':
+                      position.hasApplied,
+                  },
+                )}
               >
-                Apply
+                {position.hasApplied ? (
+                  <div className="flex">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span className="ml-2">Applied</span>
+                  </div>
+                ) : (
+                  'Apply'
+                )}
               </button>
             </div>
           )}
