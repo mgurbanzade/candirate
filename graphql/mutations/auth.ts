@@ -7,6 +7,7 @@ export const LOGIN_MUTATION = graphql(`
       refreshToken
       user {
         firstname
+        candidateId
       }
     }
   }

@@ -14,6 +14,7 @@ type SelectProps = {
   control: any;
   fieldName: string;
   options: OptionType[];
+  defaultSelected?: OptionType;
   wrapperClassnames?: string;
   dropdownClassnames?: string;
   label?: string;
@@ -24,10 +25,11 @@ const Select = ({
   fieldName,
   options,
   control,
+  defaultSelected,
   wrapperClassnames,
   dropdownClassnames,
 }: SelectProps) => {
-  const [selected, setSelected] = useState(options[0]);
+  const [selected, setSelected] = useState(defaultSelected || options[0]);
 
   return (
     <Controller
@@ -37,6 +39,7 @@ const Select = ({
       render={({ field: { onChange, value } }) => (
         <Listbox
           value={value}
+          defaultValue={selected.id}
           onChange={(value) => {
             onChange(value.id);
             setSelected(value);

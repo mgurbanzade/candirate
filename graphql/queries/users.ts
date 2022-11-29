@@ -17,6 +17,40 @@ export const GET_CURRENT_USER = graphql(`
         firstname
         email
         type
+        candidateId
+        recruiterId
+        candidate {
+          positionTitle
+          yearsOfExperience
+          salaryExpectation
+          salaryRateType
+          about
+        }
+      }
+    }
+  }
+`);
+
+export const GET_USER_PROFILE = graphql(`
+  query GetUserProfile {
+    getUserProfile {
+      id
+      firstname
+      middlename
+      lastname
+      email
+      type
+      candidateId
+      recruiterId
+      candidate {
+        positionTitle
+        yearsOfExperience
+        salaryExpectation
+        salaryRateType
+        about
+      }
+      recruiter {
+        id
       }
     }
   }

@@ -71,7 +71,7 @@ const useProvideAuth = () => {
 
     if (result?.data?.login?.accessToken) {
       setAuthToken(result.data.login.accessToken);
-      router.push('/');
+      router.push('/profile');
     }
   };
 

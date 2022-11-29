@@ -1,7 +1,7 @@
 import { graphql } from '../types';
 
 export const GET_POSITION = graphql(`
-  query getPosition($id: Int!) {
+  query getPosition($id: Int!, $isCandidate: Boolean!) {
     getPosition(id: $id) {
       id
       title
@@ -19,9 +19,12 @@ export const GET_POSITION = graphql(`
       }
       applicants {
         id
-        firstname
+        positionTitle
+        yearsOfExperience
+        salaryExpectation
+        salaryRateType
       }
-      hasApplied
+      hasApplied @include(if: $isCandidate)
     }
   }
 `);

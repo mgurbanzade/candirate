@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { useState } from 'react';
 import { useMutation, ApolloQueryResult } from '@apollo/client';
-import { Position, GetPositionQuery } from '@gql/types/graphql';
+import { Position, GetPositionQuery, Candidate } from '@gql/types/graphql';
 import {
   UPDATE_POSITION_MUTATION,
   PUBLISH_POSITION_MUTATION,
@@ -12,6 +12,8 @@ import PositionShowView from '@components/Positions/PositionShowView';
 import PositionEditView from '@components/Positions/PositionEditView';
 import useNotification from '@hooks/useNotification';
 import useSession from '@hooks/useSession';
+import ApplicantsList from './ApplicantsList';
+import { useRouter } from 'next/router';
 
 type PositionPageProps = {
   position: Position;
@@ -35,6 +37,7 @@ type PositionFormInputs = {
 
 const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   const session = useSession();
+  const router = useRouter();
   const [publishError, setPublishError] = useState<string | null>(null);
   const [viewState, setViewState] = useState<'show' | 'edit'>('show');
   const { setNotification } = useNotification();
@@ -98,12 +101,27 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   };
 
   const handleApply = async (position: Position) => {
-    if (!position.id || !session?.currentUser?.id) return;
+    if (!position.id || !session?.currentUser?.candidateId) return;
+    const candidate = session.currentUser.candidate;
+    if (
+      !candidate?.positionTitle ||
+      !candidate?.salaryExpectation ||
+      !candidate?.yearsOfExperience
+    ) {
+      setNotification({
+        type: 'error',
+        title: 'Error!',
+        description: 'Please complete your profile before applying',
+        isVisible: true,
+      });
+      return router.push('/profile');
+    }
+
     try {
       const res = await applyToPosition({
         variables: {
           positionId: position.id,
-          userId: session?.currentUser?.id,
+          candidateId: session?.currentUser.candidateId,
         },
       });
 
@@ -210,13 +228,13 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
                 className={cx(
                   'inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
                   {
-                    'shadow-none bg-transparent hover:bg-transparent text-green-500':
+                    'shadow-none bg-green-500 hover:bg-green-500 text-white':
                       position.hasApplied,
                   },
                 )}
               >
                 {position.hasApplied ? (
-                  <div className="flex">
+                  <>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -231,8 +249,8 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
                         d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <span className="ml-2">Applied</span>
-                  </div>
+                    <span className="ml-1">Applied</span>
+                  </>
                 ) : (
                   'Apply'
                 )}
@@ -257,6 +275,14 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
           )}
         </div>
       </div>
+      {session?.currentUser?.type === 'RECRUITER' &&
+      position.applicants?.length ? (
+        <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2 lg:col-start-1">
+            <ApplicantsList applicants={position.applicants as Candidate[]} />
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 };

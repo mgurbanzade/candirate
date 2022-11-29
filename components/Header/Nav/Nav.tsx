@@ -43,17 +43,31 @@ const Navigation = () => {
                   />
                 </div> */}
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8 w-full justify-between">
-                  <Link
-                    href="/"
-                    className={cx(
-                      'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700',
-                      {
-                        'border-indigo-500 text-gray-900': pathname === '/',
-                      },
-                    )}
-                  >
-                    Dashboard
-                  </Link>
+                  <div className="flex">
+                    <Link
+                      href="/"
+                      className={cx(
+                        'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700',
+                        {
+                          'border-indigo-500 text-gray-900': pathname === '/',
+                        },
+                      )}
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/interviews"
+                      className={cx(
+                        'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700 ml-4',
+                        {
+                          'border-indigo-500 text-gray-900':
+                            pathname === '/interviews',
+                        },
+                      )}
+                    >
+                      Interviews
+                    </Link>
+                  </div>
                   {session.loading ? (
                     <svg
                       className="animate-spin h-5 w-5 mr-3"
@@ -99,7 +113,7 @@ const Navigation = () => {
                         <Menu.Item>
                           {({ active }) => (
                             <a
-                              href="#"
+                              href="/profile"
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
                                 'block px-4 py-2 text-sm text-gray-700',
