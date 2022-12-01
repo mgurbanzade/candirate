@@ -4,8 +4,8 @@ import Layout from '@components/Layout';
 import Notification from '@components/Notification';
 import { NotificationProvider } from '@hooks/useNotification';
 import { SessionProvider } from '@hooks/useSession';
-import '../styles/global.css';
 import { ModalProvider } from '@hooks/useModal';
+import '../styles/global.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

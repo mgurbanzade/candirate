@@ -10,10 +10,12 @@ type Props = {
 const ProfilePageContainer = ({ profileData, refetchProfile }: Props) => {
   return (
     <div>
-      <CareerOverview
-        profileData={profileData}
-        refetchProfile={refetchProfile}
-      />
+      {profileData.type === 'CANDIDATE' && (
+        <CareerOverview
+          profileData={profileData}
+          refetchProfile={refetchProfile}
+        />
+      )}
       <PersonalData profileData={profileData} refetchProfile={refetchProfile} />
     </div>
   );

@@ -8,7 +8,6 @@ import {
   UseFormSetValue,
   FieldErrors,
 } from 'react-hook-form';
-
 import Select from '@components/Generic/Select';
 import FormErrorText from '@components/Generic/FormErrorText';
 import InputAutocomplete from '@components/Generic/InputAutocomplete';
