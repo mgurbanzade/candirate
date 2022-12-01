@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { User } from '@gql/types/graphql';
 import Select from '@components/Generic/Select';
 import FormErrorText from '@components/Generic/FormErrorText';
-import { UPDATE_CANDIDATE_MUTATION } from '@gql/mutations/users';
+import { UPDATE_CANDIDATE_MUTATION } from '@gql/mutations/candidates';
+import SkillsEditor from './SkillsEditor';
 
 type Props = {
   profileData: User;
@@ -36,12 +38,16 @@ export default function EditSection({
     control,
     formState: { errors, isDirty },
   } = useForm<CandidateFormInputs>();
+
   const [updateCandidate] = useMutation(UPDATE_CANDIDATE_MUTATION);
   const onSubmit = async (formData: CandidateFormInputs) => {
     if (!profileData?.candidateId) {
       throw new Error('Candidate ID is missing');
     }
-    if (!isDirty) return setViewState('show');
+    if (!isDirty) {
+      refetchProfile();
+      return setViewState('show');
+    }
     try {
       const { errors } = await updateCandidate({
         variables: {
@@ -84,7 +90,7 @@ export default function EditSection({
           onClick={handleSubmit(onSubmit)}
           className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none border-transparent bg-blue-600 text-white hover:bg-blue-700"
         >
-          {isDirty ? 'Save' : 'Cancel'}
+          Save
         </button>
       </div>
       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
@@ -163,6 +169,18 @@ export default function EditSection({
                   dropdownClassnames="w-40"
                 />
               </div>
+            </dd>
+          </div>
+          <div className="sm:col-span-2">
+            <dt className="text-sm font-medium text-gray-500">Skills</dt>
+            <dd
+              className="mt-1 text-sm text-gray-900 rounded-md border border-gray-300 p-2"
+              style={{ minHeight: 40 }}
+            >
+              <SkillsEditor
+                skills={profileData.candidate?.skills}
+                candidateId={profileData.candidateId}
+              />
             </dd>
           </div>
           <div className="sm:col-span-2">

@@ -1,8 +1,9 @@
 import cx from 'classnames';
-import { User } from '@gql/types/graphql';
+import { Candidate } from '@gql/types/graphql';
+import Tags from '@components/Tags';
 
 type Props = {
-  profileData: User;
+  candidate: Candidate;
   setViewState: (viewState: 'show' | 'edit') => void;
 };
 
@@ -14,10 +15,13 @@ const getSalaryRate = (salaryRateType: string) => {
     : 'year';
 };
 
-export default function ShowSection({ profileData, setViewState }: Props) {
-  const salaryRateType = getSalaryRate(
-    profileData.candidate?.salaryRateType || 'MONTHLY',
-  );
+export default function ShowSection({ candidate, setViewState }: Props) {
+  if (!candidate) {
+    return null;
+  }
+
+  const salaryRateType = getSalaryRate(candidate.salaryRateType || 'MONTHLY');
+
   return (
     <>
       <div className="flex justify-between items-center px-4 py-5 sm:px-6">
@@ -44,7 +48,7 @@ export default function ShowSection({ profileData, setViewState }: Props) {
               Position title
             </dt>
             <dd className="mt-1 text-sm text-gray-900">
-              {profileData.candidate?.positionTitle || 'none'}
+              {candidate.positionTitle || 'none'}
             </dd>
           </div>
           <div className="sm:col-span-1">
@@ -52,7 +56,7 @@ export default function ShowSection({ profileData, setViewState }: Props) {
               Years of experience
             </dt>
             <dd className="mt-1 text-sm text-gray-900">
-              {profileData.candidate?.yearsOfExperience || 'none'}
+              {candidate.yearsOfExperience || 'none'}
             </dd>
           </div>
           <div className="sm:col-span-1">
@@ -61,15 +65,23 @@ export default function ShowSection({ profileData, setViewState }: Props) {
             </dt>
             <dd className="mt-1 text-sm text-gray-900">
               $
-              {profileData.candidate?.salaryExpectation
-                ? `${profileData.candidate?.salaryExpectation} / ${salaryRateType}`
+              {candidate.salaryExpectation
+                ? `${candidate.salaryExpectation} / ${salaryRateType}`
                 : 'none'}
             </dd>
           </div>
+          {candidate.skills && candidate.skills.length > 0 ? (
+            <div className="sm:col-span-1">
+              <dt className="text-sm font-medium text-gray-500">Skills</dt>
+              <dd className="mt-1 text-sm text-gray-900">
+                <Tags tags={candidate.skills} isDraggable={false} />
+              </dd>
+            </div>
+          ) : null}
           <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">Brief info</dt>
             <dd className="mt-1 text-sm text-gray-900">
-              {profileData.candidate?.about || 'none'}
+              {candidate.about || 'none'}
             </dd>
           </div>
         </dl>
