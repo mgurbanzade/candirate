@@ -44,10 +44,7 @@ export default function EditSection({
     if (!profileData?.candidateId) {
       throw new Error('Candidate ID is missing');
     }
-    if (!isDirty) {
-      refetchProfile();
-      return setViewState('show');
-    }
+    if (!isDirty) return setViewState('show');
     try {
       const { errors } = await updateCandidate({
         variables: {
@@ -180,6 +177,7 @@ export default function EditSection({
               <SkillsEditor
                 skills={profileData.candidate?.skills}
                 candidateId={profileData.candidateId}
+                refetchProfile={refetchProfile}
               />
             </dd>
           </div>

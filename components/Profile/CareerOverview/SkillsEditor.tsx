@@ -10,9 +10,14 @@ import { Skill } from '@gql/types/graphql';
 type SkillsEditorProps = {
   skills: Skill[] | any;
   candidateId: number | null | undefined;
+  refetchProfile: () => void;
 };
 
-const SkillsEditor = ({ skills, candidateId }: SkillsEditorProps) => {
+const SkillsEditor = ({
+  skills,
+  candidateId,
+  refetchProfile,
+}: SkillsEditorProps) => {
   const [addSkillToCandidate] = useMutation(ADD_SKILL_TO_CANDIDATE_MUTATION);
   const [removeSkillFromCandidate] = useMutation(
     REMOVE_SKILL_FROM_CANDIDATE_MUTATION,
@@ -32,6 +37,7 @@ const SkillsEditor = ({ skills, candidateId }: SkillsEditorProps) => {
 
       if (!errors?.length) {
         setEditorSkills(editorSkills.filter((s: Skill) => s.id !== skillId));
+        refetchProfile();
       }
     } catch (error) {
       console.log(error);
@@ -66,6 +72,7 @@ const SkillsEditor = ({ skills, candidateId }: SkillsEditorProps) => {
           ]);
 
           setInputVal('');
+          refetchProfile();
         }
       } catch (err) {
         console.log(err);
