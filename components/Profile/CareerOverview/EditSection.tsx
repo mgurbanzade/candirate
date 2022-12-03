@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { User } from '@gql/types/graphql';

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Candidate } from '@gql/types/graphql';
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 
@@ -22,7 +23,10 @@ const ApplicantsList = ({ applicants }: Props) => {
       >
         {applicants.map((applicant) => (
           <li key={applicant.id}>
-            <a className="block hover:bg-gray-50">
+            <Link
+              href={`/candidates/${applicant.uuid}`}
+              className="block hover:bg-gray-50"
+            >
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
                   <p className="truncate text-sm font-medium text-indigo-600">
@@ -43,7 +47,7 @@ const ApplicantsList = ({ applicants }: Props) => {
                   </div>
                 </div>
               </div>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

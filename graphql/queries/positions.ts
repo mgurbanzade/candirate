@@ -19,6 +19,7 @@ export const GET_POSITION = graphql(`
       }
       applicants {
         id
+        uuid
         positionTitle
         yearsOfExperience
         salaryExpectation
