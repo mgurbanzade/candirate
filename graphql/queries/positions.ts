@@ -1,9 +1,10 @@
 import { graphql } from '../types';
 
 export const GET_POSITION = graphql(`
-  query getPosition($id: Int!, $isCandidate: Boolean!) {
-    getPosition(id: $id) {
+  query getPosition($uuid: String!, $isCandidate: Boolean!) {
+    getPosition(uuid: $uuid) {
       id
+      uuid
       title
       description
       type
@@ -34,6 +35,7 @@ export const GET_POSITIONS = graphql(`
   query GetPositions($where: PositionWhereInput!) {
     getAllPositions(where: $where) {
       id
+      uuid
       title
       description
       type

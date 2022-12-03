@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default function PositionsListItem({ position }: Props) {
-  const positionPath = `/positions/${position.id}`;
+  const positionPath = `/positions/${position.uuid}`;
   return (
     <Link href={positionPath} className="block hover:bg-gray-50">
       <div className="px-4 py-4 sm:px-6">

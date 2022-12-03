@@ -20,7 +20,7 @@ type PositionPageProps = {
   refetchPosition: (
     variables?:
       | Partial<{
-          id: number;
+          uuid: string;
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<GetPositionQuery>>;

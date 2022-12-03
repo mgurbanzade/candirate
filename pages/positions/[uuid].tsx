@@ -8,9 +8,9 @@ const PositionPage = () => {
   const router = useRouter();
   const session = useSession();
   const { data, refetch } = useQuery(GET_POSITION, {
-    skip: !router.query.id,
+    skip: !router.query.uuid,
     variables: {
-      id: Number(router.query.id),
+      uuid: router.query.uuid as string,
       isCandidate: session?.currentUser?.type === 'CANDIDATE',
     },
   });
