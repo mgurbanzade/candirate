@@ -234,7 +234,9 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   };
 
   const applicationStatusIcon =
-    statusIcons[position.applicationStatus as keyof typeof statusIcons]();
+    session.currentUser?.type === 'candidate'
+      ? statusIcons[position.applicationStatus as keyof typeof statusIcons]()
+      : null;
   return (
     <main className="py-10">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">
@@ -271,7 +273,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
                       : () => setViewState('edit')
                   }
                   className={cx(
-                    'inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
+                    'inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
                     {
                       'border-gray-300 bg-white text-gray-700 hover:bg-gray-50':
                         !isEditView,

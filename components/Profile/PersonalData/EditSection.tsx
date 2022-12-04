@@ -61,7 +61,7 @@ export default function EditSection({
         <button
           type="button"
           onClick={handleSubmit(onSubmit)}
-          className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none border-transparent bg-blue-600 text-white hover:bg-blue-700"
+          className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none border-transparent bg-blue-600 text-white hover:bg-blue-700"
         >
           Save
         </button>

@@ -56,7 +56,7 @@ const ApplicationList = ({ applications }: Props) => {
                       </p>
                     </div>
                     {session?.currentUser?.type === 'RECRUITER' && (
-                      <div className="flex items-start justify-end ml-3">
+                      <div className="flex items-center justify-end ml-3">
                         <button
                           type="button"
                           onClick={() => {
