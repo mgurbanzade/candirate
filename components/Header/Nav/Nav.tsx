@@ -14,7 +14,7 @@ const Navigation = () => {
   const session = useSession();
 
   return (
-    <Disclosure as="nav" className="bg-white shadow">
+    <Disclosure as="nav" className="bg-white">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -30,44 +30,7 @@ const Navigation = () => {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-full">
-                {/* <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Your Company"
-                  />
-                </div> */}
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8 w-full justify-between">
-                  <div className="flex">
-                    <Link
-                      href="/"
-                      className={cx(
-                        'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700',
-                        {
-                          'border-indigo-500 text-gray-900': pathname === '/',
-                        },
-                      )}
-                    >
-                      Dashboard
-                    </Link>
-                    <Link
-                      href="/interviews"
-                      className={cx(
-                        'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300 hover:text-gray-700 ml-4',
-                        {
-                          'border-indigo-500 text-gray-900':
-                            pathname === '/interviews',
-                        },
-                      )}
-                    >
-                      Interviews
-                    </Link>
-                  </div>
                   {session.loading ? (
                     <svg
                       className="animate-spin h-5 w-5 mr-3"

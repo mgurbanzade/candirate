@@ -1,8 +1,6 @@
-// moved to /positions/index.tsx
-
 import Positions from '@components/Positions';
 
-export default function Home() {
+export default function PositionsPage() {
   return (
     <main>
       <Positions />
