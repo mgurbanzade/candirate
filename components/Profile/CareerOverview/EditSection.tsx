@@ -75,10 +75,7 @@ export default function EditSection({
   return (
     <>
       <div className="flex justify-between items-center px-4 py-5 sm:px-6">
-        <h2
-          id="applicant-information-title"
-          className="text-lg font-medium leading-6 text-gray-900"
-        >
+        <h2 className="text-lg font-medium leading-6 text-gray-900">
           Career overview
         </h2>
         <button

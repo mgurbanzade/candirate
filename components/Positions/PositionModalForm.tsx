@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { CREATE_POSITION_MUTATION } from '@gql/mutations/positions';
 
-type PositionFromInputs = {
+type PositionFormInputs = {
   title: string;
   description: string;
 };
@@ -17,9 +17,9 @@ const PositionModalForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PositionFromInputs>();
+  } = useForm<PositionFormInputs>();
 
-  const onSubmit: SubmitHandler<PositionFromInputs> = async (data) => {
+  const onSubmit: SubmitHandler<PositionFormInputs> = async (data) => {
     if (!currentUser?.id || !currentUser?.recruiterId) return;
 
     const res = await createPosition({

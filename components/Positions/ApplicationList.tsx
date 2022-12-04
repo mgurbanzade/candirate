@@ -1,14 +1,22 @@
 import Link from 'next/link';
 import useSession from '@hooks/useSession';
-import { Candidate } from '@gql/types/graphql';
+import Modal from '@components/Generic/Modal';
+import DeclineModalForm from '@components/Applications/DeclineModalForm';
+import { useState } from 'react';
+import { useModal } from '@hooks/useModal';
+import { Application } from '@gql/types/graphql';
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 
 type Props = {
-  applicants: Candidate[];
+  applications: Application[];
 };
 
-const ApplicantsList = ({ applicants }: Props) => {
+const ApplicationList = ({ applications }: Props) => {
   const session = useSession();
+  const [currApplicationId, setCurrApplicationId] = useState<
+    number | null | undefined
+  >(null);
+  const { setIsVisible } = useModal();
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <div className="px-4 py-5 sm:px-6">
@@ -23,14 +31,14 @@ const ApplicantsList = ({ applicants }: Props) => {
         role="list"
         className="divide-y divide-gray-200 border-t border-gray-200"
       >
-        {applicants.map((applicant) => (
-          <li key={applicant.id}>
+        {applications.map((app) => (
+          <li key={app?.id}>
             <div className="block hover:bg-gray-50">
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
-                  <Link href={`/candidates/${applicant.uuid}`}>
+                  <Link href={`/candidates/${app?.candidate?.uuid}`}>
                     <p className="truncate text-sm font-medium text-indigo-600">
-                      {applicant.positionTitle}
+                      {app?.candidate?.positionTitle}
                     </p>
                   </Link>
                   <div className="flex items-center justify-end grow">
@@ -40,17 +48,21 @@ const ApplicantsList = ({ applicants }: Props) => {
                           className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                           aria-hidden="true"
                         />
-                        {applicant.salaryExpectation} /{' '}
-                        {applicant.salaryRateType.toLowerCase()}
+                        {app?.candidate?.salaryExpectation} /{' '}
+                        {app?.candidate?.salaryRateType.toLowerCase()}
                       </p>
                       <p className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 ml-4">
-                        {applicant.yearsOfExperience} years
+                        {app?.candidate?.yearsOfExperience} years
                       </p>
                     </div>
                     {session?.currentUser?.type === 'RECRUITER' && (
                       <div className="flex items-start justify-end ml-3">
                         <button
                           type="button"
+                          onClick={() => {
+                            setCurrApplicationId(app.id);
+                            setIsVisible(true);
+                          }}
                           className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
                         >
                           Decline
@@ -84,8 +96,15 @@ const ApplicantsList = ({ applicants }: Props) => {
           </li>
         ))}
       </ul>
+      <Modal>
+        <DeclineModalForm
+          appId={currApplicationId as number}
+          setIsVisible={setIsVisible}
+          setCurrApplicationId={setCurrApplicationId}
+        />
+      </Modal>
     </div>
   );
 };
 
-export default ApplicantsList;
+export default ApplicationList;

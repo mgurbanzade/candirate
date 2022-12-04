@@ -18,15 +18,19 @@ export const GET_POSITION = graphql(`
         id
         name
       }
-      applicants {
+      applications {
         id
-        uuid
-        positionTitle
-        yearsOfExperience
-        salaryExpectation
-        salaryRateType
+        status
+        candidate {
+          id
+          uuid
+          positionTitle
+          yearsOfExperience
+          salaryExpectation
+          salaryRateType
+        }
       }
-      hasApplied @include(if: $isCandidate)
+      applicationStatus @include(if: $isCandidate)
     }
   }
 `);

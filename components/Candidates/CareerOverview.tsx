@@ -24,7 +24,7 @@ export default function CareerOverview({ candidate }: Props) {
     <>
       <div className="flex justify-between items-center px-4 py-5 sm:px-6">
         <h2
-          id="applicant-information-title"
+          id="candidate-information-title"
           className="text-lg font-medium leading-6 text-gray-900"
         >
           {candidate.positionTitle}

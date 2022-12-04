@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { useState } from 'react';
 import { useMutation, ApolloQueryResult } from '@apollo/client';
-import { Position, GetPositionQuery, Candidate } from '@gql/types/graphql';
+import { Position, GetPositionQuery, Application } from '@gql/types/graphql';
 import {
   UPDATE_POSITION_MUTATION,
   PUBLISH_POSITION_MUTATION,
@@ -12,7 +12,7 @@ import PositionShowView from '@components/Positions/PositionShowView';
 import PositionEditView from '@components/Positions/PositionEditView';
 import useNotification from '@hooks/useNotification';
 import useSession from '@hooks/useSession';
-import ApplicantsList from './ApplicantsList';
+import ApplicationList from './ApplicationList';
 import { useRouter } from 'next/router';
 
 type PositionPageProps = {
@@ -33,6 +33,86 @@ type PositionFormInputs = {
   salaryRateType: 'HOURLY' | 'MONTHLY' | 'YEARLY';
   companyId: number;
   type: 'FULLTIME' | 'PARTTIME';
+};
+
+const statusIcons = {
+  NOT_APPLIED: () => 'Apply',
+  DECLINED: () => (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-6 h-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span className="ml-1">Declined</span>
+    </>
+  ),
+  APPLIED: () => (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-6 h-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span className="ml-1">Applied</span>
+    </>
+  ),
+  INVITED: () => (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-6 h-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span className="ml-1">Invited</span>
+    </>
+  ),
+  HIRED: () => (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-6 h-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+      </svg>
+      <span className="ml-1">Hired</span>
+    </>
+  ),
 };
 
 const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
@@ -153,6 +233,8 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
     return isEditView ? handleUpdate(position, data) : handlePublish(position);
   };
 
+  const applicationStatusIcon =
+    statusIcons[position.applicationStatus as keyof typeof statusIcons]();
   return (
     <main className="py-10">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">
@@ -223,37 +305,25 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
             <div>
               <button
                 type="button"
-                onClick={handleSubmit(onSubmit)}
-                disabled={position.hasApplied || false}
+                onClick={
+                  position.applicationStatus === 'NOT_APPLIED'
+                    ? handleSubmit(onSubmit)
+                    : () => null
+                }
+                disabled={position.applicationStatus !== 'NOT_APPLIED'}
                 className={cx(
-                  'inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
+                  'shadow-none inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
                   {
-                    'shadow-none bg-green-500 hover:bg-green-500 text-white':
-                      position.hasApplied,
+                    'bg-green-500 hover:bg-green-500 text-white': [
+                      'APPLIED',
+                      'INVITED',
+                    ].includes(position.applicationStatus),
+                    'bg-red-500 hover:bg-red-500 text-white':
+                      position.applicationStatus === 'DECLINED',
                   },
                 )}
               >
-                {position.hasApplied ? (
-                  <>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span className="ml-1">Applied</span>
-                  </>
-                ) : (
-                  'Apply'
-                )}
+                {applicationStatusIcon}
               </button>
             </div>
           )}
@@ -276,10 +346,12 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
         </div>
       </div>
       {session?.currentUser?.type === 'RECRUITER' &&
-      position.applicants?.length ? (
+      position.applications?.length ? (
         <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2 lg:col-start-1">
-            <ApplicantsList applicants={position.applicants as Candidate[]} />
+            <ApplicationList
+              applications={position.applications as Application[]}
+            />
           </div>
         </div>
       ) : null}

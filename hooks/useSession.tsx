@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_CURRENT_USER } from '@gql/queries/users';
@@ -19,24 +19,25 @@ const SessionContext = createContext<SessionContextType>({
 });
 
 const useProvideSession = () => {
-  let currentUser;
-
+  const [currentUser, setCurrentUser] = useState<User | null | undefined>(null);
   const router = useRouter();
-  const { data, error, loading } = useQuery(GET_CURRENT_USER);
+  const { data, error, loading } = useQuery(GET_CURRENT_USER, {
+    skip: !!currentUser,
+  });
   const { data: refreshUser } = useQuery(REFRESH, {
-    skip: error?.message !== 'Unauthorized',
+    skip: error?.message !== 'Unauthorized' || !!currentUser,
   });
 
   const [logoutAction] = useMutation(LOGOUT_MUTATION);
 
   if (data?.getCurrentUser?.user || refreshUser?.refresh?.user) {
-    currentUser = data?.getCurrentUser?.user || refreshUser?.refresh?.user;
+    setCurrentUser(data?.getCurrentUser?.user || refreshUser?.refresh?.user);
   }
 
   const logout = async () => {
     const res = await logoutAction();
     if (res.data?.logout.success) {
-      currentUser = null;
+      setCurrentUser(null);
       router.push('/');
     }
   };
