@@ -44,6 +44,7 @@ export const GET_USER_PROFILE = graphql(`
       recruiterId
       candidate {
         id
+        uuid
         positionTitle
         yearsOfExperience
         salaryExpectation

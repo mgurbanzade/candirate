@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import useSession from '@hooks/useSession';
 import { Candidate } from '@gql/types/graphql';
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 
@@ -7,6 +8,7 @@ type Props = {
 };
 
 const ApplicantsList = ({ applicants }: Props) => {
+  const session = useSession();
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <div className="px-4 py-5 sm:px-6">
@@ -23,31 +25,62 @@ const ApplicantsList = ({ applicants }: Props) => {
       >
         {applicants.map((applicant) => (
           <li key={applicant.id}>
-            <Link
-              href={`/candidates/${applicant.uuid}`}
-              className="block hover:bg-gray-50"
-            >
+            <div className="block hover:bg-gray-50">
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
-                  <p className="truncate text-sm font-medium text-indigo-600">
-                    {applicant.positionTitle}
-                  </p>
-                  <div className="flex">
-                    <p className="flex items-center text-sm text-gray-500 ml-4">
-                      <CurrencyDollarIcon
-                        className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      {applicant.salaryExpectation} /{' '}
-                      {applicant.salaryRateType.toLowerCase()}
+                  <Link href={`/candidates/${applicant.uuid}`}>
+                    <p className="truncate text-sm font-medium text-indigo-600">
+                      {applicant.positionTitle}
                     </p>
-                    <p className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 ml-4">
-                      {applicant.yearsOfExperience} years
-                    </p>
+                  </Link>
+                  <div className="flex items-center justify-end grow">
+                    <div className="flex">
+                      <p className="flex items-center text-sm text-gray-500 ml-4">
+                        <CurrencyDollarIcon
+                          className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        {applicant.salaryExpectation} /{' '}
+                        {applicant.salaryRateType.toLowerCase()}
+                      </p>
+                      <p className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 ml-4">
+                        {applicant.yearsOfExperience} years
+                      </p>
+                    </div>
+                    {session?.currentUser?.type === 'RECRUITER' && (
+                      <div className="flex items-start justify-end ml-3">
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                        >
+                          Decline
+                        </button>
+                        <button
+                          type="button"
+                          className="ml-3 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 pr-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none"
+                        >
+                          Schedule
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6 ml-2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           </li>
         ))}
       </ul>

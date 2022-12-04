@@ -10,7 +10,7 @@ export default function PositionsListItem({ position }: Props) {
   const positionPath = `/positions/${position.uuid}`;
   return (
     <Link href={positionPath} className="block hover:bg-gray-50">
-      <div className="px-4 py-4 sm:px-6">
+      <div className="px-4 py-6 sm:px-6">
         <div className="flex items-center justify-between">
           <p className="truncate text-sm font-medium text-indigo-600">
             {position.title}
@@ -27,8 +27,8 @@ export default function PositionsListItem({ position }: Props) {
             </p>
           </div>
         </div>
-        <div className="mt-2 sm:flex sm:justify-between">
-          {!position.isRemoteWorldWide && (
+        {!position.isRemoteWorldWide && (
+          <div className="mt-2 sm:flex sm:justify-between">
             <div className="sm:flex">
               <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                 <MapPinIcon
@@ -38,20 +38,8 @@ export default function PositionsListItem({ position }: Props) {
                 Remote
               </p>
             </div>
-          )}
-          {/* <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                  <CalendarIcon
-                    className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <p>
-                    Closing on{' '}
-                    <time dateTime={position.closeDate}>
-                      {position.closeDateFull}
-                    </time>
-                  </p>
-                </div> */}
-        </div>
+          </div>
+        )}
       </div>
     </Link>
   );
