@@ -1,9 +1,11 @@
 import Positions from '@components/Positions';
 
-export default function PositionsPage() {
+function PositionsPage() {
   return (
     <main>
       <Positions />
     </main>
   );
 }
+
+export default PositionsPage;
