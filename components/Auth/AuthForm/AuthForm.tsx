@@ -8,6 +8,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAuth, AuthContextType } from '@hooks/useAuth';
 import { useMutation } from '@apollo/client';
 import { SIGNUP_MUTATION } from '@gql/mutations/auth';
+import { rootPath, loginPath } from '@lib/routes';
 import { AuthFormProps, AuthFormInputs, SignupInputs } from './types';
 import { getFormTypeConfig } from './helpers';
 
@@ -32,7 +33,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
 
   const [signupAction] = useMutation(SIGNUP_MUTATION);
 
-  if (!!currentUser) router.push('/');
+  if (!!currentUser) router.push(rootPath());
 
   const signupHandler = async (data: AuthFormInputs) => {
     const { passwordConfirmation, ...signupInput } = data as SignupInputs; // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -47,7 +48,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
     const firstname = res.data?.signup.user.firstname;
 
     if (firstname) {
-      router.push('/login');
+      router.push(loginPath());
       setNotification({
         isVisible: true,
         type: 'success',

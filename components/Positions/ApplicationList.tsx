@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import cx from 'classnames';
 import useSession from '@hooks/useSession';
 import Modal from '@components/Generic/Modal';
 import DeclineModalForm from '@components/Applications/DeclineModalForm';
@@ -6,6 +7,8 @@ import { useState } from 'react';
 import { useModal } from '@hooks/useModal';
 import { Application } from '@gql/types/graphql';
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
+import { interviewPath, scheduleInterviewPath } from '@lib/routes';
+import { useRouter } from 'next/router';
 
 type Props = {
   applications: Application[];
@@ -13,6 +16,7 @@ type Props = {
 
 const ApplicationList = ({ applications }: Props) => {
   const session = useSession();
+  const router = useRouter();
   const [currApplicationId, setCurrApplicationId] = useState<
     number | null | undefined
   >(null);
@@ -57,21 +61,38 @@ const ApplicationList = ({ applications }: Props) => {
                     </div>
                     {session?.currentUser?.type === 'RECRUITER' && (
                       <div className="flex items-center justify-end ml-3">
+                        {app.status !== 'INVITED' && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCurrApplicationId(app.id);
+                              setIsVisible(true);
+                            }}
+                            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                          >
+                            Decline
+                          </button>
+                        )}
                         <button
                           type="button"
+                          className={cx(
+                            'ml-3 inline-flex items-center justify-center rounded-md border border-transparent px-4 pr-3 py-2 text-sm font-medium text-white shadow-sm focus:outline-none',
+                            {
+                              'bg-blue-600 hover:bg-blue-700':
+                                app.status !== 'INVITED',
+                              'bg-green-600 hover:bg-green-700':
+                                app.status === 'INVITED',
+                            },
+                          )}
                           onClick={() => {
-                            setCurrApplicationId(app.id);
-                            setIsVisible(true);
+                            const path =
+                              app.status === 'INVITED'
+                                ? interviewPath(app?.interview?.uuid as string)
+                                : scheduleInterviewPath(app.uuid);
+                            router.push(path);
                           }}
-                          className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
                         >
-                          Decline
-                        </button>
-                        <button
-                          type="button"
-                          className="ml-3 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 pr-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none"
-                        >
-                          Schedule
+                          {app.status === 'INVITED' ? 'Scheduled' : 'Schedule'}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

@@ -8,6 +8,7 @@ import {
 } from '@apollo/client';
 import { LOGIN_MUTATION } from '@gql/mutations/auth';
 import { AuthFormInputs } from '@components/Auth/AuthForm/types';
+import { profilePath } from '@lib/routes';
 
 type AuthContextType = {
   loginAction: (data: AuthFormInputs) => void;
@@ -71,7 +72,7 @@ const useProvideAuth = () => {
 
     if (result?.data?.login?.accessToken) {
       setAuthToken(result.data.login.accessToken);
-      router.push('/profile');
+      router.push(profilePath());
     }
   };
 

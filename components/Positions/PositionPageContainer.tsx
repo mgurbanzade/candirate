@@ -12,8 +12,10 @@ import PositionShowView from '@components/Positions/PositionShowView';
 import PositionEditView from '@components/Positions/PositionEditView';
 import useNotification from '@hooks/useNotification';
 import useSession from '@hooks/useSession';
+import { profilePath } from '@lib/routes';
 import ApplicationList from './ApplicationList';
 import { useRouter } from 'next/router';
+import statusIcons from './statusIcons';
 
 type PositionPageProps = {
   position: Position;
@@ -33,86 +35,6 @@ type PositionFormInputs = {
   salaryRateType: 'HOURLY' | 'MONTHLY' | 'YEARLY';
   companyId: number;
   type: 'FULLTIME' | 'PARTTIME';
-};
-
-const statusIcons = {
-  NOT_APPLIED: () => 'Apply',
-  DECLINED: () => (
-    <>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      <span className="ml-1">Declined</span>
-    </>
-  ),
-  APPLIED: () => (
-    <>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      <span className="ml-1">Applied</span>
-    </>
-  ),
-  INVITED: () => (
-    <>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      <span className="ml-1">Invited</span>
-    </>
-  ),
-  HIRED: () => (
-    <>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
-        />
-      </svg>
-      <span className="ml-1">Hired</span>
-    </>
-  ),
 };
 
 const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
@@ -194,7 +116,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
         description: 'Please complete your profile before applying',
         isVisible: true,
       });
-      return router.push('/profile');
+      return router.push(profilePath());
     }
 
     try {
@@ -234,9 +156,10 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   };
 
   const applicationStatusIcon =
-    session.currentUser?.type === 'candidate'
+    session.currentUser?.type === 'CANDIDATE'
       ? statusIcons[position.applicationStatus as keyof typeof statusIcons]()
       : null;
+
   return (
     <main className="py-5">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">

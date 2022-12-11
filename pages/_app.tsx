@@ -13,6 +13,7 @@ import { LOGOUT_MUTATION } from '@gql/mutations/auth';
 import { User } from '@gql/types/graphql';
 
 import '../styles/global.css';
+import { loginPath } from '@lib/routes';
 
 function App({
   Component,
@@ -32,7 +33,7 @@ function App({
     });
 
     if (res.data?.logout.success) {
-      router.push('/login');
+      router.push(loginPath());
     }
   };
   return (

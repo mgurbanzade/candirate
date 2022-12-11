@@ -20,6 +20,7 @@ export const GET_POSITION = graphql(`
       }
       applications {
         id
+        uuid
         status
         candidate {
           id
@@ -28,6 +29,9 @@ export const GET_POSITION = graphql(`
           yearsOfExperience
           salaryExpectation
           salaryRateType
+        }
+        interview {
+          uuid
         }
       }
       applicationStatus @include(if: $isCandidate)

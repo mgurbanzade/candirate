@@ -1,10 +1,6 @@
-import { useModal } from '@hooks/useModal';
-import Modal from '@components/Generic/Modal';
-import InterviewsEmptyState from '@components/Interviews/InterviewsEmptyState';
-import InterviewModalForm from '@components/Interviews/InterviewModalForm';
+import Calendar from '@components/Calendar/Calendar';
 
 const InterviewsPage = () => {
-  const { setIsVisible } = useModal();
   return (
     <div className="py-5">
       <header>
@@ -19,10 +15,7 @@ const InterviewsPage = () => {
           <div className="px-4 py-8 sm:px-0">
             <div className="h-96 rounded-lg">
               <div className="overflow-hidden bg-white shadow sm:rounded-md">
-                <InterviewsEmptyState onClick={() => setIsVisible(true)} />
-                <Modal>
-                  <InterviewModalForm />
-                </Modal>
+                <Calendar />
               </div>
             </div>
           </div>
