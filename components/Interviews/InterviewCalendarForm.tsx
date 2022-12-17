@@ -33,31 +33,38 @@ const InterviewModalForm = ({
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<InterviewFromInputs>();
 
   const onSubmit: SubmitHandler<InterviewFromInputs> = async (data) => {
     if (!currentUser) return;
 
-    const res = await createInterview({
-      variables: {
-        applicationId: application.id as number,
-        createInterviewInput: {
-          description: data.description,
-          meetingLink: data.meetingLink,
-          title: interviewTitle,
-          startsAt: event?.startDate.toISO(),
-          endsAt: event?.startDate.plus({ minutes: data.duration }).toISO(),
-          candidateId: application?.candidate?.id as number,
-          positionId: application?.position?.id as number,
-          recruiterId: currentUser?.recruiterId as number,
+    try {
+      const res = await createInterview({
+        variables: {
+          applicationId: application.id as number,
+          createInterviewInput: {
+            description: data.description,
+            meetingLink: data.meetingLink,
+            title: interviewTitle,
+            startsAt: event?.startDate.toISO(),
+            endsAt: event?.startDate.plus({ minutes: data.duration }).toISO(),
+            candidateId: application?.candidate?.id as number,
+            positionId: application?.position?.id as number,
+            recruiterId: currentUser?.recruiterId as number,
+          },
         },
-      },
-    });
+      });
 
-    if (res.data?.createInterview.title) {
-      await refetchEvents();
-      closePopover();
+      if (res.data?.createInterview.title) {
+        await refetchEvents();
+        closePopover();
+      }
+    } catch (err: any) {
+      setError('duration', {
+        message: err.message,
+      });
     }
   };
 

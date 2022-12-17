@@ -23,6 +23,7 @@ export default function Calendar({ application, isNewInterview }: Props) {
   const [events, setEvents] = useState<UIInteviewType[]>([]);
 
   const container = useRef(null);
+
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
 
@@ -43,24 +44,33 @@ export default function Calendar({ application, isNewInterview }: Props) {
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
-    // const currentMinute = new Date().getHours() * 60;
-    // container.current.scrollTop =
-    //   ((container?.current?.scrollHeight -
-    //     containerNav?.current?.offsetHeight -
-    //     containerOffset?.current?.offsetHeight) *
-    //     currentMinute) /
-    //   1440;
+    const currentMinute = new Date().getHours() * 60;
+    (container as any).current.scrollTop =
+      (((container?.current as any).scrollHeight -
+        (containerNav?.current as any).offsetHeight -
+        (containerOffset?.current as any).offsetHeight) *
+        currentMinute) /
+      1440;
   }, []);
 
   return (
-    <div className="flex h-full flex-col">
+    <div
+      className="flex h-full flex-col"
+      style={{
+        maxHeight: isNewInterview ? 'auto' : 'calc(100vh - 120px)',
+      }}
+    >
       <CalendarHeader
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
       />
       <div className="isolate flex flex-auto overflow-hidden bg-white">
         <div ref={container} className="flex flex-auto flex-col overflow-auto">
-          <MobileHeader containerNav={containerNav} />
+          <MobileHeader
+            ref={containerNav}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+          />
           <div className="flex w-full flex-auto">
             <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
             <div className="grid flex-auto grid-cols-1 grid-rows-1">

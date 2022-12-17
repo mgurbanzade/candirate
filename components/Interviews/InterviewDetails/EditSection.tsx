@@ -47,9 +47,9 @@ export default function EditSection({
     handleSubmit,
     control,
     getValues,
+    setError,
     formState: { errors },
   } = useForm<InterviewFormInputs>();
-
   const [updateInterview] = useMutation(UPDATE_INTERVIEW_MUTATION);
   const onSubmit = async (formData: InterviewFormInputs) => {
     try {
@@ -68,12 +68,15 @@ export default function EditSection({
           },
         },
       });
+
       if (!errors?.length) {
         refetchInterview();
         setViewState('show');
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      setError('duration', {
+        message: error.message,
+      });
     }
   };
 
@@ -172,6 +175,7 @@ export default function EditSection({
               />
             </dd>
           </div>
+          <FormErrorText field={errors.duration} />
           <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">
               Notes for the candidate

@@ -35,7 +35,11 @@ const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
         <div className="flex items-center rounded-md shadow-sm md:items-stretch md:hidden">
           <button
             type="button"
-            onClick={() => setSelectedDay(selectedDay.minus({ months: 1 }))}
+            onClick={() => {
+              const gap =
+                window.innerWidth < 768 ? { weeks: 1 } : { months: 1 };
+              setSelectedDay(selectedDay.minus(gap));
+            }}
             className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span className="sr-only">Previous month</span>
@@ -50,14 +54,18 @@ const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
           <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
           <button
             type="button"
-            onClick={() => setSelectedDay(selectedDay.plus({ months: 1 }))}
+            onClick={() => {
+              const gap =
+                window.innerWidth < 768 ? { weeks: 1 } : { months: 1 };
+              setSelectedDay(selectedDay.plus(gap));
+            }}
             className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span className="sr-only">Next month</span>
             <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
-        <div className="hidden md:ml-4 md:flex md:items-center">
+        {/* <div className="hidden md:ml-4 md:flex md:items-center">
           <Menu as="div" className="relative">
             <Menu.Button
               type="button"
@@ -152,8 +160,8 @@ const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
           >
             Add event
           </button> */}
-        </div>
-        <Menu as="div" className="relative ml-6 md:hidden">
+        {/* </div> */}
+        {/* <Menu as="div" className="relative ml-6 md:hidden">
           <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
             <span className="sr-only">Open menu</span>
             <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
@@ -255,7 +263,7 @@ const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
               </div>
             </Menu.Items>
           </Transition>
-        </Menu>
+        </Menu> */}
       </div>
     </header>
   );

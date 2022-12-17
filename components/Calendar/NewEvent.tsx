@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
-import InterviewModalForm from '@components/Interviews/InterviewModalForm';
+import InterviewCalendarForm from '@components/Interviews/InterviewCalendarForm';
 import { UIInteviewType } from '@lib/ui-types';
 
 type Props = {
@@ -59,7 +59,7 @@ const NewEvent = ({ event, setEvents, refetchEvents }: Props) => {
             <Popover.Panel className="absolute left-44 z-10 mt-3 w-screen max-w-xs -translate-x-1/2 transform px-2 sm:px-0 mt-16 -ml-2">
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative grid gap-6 bg-white px-4 py-4 sm:gap-8">
-                  <InterviewModalForm
+                  <InterviewCalendarForm
                     application={event.application}
                     setEvents={setEvents}
                     event={event}

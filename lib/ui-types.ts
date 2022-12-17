@@ -3,13 +3,13 @@ import { DateTime } from 'luxon';
 
 export type UIInteviewType = {
   id: string;
-  uuid: string;
   application?: Application | null;
   description?: string | null;
   startDate: DateTime;
   title: string;
   startStr: string;
   duration: number;
+  uuid?: string;
   isNew?: boolean;
 };
 

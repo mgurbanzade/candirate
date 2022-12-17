@@ -28,3 +28,12 @@ export const GET_INTERVIEW = graphql(`
     }
   }
 `);
+
+export const GET_RESERVED_TIMESTAMPS = graphql(`
+  query GetReservedTimestamps($timestampInput: TimestampInput!) {
+    getReservedTimestamps(timestampInput: $timestampInput) {
+      startsAt
+      endsAt
+    }
+  }
+`);

@@ -81,3 +81,21 @@ export const mapInterviewsToTimeline = (
     };
   });
 };
+
+export const getDaysForWeek = (dateTime: DateTime = DateTime.local()) => {
+  const days = [];
+  const startOfWeek = dateTime.startOf('week');
+
+  for (let i = 0; i <= 6; i++) {
+    const date = startOfWeek.plus({ days: i });
+    days.push({
+      id: date.toISO(),
+      date,
+      isWeekend: date.weekday === 6 || date.weekday === 7,
+      isToday: date.hasSame(DateTime.local(), 'day'),
+      isSelected: (selectedDate: DateTime) => date.hasSame(selectedDate, 'day'),
+    });
+  }
+
+  return days;
+};

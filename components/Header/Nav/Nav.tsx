@@ -30,7 +30,7 @@ const Navigation = () => {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-full">
-                <div className="hidden sm:ml-6 sm:flex sm:space-x-8 w-full justify-between">
+                {/* <div className="hidden sm:ml-6 sm:flex sm:space-x-8 w-full justify-between">
                   {session.loading ? (
                     <svg
                       className="animate-spin h-5 w-5 mr-3"
@@ -52,7 +52,7 @@ const Navigation = () => {
                       </Link>
                     )
                   )}
-                </div>
+                </div> */}
               </div>
               {session.currentUser && (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
