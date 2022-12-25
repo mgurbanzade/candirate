@@ -1,13 +1,25 @@
+import cx from 'classnames';
+
 type Props = {
   data: { id: number; name: string };
   withRemoveBtn?: boolean;
+  bgColor?: string;
+  textColor?: string;
   onRemove?: (data: any) => void;
 };
 
-const Tag = ({ data, withRemoveBtn, onRemove }: Props) => {
+const Tag = ({ data, withRemoveBtn, onRemove, bgColor, textColor }: Props) => {
   const { id, name } = data;
   return (
-    <span className="inline-flex items-center rounded-full bg-indigo-100 py-0.5 pl-2 pr-2 mr-1 mb-1 text-xs font-medium text-indigo-700">
+    <span
+      className={cx(
+        'inline-flex items-center rounded-full bg-indigo-100 py-0.5 pl-2 pr-2 mr-1 mb-1 text-xs font-medium text-indigo-700',
+        {
+          [bgColor as string]: !!bgColor,
+          [textColor as string]: !!textColor,
+        },
+      )}
+    >
       {name}
       {withRemoveBtn && onRemove && (
         <button

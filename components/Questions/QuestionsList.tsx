@@ -1,46 +1,27 @@
-import { CalendarIcon, MapPinIcon, UsersIcon } from '@heroicons/react/20/solid';
+import { Question } from '@gql/types/graphql';
+import QuestionItem from './QuestionItem';
 
-const positions = [
-  {
-    id: 1,
-    uuid: '123123',
-    title: 'What is OOP?',
-    body: 'Tell me about OOP',
-    points: 7,
-  },
-  {
-    id: 2,
-    uuid: '123123',
-    title: 'What is React?',
-    body: 'Tell me about React',
-    points: 5,
-  },
-  {
-    id: 3,
-    uuid: '123123',
-    title: 'How does Event Loop work?',
-    body: 'Tell Me about Event Loop',
-    points: 10,
-  },
-];
+type Props = {
+  questions: Question[];
+  refetchQuestions: any;
+  isSelectState: boolean;
+};
 
-export default function Example() {
+export default function QuestionsList({
+  questions,
+  refetchQuestions,
+  isSelectState,
+}: Props) {
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <ul role="list" className="divide-y divide-gray-200">
-        {positions.map((position) => (
-          <li key={position.id}>
-            <a href="#" className="block hover:bg-gray-50">
-              <div className="px-4 py-4 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <p className="truncate text-sm font-medium text-indigo-600">
-                    {position.title}
-                  </p>
-                </div>
-                <div className="mt-2 sm:flex sm:justify-between"></div>
-              </div>
-            </a>
-          </li>
+        {questions.map((question) => (
+          <QuestionItem
+            isSelectState={isSelectState}
+            key={question.id}
+            question={question}
+            refetchQuestions={refetchQuestions}
+          />
         ))}
       </ul>
     </div>

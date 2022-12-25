@@ -3,7 +3,7 @@ export default function QuestionsEmptyState({ onClick }: { onClick: any }) {
     <button
       type="button"
       onClick={onClick}
-      className="relative block w-full rounded-lg border-4 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      className="relative block w-full rounded-lg border-4 border-dashed border-gray-300 p-12 text-center hover:border-gray-400"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

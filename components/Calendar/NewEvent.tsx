@@ -3,9 +3,10 @@ import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import InterviewCalendarForm from '@components/Interviews/InterviewCalendarForm';
 import { UIInteviewType } from '@lib/ui-types';
+import { Application } from '@gql/types/graphql';
 
 type Props = {
-  event: any;
+  event: UIInteviewType;
   setEvents: React.Dispatch<React.SetStateAction<UIInteviewType[]>>;
   refetchEvents: () => void;
 };
@@ -16,7 +17,10 @@ const NewEvent = ({ event, setEvents, refetchEvents }: Props) => {
   const gridRow = `${startHour * 12 + topOffset} / span ${event.duration * 12}`;
 
   return (
-    <Popover className="relative mt-px flex" style={{ gridRow }}>
+    <Popover
+      className="relative mt-px flex cursor-pointer z-50"
+      style={{ gridRow }}
+    >
       {({ open, close }) => (
         <>
           <li>
@@ -35,7 +39,7 @@ const NewEvent = ({ event, setEvents, refetchEvents }: Props) => {
                   {event.title}
                 </p>
                 <p className="order-1 text-blue-500 group-hover:text-blue-700">
-                  {event.descr}
+                  {event.description}
                 </p>
                 <p className="text-blue-500 group-hover:text-blue-700">
                   <time dateTime={event.startDate.toISO()}>
@@ -60,7 +64,7 @@ const NewEvent = ({ event, setEvents, refetchEvents }: Props) => {
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative grid gap-6 bg-white px-4 py-4 sm:gap-8">
                   <InterviewCalendarForm
-                    application={event.application}
+                    application={event.application as Application}
                     setEvents={setEvents}
                     event={event}
                     closePopover={close}

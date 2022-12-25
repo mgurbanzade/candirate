@@ -13,6 +13,13 @@ export type UIInteviewType = {
   isNew?: boolean;
 };
 
+export type UIQuestionType = {
+  id: number;
+  title: string;
+  points: number;
+  isNew: boolean;
+};
+
 export type TimelineCellType = {
   id: string;
   hour: DateTime;

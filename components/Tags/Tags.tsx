@@ -34,7 +34,6 @@ const Tags = ({ tags, onRemove, isDraggable }: Props) => {
           withRemoveBtn
         />
       )}
-      onChange={(tags) => console.log(tags)}
     />
   ) : (
     <div>
