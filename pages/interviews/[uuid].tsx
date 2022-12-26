@@ -1,12 +1,10 @@
 import { useRouter } from 'next/router';
-// import useSession from '@hooks/useSession';
 import { GET_INTERVIEW } from '@gql/queries/interviews';
 import { useQuery } from '@apollo/client';
 import Page from '@components/Interviews/InterviewPageContainer';
 
 const InterviewPage = () => {
   const router = useRouter();
-  // const session = useSession();
   const { data, refetch } = useQuery(GET_INTERVIEW, {
     skip: !router.query.uuid,
     variables: {

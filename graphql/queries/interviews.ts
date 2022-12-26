@@ -25,6 +25,11 @@ export const GET_INTERVIEW = graphql(`
       meetingLink
       startsAt
       endsAt
+      questions {
+        id
+        title
+        points
+      }
     }
   }
 `);

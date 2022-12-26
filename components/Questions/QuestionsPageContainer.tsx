@@ -1,26 +1,45 @@
-import { useState } from 'react';
-import QuestionsListHeader from './QuestionsListHeader';
-import QuestionsList from './QuestionsList';
-import QuestionsEmptyState from './QuestionsEmptyState';
 import Modal from '@components/Generic/Modal';
-import QuestionModalForm from './QuestionModalForm';
 import useSession from '@hooks/useSession';
+import QuestionsList from './QuestionsList';
+import InterviewsList from './InterviewsList';
+import QuestionModalForm from './QuestionModalForm';
+import QuestionsListHeader from './QuestionsListHeader';
+import QuestionsEmptyState from './QuestionsEmptyState';
+
+import { DateTime } from 'luxon';
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_QUESTIONS } from '@gql/queries/questions';
 import { useModal } from '@hooks/useModal';
-import { Question } from '@gql/types/graphql';
+import { Interview, Question } from '@gql/types/graphql';
+import { GET_QUESTIONS } from '@gql/queries/questions';
+import { GET_INTERVIEWS } from '@gql/queries/interviews';
 
 const QuestionsPageContainer = () => {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [isSelectState, setIsSelectState] = useState(false);
   const { setIsVisible } = useModal();
   const { currentUser } = useSession();
+  const [isSelectState, setIsSelectState] = useState(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [selectedQuestionIds, setSelectedQuestionIds] = useState<number[]>([]);
+
   const { error, refetch } = useQuery(GET_QUESTIONS, {
     variables: {
       recruiterId: currentUser?.recruiterId as number,
     },
     onCompleted: (data) => {
       setQuestions((data.getQuestions as Question[]) || []);
+    },
+  });
+
+  const dayStart = DateTime.local().startOf('minute').toISO();
+  const dayEnd = DateTime.local().plus({ years: 10 }).endOf('minute').toISO();
+
+  const { data } = useQuery(GET_INTERVIEWS, {
+    variables: {
+      getInterviewsWhereInput: {
+        recruiterId: currentUser?.recruiterId as number,
+        dayStart,
+        dayEnd,
+      },
     },
   });
 
@@ -44,12 +63,14 @@ const QuestionsPageContainer = () => {
                   <QuestionsListHeader
                     setQuestions={setQuestions}
                     isSelectState={isSelectState}
+                    selectedQuestionIds={selectedQuestionIds}
                     setIsSelectState={setIsSelectState}
                   />
                   <QuestionsList
                     questions={questions}
                     refetchQuestions={refetch}
                     isSelectState={isSelectState}
+                    setSelectedQuestionIds={setSelectedQuestionIds}
                   />
                 </div>
               ) : (
@@ -59,7 +80,14 @@ const QuestionsPageContainer = () => {
           </div>
         </div>
         <Modal>
-          <QuestionModalForm refetchQuestions={refetch} />
+          {isSelectState ? (
+            <InterviewsList
+              interviews={data?.getInterviews as Interview[]}
+              selectedQuestionIds={selectedQuestionIds}
+            />
+          ) : (
+            <QuestionModalForm refetchQuestions={refetch} />
+          )}
         </Modal>
       </main>
     </div>

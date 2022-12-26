@@ -31,3 +31,11 @@ export const UPDATE_INTERVIEW_MUTATION = graphql(`
     }
   }
 `);
+
+export const IMPORT_QUESTIONS_MUTATION = graphql(`
+  mutation importQuestions($questionIds: [Int]!, $interviewId: Int!) {
+    importQuestions(questionIds: $questionIds, interviewId: $interviewId) {
+      __typename
+    }
+  }
+`);

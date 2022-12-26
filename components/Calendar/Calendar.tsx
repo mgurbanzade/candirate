@@ -1,16 +1,17 @@
+import Events from './Events';
+import Timeline from './Timeline';
+import useSession from '@hooks/useSession';
+import Datepicker from './Datepicker';
+import MobileHeader from './MobileHeader';
+import CalendarHeader from './Header';
+
 import { useQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
-import { useEffect, useRef, useState } from 'react';
 import { Application } from '@gql/types/graphql';
 import { UIInteviewType } from '@lib/ui-types';
 import { GET_INTERVIEWS } from '@gql/queries/interviews';
-import useSession from '@hooks/useSession';
-import CalendarHeader from './Header';
-import Timeline from './Timeline';
-import Events from './Events';
-import Datepicker from './Datepicker';
-import MobileHeader from './MobileHeader';
 import { mapInterviewsToTimeline } from './helpers';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   isNewInterview?: boolean;
@@ -74,13 +75,11 @@ export default function Calendar({ application, isNewInterview }: Props) {
           <div className="flex w-full flex-auto">
             <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
             <div className="grid flex-auto grid-cols-1 grid-rows-1">
-              {/* Events */}
               <Events
                 events={events}
                 setEvents={setEvents}
                 refetchEvents={refetch}
               />
-              {/* Timeline */}
               <Timeline
                 containerOffset={containerOffset}
                 selectedDay={selectedDay}

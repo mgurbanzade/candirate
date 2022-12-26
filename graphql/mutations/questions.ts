@@ -20,3 +20,11 @@ export const UPDATE_QUESTION = graphql(`
     }
   }
 `);
+
+export const REMOVE_QUESTIONS = graphql(`
+  mutation RemoveQuestions($ids: [Int!]!) {
+    removeQuestions(ids: $ids) {
+      __typename
+    }
+  }
+`);

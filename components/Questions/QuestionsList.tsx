@@ -5,12 +5,14 @@ type Props = {
   questions: Question[];
   refetchQuestions: any;
   isSelectState: boolean;
+  setSelectedQuestionIds: any;
 };
 
 export default function QuestionsList({
   questions,
   refetchQuestions,
   isSelectState,
+  setSelectedQuestionIds,
 }: Props) {
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
@@ -21,6 +23,7 @@ export default function QuestionsList({
             key={question.id}
             question={question}
             refetchQuestions={refetchQuestions}
+            setSelectedQuestionIds={setSelectedQuestionIds}
           />
         ))}
       </ul>
