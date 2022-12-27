@@ -259,6 +259,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
         <div className="space-y-6 lg:col-span-2 lg:col-start-1">
           {isEditView ? (
             <PositionEditView
+              refetchPosition={refetchPosition}
               position={position}
               control={control}
               register={register}

@@ -11,6 +11,7 @@ import {
 import Select from '@components/Generic/Select';
 import FormErrorText from '@components/Generic/FormErrorText';
 import InputAutocomplete from '@components/Generic/InputAutocomplete';
+import SkillsEditor from '@components/Profile/CareerOverview/SkillsEditor';
 
 import { SEARCH_COMPANIES } from '@gql/queries/companies';
 
@@ -25,6 +26,7 @@ type PositionFormInputs = {
 
 type PositionEditViewProps = {
   position: Position;
+  refetchPosition: () => void;
   control: Control<PositionFormInputs, any>;
   register: UseFormRegister<PositionFormInputs>;
   errors: FieldErrors<PositionFormInputs>;
@@ -44,6 +46,7 @@ const employmentTypeOptions = [
 
 const PositionEditView = ({
   position,
+  refetchPosition,
   register,
   control,
   errors,
@@ -154,6 +157,19 @@ const PositionEditView = ({
                   control={control}
                   wrapperClassnames="w-80"
                   dropdownClassnames="w-80"
+                />
+              </dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-sm font-medium text-gray-500">Skills</dt>
+              <dd
+                className="mt-1 text-sm text-gray-900 rounded-md border border-gray-300 p-2"
+                style={{ minHeight: 40 }}
+              >
+                <SkillsEditor
+                  skills={position.requiredSkills}
+                  positionId={position.id}
+                  refetchPosition={refetchPosition}
                 />
               </dd>
             </div>

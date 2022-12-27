@@ -1,4 +1,5 @@
 import { Position } from '@gql/types/graphql';
+import Tags from '@components/Tags';
 
 type PositionShowViewProps = {
   position: Position;
@@ -43,6 +44,14 @@ const PositionShowView = ({ position }: PositionShowViewProps) => {
               </dt>
               <dd className="mt-1 text-sm text-gray-900">{typeTitle}</dd>
             </div>
+            {position.requiredSkills && position.requiredSkills.length > 0 ? (
+              <div className="sm:col-span-2">
+                <dt className="text-sm font-medium text-gray-500">Skills</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  <Tags tags={position.requiredSkills} isDraggable={false} />
+                </dd>
+              </div>
+            ) : null}
             <div className="sm:col-span-2">
               <dt className="text-sm font-medium text-gray-500">Description</dt>
               <dd className="mt-1 text-sm text-gray-900">
