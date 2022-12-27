@@ -1,4 +1,4 @@
-import QuestionsPageContainer from '@components/Questions/QuestionsPageContainer';
+import QuestionsPageContainer from '@components/Questions';
 
 const QuestionsPage = () => {
   return <QuestionsPageContainer />;

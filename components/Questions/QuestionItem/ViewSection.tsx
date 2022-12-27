@@ -1,4 +1,6 @@
 import Tag from '@components/Tags/Tag';
+
+import { useState, useEffect } from 'react';
 import { Question } from '@gql/types/graphql';
 
 type Props = {
@@ -15,17 +17,30 @@ const QuestionViewSection = ({
   setViewState,
   isSelectState,
 }: Props) => {
-  const handleCheckbox = (e: any) => {
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
+      setIsChecked(true);
       setSelectedQuestionIds((prev: number[]) => [...prev, question.id]);
     } else {
+      setIsChecked(false);
       setSelectedQuestionIds((prev: number[]) =>
         prev.filter((id) => id !== question.id),
       );
     }
   };
+
+  const handleItemClick = () => {
+    if (!isSelectState) return;
+    setIsChecked(!isChecked);
+  };
+
+  useEffect(() => {
+    if (!isSelectState) setIsChecked(false);
+  }, [isSelectState]);
+
   return (
-    <li key={question.id}>
+    <li key={question.id} onClick={handleItemClick}>
       <div className="px-4 py-4 sm:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center text-sm font-medium text-indigo-600">
@@ -36,6 +51,7 @@ const QuestionViewSection = ({
                 onChange={handleCheckbox}
                 name="comments"
                 type="checkbox"
+                checked={isChecked}
                 className="h-6 w-6 rounded border-gray-300 text-indigo-600 focus-0 mr-3"
               />
             )}
@@ -51,6 +67,7 @@ const QuestionViewSection = ({
           </div>
           <button
             type="button"
+            disabled={isSelectState}
             onClick={() => setViewState('edit')}
             className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none border-transparent"
           >

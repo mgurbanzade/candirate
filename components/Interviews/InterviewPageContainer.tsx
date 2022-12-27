@@ -25,19 +25,21 @@ const InterviewPageContainer = ({ interviewData, refetchInterview }: Props) => {
             refetchInterview={refetchInterview}
           />
         </div>
-        <div className="overflow-hidden bg-white shadow sm:rounded-md space-y-6 lg:col-span-2 lg:col-start-1">
-          <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg font-medium leading-6 text-gray-900">
-              Attached questions
-            </h2>
+        {(interviewData.questions?.length as number) > 0 && (
+          <div className="overflow-hidden bg-white shadow sm:rounded-md space-y-6 lg:col-span-2 lg:col-start-1">
+            <div className="px-4 py-5 sm:px-6">
+              <h2 className="text-lg font-medium leading-6 text-gray-900">
+                Attached questions
+              </h2>
+            </div>
+            <InterviewQuestionsList
+              questions={interviewData.questions as Question[]}
+              refetchQuestions={refetchInterview}
+              isSelectState={false}
+              setSelectedQuestionIds={() => null}
+            />
           </div>
-          <InterviewQuestionsList
-            questions={interviewData.questions as Question[]}
-            refetchQuestions={refetchInterview}
-            isSelectState={false}
-            setSelectedQuestionIds={() => null}
-          />
-        </div>
+        )}
       </div>
     </div>
   );
