@@ -22,6 +22,14 @@ export const GET_POSITION = graphql(`
         id
         name
       }
+      suggestedCandidates {
+        id
+        uuid
+        positionTitle
+        yearsOfExperience
+        salaryExpectation
+        salaryRateType
+      }
       applications {
         id
         uuid

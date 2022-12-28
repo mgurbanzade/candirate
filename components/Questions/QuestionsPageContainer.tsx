@@ -25,6 +25,7 @@ const QuestionsPageContainer = () => {
     variables: {
       recruiterId: currentUser?.recruiterId as number,
     },
+    skip: !currentUser?.recruiterId,
     onCompleted: (data) => {
       setQuestions((data.getQuestions as Question[]) || []);
     },

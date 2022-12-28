@@ -1,7 +1,12 @@
 import cx from 'classnames';
 import { useState } from 'react';
 import { useMutation, ApolloQueryResult } from '@apollo/client';
-import { Position, GetPositionQuery, Application } from '@gql/types/graphql';
+import {
+  Position,
+  GetPositionQuery,
+  Application,
+  Candidate,
+} from '@gql/types/graphql';
 import {
   UPDATE_POSITION_MUTATION,
   PUBLISH_POSITION_MUTATION,
@@ -16,6 +21,7 @@ import { profilePath } from '@lib/routes';
 import ApplicationList from './ApplicationList';
 import { useRouter } from 'next/router';
 import statusIcons from './statusIcons';
+import SuggestedCandidatesList from './SuggestedCandidatesList';
 
 type PositionPageProps = {
   position: Position;
@@ -270,6 +276,14 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
             <PositionShowView position={position} />
           )}
         </div>
+        {session?.currentUser?.type === 'RECRUITER' &&
+        position.suggestedCandidates?.length ? (
+          <div className="space-y-6 lg:col-span-1 lg:col-start-3">
+            <SuggestedCandidatesList
+              candidates={position.suggestedCandidates as Candidate[]}
+            />
+          </div>
+        ) : null}
       </div>
       {session?.currentUser?.type === 'RECRUITER' &&
       position.applications?.length ? (
