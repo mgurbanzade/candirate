@@ -1,6 +1,6 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Candidate } from '@gql/types/graphql';
-import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 import { candidateProfilePath } from '@lib/routes';
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
 };
 
 const SuggestedCandidatesList = ({ candidates }: Props) => {
+  const router = useRouter();
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <div className="px-4 py-5 sm:px-6">
@@ -27,7 +28,11 @@ const SuggestedCandidatesList = ({ candidates }: Props) => {
             <div className="block hover:bg-gray-50">
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
-                  <Link href={candidateProfilePath(candidate?.uuid as string)}>
+                  <Link
+                    href={`${candidateProfilePath(
+                      candidate?.uuid as string,
+                    )}?position=${router.query.uuid}`}
+                  >
                     <p className="truncate text-sm font-medium text-indigo-600">
                       {candidate?.positionTitle}
                     </p>

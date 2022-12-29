@@ -36,3 +36,11 @@ export const REMOVE_SKILL_FROM_CANDIDATE_MUTATION = graphql(`
     }
   }
 `);
+
+export const PROPOSE_POSITION_MUTATION = graphql(`
+  mutation ProposePosition($proposePositionInput: ProposePositionInput!) {
+    proposePosition(proposePositionInput: $proposePositionInput) {
+      uuid
+    }
+  }
+`);

@@ -17,3 +17,9 @@ export const GET_CANDIDATE_PROFILE = graphql(`
     }
   }
 `);
+
+export const GET_PROPOSAL_STATUS = graphql(`
+  query GetProposalStatus($uuid: String!, $positionUuid: String!) {
+    getProposalStatus(uuid: $uuid, positionUuid: $positionUuid)
+  }
+`);

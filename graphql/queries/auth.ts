@@ -6,11 +6,14 @@ export const REFRESH = graphql(`
       user {
         id
         firstname
+        lastname
         email
         type
         candidateId
         recruiterId
         candidate {
+          id
+          uuid
           positionTitle
           yearsOfExperience
           salaryExpectation

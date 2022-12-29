@@ -15,11 +15,14 @@ export const GET_CURRENT_USER = graphql(`
       user {
         id
         firstname
+        lastname
         email
         type
         candidateId
         recruiterId
         candidate {
+          id
+          uuid
           positionTitle
           yearsOfExperience
           salaryExpectation
