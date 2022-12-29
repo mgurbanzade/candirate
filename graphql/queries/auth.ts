@@ -3,6 +3,8 @@ import { graphql } from '../types';
 export const REFRESH = graphql(`
   query Refresh {
     refresh {
+      accessToken
+      expSeconds
       user {
         id
         firstname

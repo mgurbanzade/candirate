@@ -1,3 +1,4 @@
+// FIX LINE 14
 import { useQuery } from '@apollo/client';
 import { GET_POSITIONS } from '@gql/queries/positions';
 import { Position } from '@gql/types/graphql';
@@ -7,7 +8,7 @@ export default function PositionsList() {
   const { data } = useQuery(GET_POSITIONS, {
     variables: {
       where: {
-        authorId: 1,
+        authorId: 1, // FIX ME
       },
     },
   });

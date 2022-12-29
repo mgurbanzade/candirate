@@ -1,19 +1,20 @@
 import Layout from '@components/Layout';
 import Notification from '@components/Notification';
 import createApolloClient from '@lib/client';
-import { AppContext, AppProps } from 'next/app';
-import { useRouter } from 'next/router';
-import { AuthProvider } from '@hooks/useAuth';
-import { NotificationProvider } from '@hooks/useNotification';
-import { SessionContext } from '@hooks/useSession';
-import { ModalProvider } from '@hooks/useModal';
-import { GET_CURRENT_USER } from '@gql/queries/users';
-import { REFRESH } from '@gql/queries/auth';
-import { LOGOUT_MUTATION } from '@gql/mutations/auth';
+
 import { User } from '@gql/types/graphql';
+import { REFRESH } from '@gql/queries/auth';
+import { useRouter } from 'next/router';
+import { loginPath } from '@lib/routes';
+import { AuthProvider } from '@hooks/useAuth';
+import { ModalProvider } from '@hooks/useModal';
+import { SessionContext } from '@hooks/useSession';
+import { LOGOUT_MUTATION } from '@gql/mutations/auth';
+import { GET_CURRENT_USER } from '@gql/queries/users';
+import { AppContext, AppProps } from 'next/app';
+import { NotificationProvider } from '@hooks/useNotification';
 
 import '../styles/global.css';
-import { loginPath } from '@lib/routes';
 
 function App({
   Component,
@@ -80,6 +81,11 @@ App.getInitialProps = async (appCtx: AppContext) => {
           },
           query: REFRESH,
         });
+
+        appCtx?.ctx?.res?.setHeader(
+          'Set-Cookie',
+          `Authentication=${refreshUser.data.refresh.accessToken}; HttpOnly; Path=/; Max-Age=${refreshUser.data.refresh.expSeconds};`,
+        );
 
         return {
           currentUser: refreshUser.data.refresh.user,
