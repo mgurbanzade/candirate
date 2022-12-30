@@ -32,6 +32,7 @@ const InterviewsList = ({ interviews, selectedQuestionIds }: Props) => {
 
   return (
     <ul role="list" className="divide-y divide-gray-200">
+      {interviews?.length === 0 && 'No interviews found'}
       {interviews?.map((interview) => (
         <li
           key={interview?.id}

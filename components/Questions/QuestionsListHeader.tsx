@@ -55,20 +55,20 @@ const QuestionsListHeader = ({
 
   return (
     <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-      <div className="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
-        <div className="ml-4 mt-2">
+      <div className="flex flex-wrap items-center justify-between sm:flex-nowrap">
+        <div className="">
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             Questions
           </h3>
         </div>
-        <div className="ml-4 mt-2 flex items-center flex-shrink-0">
+        <div className="ml-4 flex items-center flex-shrink-0">
           {isSelectState && (
             <button
               type="button"
               onClick={handleDeleteQuestions}
               disabled={selectedQuestionIds.length === 0}
               className={cx(
-                'inline-flex items-center rounded-md bg-red-500 hover:bg-red-700 px-4 py-2 text-sm font-medium text-white',
+                'inline-flex items-center rounded-md border border-transparent bg-red-500 hover:bg-red-700 px-4 py-1.5 text-sm font-medium text-white',
                 {
                   'opacity-70': selectedQuestionIds.length === 0,
                 },
@@ -96,7 +96,7 @@ const QuestionsListHeader = ({
               onClick={() => setIsVisible(true)}
               disabled={selectedQuestionIds.length === 0}
               className={cx(
-                'relative inline-flex items-center rounded-md border border-transparent bg-yellow-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 ml-3',
+                'relative inline-flex items-center rounded-md border border-transparent bg-yellow-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 ml-3',
                 {
                   'opacity-70': selectedQuestionIds.length === 0,
                 },

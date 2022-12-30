@@ -58,7 +58,7 @@ export default function Calendar({ application, isNewInterview }: Props) {
     <div
       className="flex h-full flex-col"
       style={{
-        maxHeight: isNewInterview ? 'auto' : 'calc(100vh - 120px)',
+        maxHeight: isNewInterview ? 'auto' : 'calc(100vh - 50px)',
       }}
     >
       <CalendarHeader

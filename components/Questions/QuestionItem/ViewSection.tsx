@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import Tag from '@components/Tags/Tag';
 
 import { useState, useEffect } from 'react';
@@ -11,6 +12,8 @@ type Props = {
   setSelectedQuestionIds: any;
 };
 
+const CheckboxRef = createRef<HTMLInputElement>();
+
 const QuestionViewSection = ({
   setSelectedQuestionIds,
   question,
@@ -18,21 +21,19 @@ const QuestionViewSection = ({
   isSelectState,
 }: Props) => {
   const [isChecked, setIsChecked] = useState(false);
-  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setIsChecked(true);
-      setSelectedQuestionIds((prev: number[]) => [...prev, question.id]);
-    } else {
+  const handleCheckbox = () => null; // do nothing;
+
+  const handleItemClick = () => {
+    if (!isSelectState) return;
+    if (isChecked) {
       setIsChecked(false);
       setSelectedQuestionIds((prev: number[]) =>
         prev.filter((id) => id !== question.id),
       );
+    } else {
+      setIsChecked(true);
+      setSelectedQuestionIds((prev: number[]) => [...prev, question.id]);
     }
-  };
-
-  const handleItemClick = () => {
-    if (!isSelectState) return;
-    setIsChecked(!isChecked);
   };
 
   useEffect(() => {
@@ -46,6 +47,7 @@ const QuestionViewSection = ({
           <div className="flex items-center text-sm font-medium text-indigo-600">
             {isSelectState && (
               <input
+                ref={CheckboxRef}
                 id="comments"
                 aria-describedby="comments-description"
                 onChange={handleCheckbox}

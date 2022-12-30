@@ -25,28 +25,28 @@ const SuggestedCandidatesList = ({ candidates }: Props) => {
       >
         {candidates.map((candidate) => (
           <li key={candidate?.id}>
-            <div className="block hover:bg-gray-50">
-              <div className="px-4 py-4 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <Link
-                    href={`${candidateProfilePath(
-                      candidate?.uuid as string,
-                    )}?position=${router.query.uuid}`}
-                  >
+            <Link
+              href={`${candidateProfilePath(
+                candidate?.uuid as string,
+              )}?position=${router.query.uuid}`}
+            >
+              <div className="block hover:bg-gray-50">
+                <div className="px-4 py-4 sm:px-6">
+                  <div className="flex items-center justify-between">
                     <p className="truncate text-sm font-medium text-indigo-600">
                       {candidate?.positionTitle}
                     </p>
-                  </Link>
-                  <div className="flex items-center justify-end grow">
-                    <div className="flex">
-                      <p className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 ml-4">
-                        {candidate?.yearsOfExperience} years
-                      </p>
+                    <div className="flex items-center justify-end grow">
+                      <div className="flex">
+                        <p className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 ml-4">
+                          {candidate?.yearsOfExperience} years
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </li>
         ))}
       </ul>

@@ -47,51 +47,42 @@ const QuestionsPageContainer = () => {
   if (error) return <div>Error</div>;
 
   return (
-    <div className="py-5">
-      <header>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
-            Questions
-          </h1>
-        </div>
-      </header>
-      <main>
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="px-4 py-8 sm:px-0">
-            <div className="h-96 rounded-lg">
-              {questions && questions.length > 0 ? (
-                <div className="overflow-hidden bg-white shadow sm:rounded-md">
-                  <QuestionsListHeader
-                    setQuestions={setQuestions}
-                    isSelectState={isSelectState}
-                    selectedQuestionIds={selectedQuestionIds}
-                    setIsSelectState={setIsSelectState}
-                  />
-                  <QuestionsList
-                    questions={questions}
-                    refetchQuestions={refetch}
-                    isSelectState={isSelectState}
-                    setSelectedQuestionIds={setSelectedQuestionIds}
-                  />
-                </div>
-              ) : (
-                <QuestionsEmptyState onClick={() => setIsVisible(true)} />
-              )}
-            </div>
+    <main className="px-6 py-6">
+      <div className="mx-auto max-w-7xl">
+        <div className="px-4 sm:px-0">
+          <div className="h-96 rounded-lg">
+            {questions && questions.length > 0 ? (
+              <div className="overflow-hidden bg-white shadow sm:rounded-md">
+                <QuestionsListHeader
+                  setQuestions={setQuestions}
+                  isSelectState={isSelectState}
+                  selectedQuestionIds={selectedQuestionIds}
+                  setIsSelectState={setIsSelectState}
+                />
+                <QuestionsList
+                  questions={questions}
+                  refetchQuestions={refetch}
+                  isSelectState={isSelectState}
+                  setSelectedQuestionIds={setSelectedQuestionIds}
+                />
+              </div>
+            ) : (
+              <QuestionsEmptyState onClick={() => setIsVisible(true)} />
+            )}
           </div>
         </div>
-        <Modal>
-          {isSelectState ? (
-            <InterviewsList
-              interviews={data?.getInterviews as Interview[]}
-              selectedQuestionIds={selectedQuestionIds}
-            />
-          ) : (
-            <QuestionModalForm refetchQuestions={refetch} />
-          )}
-        </Modal>
-      </main>
-    </div>
+      </div>
+      <Modal>
+        {isSelectState ? (
+          <InterviewsList
+            interviews={data?.getInterviews as Interview[]}
+            selectedQuestionIds={selectedQuestionIds}
+          />
+        ) : (
+          <QuestionModalForm refetchQuestions={refetch} />
+        )}
+      </Modal>
+    </main>
   );
 };
 
