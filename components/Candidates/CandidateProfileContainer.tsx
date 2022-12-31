@@ -36,7 +36,7 @@ const CandidateProfileContainer = () => {
       const res = await proposePosition({
         variables: {
           proposePositionInput: {
-            title: 'You have been proposed for a position',
+            title: 'Position proposal',
             body: `${currentUser?.firstname} ${currentUser?.lastname} invited you to check out a position`,
             positionUuid: router.query.position as string,
             candidateUuid: router.query.uuid as string,

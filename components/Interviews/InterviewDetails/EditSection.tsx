@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { Interview } from '@gql/types/graphql';
+import useSession from '@hooks/useSession';
 import FormErrorText from '@components/Generic/FormErrorText';
 import { UPDATE_INTERVIEW_MUTATION } from '@gql/mutations/interviews';
 import DateTimePicker from '@components/Generic/DateTimePicker';
@@ -39,6 +40,7 @@ export default function EditSection({
   setViewState,
   refetchInterview,
 }: Props) {
+  const { currentUser } = useSession();
   const [startDate, setStartDate] = useState(
     DateTime.fromISO(interview.startsAt),
   );
@@ -97,13 +99,15 @@ export default function EditSection({
         <h2 className="text-lg font-medium leading-6 text-gray-900">
           Interview details
         </h2>
-        <button
-          type="button"
-          onClick={handleSubmit(onSubmit)}
-          className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none border-transparent bg-blue-600 text-white hover:bg-blue-700"
-        >
-          Save
-        </button>
+        {currentUser?.recruiterId && (
+          <button
+            type="button"
+            onClick={handleSubmit(onSubmit)}
+            className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none border-transparent bg-blue-600 text-white hover:bg-blue-700"
+          >
+            Save
+          </button>
+        )}
       </div>
       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">

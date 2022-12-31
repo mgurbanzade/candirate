@@ -17,7 +17,7 @@ import PositionShowView from '@components/Positions/PositionShowView';
 import PositionEditView from '@components/Positions/PositionEditView';
 import useNotification from '@hooks/useNotification';
 import useSession from '@hooks/useSession';
-import { profilePath } from '@lib/routes';
+import { interviewsPath, profilePath } from '@lib/routes';
 import ApplicationList from './ApplicationList';
 import { useRouter } from 'next/router';
 import statusIcons from './statusIcons';
@@ -182,9 +182,11 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
                 </>
               )}
             </h1>
-            <p className="text-sm font-medium text-gray-500">
-              Add missing details before publishing
-            </p>
+            {position.isPublished ? null : (
+              <p className="text-sm font-medium text-gray-500">
+                Add missing details before publishing
+              </p>
+            )}
             {publishError && (
               <div className="text-red-500 mt-1 text-sm">{publishError}</div>
             )}
@@ -198,7 +200,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
                   type="button"
                   onClick={
                     isEditView
-                      ? handleSubmit(onSubmit)
+                      ? (router.push(interviewsPath()) as any)
                       : () => setViewState('edit')
                   }
                   className={cx(

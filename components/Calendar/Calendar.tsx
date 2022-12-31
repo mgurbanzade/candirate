@@ -32,6 +32,7 @@ export default function Calendar({ application, isNewInterview }: Props) {
   const { refetch } = useQuery(GET_INTERVIEWS, {
     variables: {
       getInterviewsWhereInput: {
+        candidateId: session?.currentUser?.candidateId,
         recruiterId: session?.currentUser?.recruiterId,
         dayStart: selectedDay.startOf('day').toISO(),
         dayEnd: selectedDay.endOf('day').toISO(),
