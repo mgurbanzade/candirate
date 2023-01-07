@@ -164,15 +164,15 @@ export default function EditSection({
               <input
                 type="number"
                 id="duration"
-                min={30}
+                min={15}
                 max={480}
-                step={30}
-                defaultValue={duration || 30}
+                step={15}
+                defaultValue={duration || 15}
                 autoComplete="duration"
                 className="block w-full min-w-0 flex-1 rounded-md border-gray-300 sm:text-sm"
                 {...register('duration', {
                   required: true,
-                  min: 30,
+                  min: 15,
                   max: 480,
                   valueAsNumber: true,
                 })}

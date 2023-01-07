@@ -1,4 +1,8 @@
-import { TimelineCellType, UIInteviewType } from '@lib/ui-types';
+import {
+  TimelineCellType,
+  TimelineEventTypes,
+  UITimelineEventType,
+} from '@lib/ui-types';
 import { DateTime, Interval } from 'luxon';
 
 const lastMonthDaysDispatcher = {
@@ -16,16 +20,18 @@ export const getTimelineForDate = (dateTime: DateTime): TimelineCellType[] => {
 
   for (let i = 0; i <= 23; i++) {
     const hour = dateTime.plus({ hours: i });
+    const hourAndQuarter = dateTime.plus({ hours: i, minutes: 15 });
     const hourAndHalf = dateTime.plus({ hours: i, minutes: 30 });
+    const hourAndThreeQuarter = dateTime.plus({ hours: i, minutes: 45 });
 
-    hours.push(hour, hourAndHalf);
+    hours.push(hour, hourAndQuarter, hourAndHalf, hourAndThreeQuarter);
   }
 
   return hours.map((hour) => {
     return {
       id: hour.toString(),
       hour,
-      hourStr: hour.minute === 30 ? hour.toFormat('h:ma') : hour.toFormat('ha'),
+      hourStr: hour.minute === 0 ? hour.toFormat('ha') : hour.toFormat('h:ma'),
       events: [],
     };
   });
@@ -58,13 +64,13 @@ export const getDatePickerData = (dateTime: DateTime = DateTime.local()) => {
   return days;
 };
 
-const roundToNearestHalfHour = (minutes: number) => {
-  return Math.ceil(minutes / 30) * 30;
+const roundToNearestQuarter = (minutes: number) => {
+  return Math.ceil(minutes / 15) * 15;
 };
 
 export const mapInterviewsToTimeline = (
   interviews: any[],
-): UIInteviewType[] => {
+): UITimelineEventType[] => {
   return interviews.map((interview) => {
     const start = DateTime.fromISO(interview.startsAt);
     const end = DateTime.fromISO(interview.endsAt);
@@ -75,9 +81,35 @@ export const mapInterviewsToTimeline = (
       application: null,
       description: interview.description,
       startDate: start,
+      endDate: end,
+      type: TimelineEventTypes.INTERVIEW,
       title: interview.title,
       startStr: start.toFormat('h:mma'),
-      duration: roundToNearestHalfHour(end.diff(start, 'minutes').minutes) / 60,
+      endStr: end.toFormat('h:mma'),
+      duration: roundToNearestQuarter(end.diff(start, 'minutes').minutes) / 60,
+    };
+  });
+};
+
+export const mapTimeslotsToTimeline = (
+  timeslots: any[],
+): UITimelineEventType[] => {
+  return timeslots.map((timeslot) => {
+    const { startsAt, endsAt, application } = timeslot;
+    const start = DateTime.fromISO(startsAt);
+    const end = DateTime.fromISO(endsAt);
+    const duration = Math.abs(start.diff(end, 'hours').hours);
+
+    return {
+      id: timeslot.id,
+      title: `Free time slot provided by candidate (click to schedule interview)`,
+      startDate: start,
+      endDate: end,
+      startStr: start.toFormat('h:mma'),
+      endStr: start.toFormat('h:mma'),
+      type: TimelineEventTypes.SUBMITTED_SLOT,
+      duration,
+      application,
     };
   });
 };

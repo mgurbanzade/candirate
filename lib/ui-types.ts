@@ -1,16 +1,25 @@
 import { Application } from '@gql/types/graphql';
 import { DateTime } from 'luxon';
 
-export type UIInteviewType = {
+export enum TimelineEventTypes {
+  INTERVIEW = 'interview',
+  EVENT = 'event',
+  NEW_SLOT = 'new slot',
+  SUBMITTED_SLOT = 'submitted slot',
+}
+
+export type UITimelineEventType = {
   id: string;
+  title: string;
+  duration: number;
+  startDate: DateTime;
+  endDate?: DateTime;
+  startStr: string;
+  endStr?: string;
+  type: TimelineEventTypes;
   application?: Application | null;
   description?: string | null;
-  startDate: DateTime;
-  title: string;
-  startStr: string;
-  duration: number;
   uuid?: string;
-  isNew?: boolean;
 };
 
 export type UIQuestionType = {

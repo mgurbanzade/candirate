@@ -32,9 +32,13 @@ export const PUBLISH_POSITION_MUTATION = graphql(`
 `);
 
 export const APPLY_POSITION_MUTATION = graphql(`
-  mutation ApplyPosition($positionId: Int!, $candidateId: Int!) {
-    applyToPosition(positionId: $positionId, candidateId: $candidateId) {
-      id
+  mutation ApplyPosition($applyToPositionInput: ApplyToPositionInput!) {
+    applyToPosition(applyToPositionInput: $applyToPositionInput) {
+      timeslots {
+        id
+        startsAt
+        endsAt
+      }
     }
   }
 `);

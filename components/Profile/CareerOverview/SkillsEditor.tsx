@@ -60,7 +60,6 @@ const SkillsEditor = ({
       });
 
       if (!errors?.length) {
-        console.log(editorSkills, skillId);
         setEditorSkills(editorSkills.filter((s: Skill) => s.id !== skillId));
         (refetchFunc as any)();
       }

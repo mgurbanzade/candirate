@@ -88,7 +88,10 @@ const ApplicationList = ({ applications }: Props) => {
                             const path =
                               app.status === 'INVITED'
                                 ? interviewPath(app?.interview?.uuid as string)
-                                : scheduleInterviewPath(app.uuid);
+                                : scheduleInterviewPath(
+                                    app?.uuid as string,
+                                    app?.candidate?.uuid as string,
+                                  );
                             router.push(path);
                           }}
                         >

@@ -10,7 +10,7 @@ import {
 import {
   UPDATE_POSITION_MUTATION,
   PUBLISH_POSITION_MUTATION,
-  APPLY_POSITION_MUTATION,
+  // APPLY_POSITION_MUTATION,
 } from '@gql/mutations/positions';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import PositionShowView from '@components/Positions/PositionShowView';
@@ -58,7 +58,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   } = useForm<PositionFormInputs>();
   const [updatePosition] = useMutation(UPDATE_POSITION_MUTATION);
   const [publishPosition] = useMutation(PUBLISH_POSITION_MUTATION);
-  const [applyToPosition] = useMutation(APPLY_POSITION_MUTATION);
+  // const [applyToPosition] = useMutation(APPLY_POSITION_MUTATION);
   const handleUpdate = async (position: Position, data: PositionFormInputs) => {
     if (!position.id) return;
     if (!isDirty) {
@@ -125,33 +125,35 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
       return router.push(profilePath());
     }
 
-    try {
-      const res = await applyToPosition({
-        variables: {
-          positionId: position.id,
-          candidateId: session?.currentUser.candidateId,
-        },
-      });
+    router.push(`${interviewsPath()}?s=enabled&p=${position.uuid}`);
 
-      if (res.data?.applyToPosition) {
-        refetchPosition();
-        setNotification({
-          type: 'success',
-          title: 'Sucess!',
-          description: 'Application sent successfully',
-          isVisible: true,
-        });
-      }
-    } catch (e: any) {
-      if (e.message) {
-        setNotification({
-          type: 'error',
-          title: 'Error',
-          description: e.message,
-          isVisible: true,
-        });
-      }
-    }
+    // try {
+    //   const res = await applyToPosition({
+    //     variables: {
+    //       positionId: position.id,
+    //       candidateId: session?.currentUser.candidateId,
+    //     },
+    //   });
+
+    //   if (res.data?.applyToPosition) {
+    //     refetchPosition();
+    //     setNotification({
+    //       type: 'success',
+    //       title: 'Sucess!',
+    //       description: 'Application sent successfully',
+    //       isVisible: true,
+    //     });
+    //   }
+    // } catch (e: any) {
+    //   if (e.message) {
+    //     setNotification({
+    //       type: 'error',
+    //       title: 'Error',
+    //       description: e.message,
+    //       isVisible: true,
+    //     });
+    //   }
+    // }
   };
 
   const isEditView = viewState === 'edit';
@@ -200,11 +202,11 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
                   type="button"
                   onClick={
                     isEditView
-                      ? (router.push(interviewsPath()) as any)
+                      ? handleSubmit(onSubmit)
                       : () => setViewState('edit')
                   }
                   className={cx(
-                    'inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
+                    'inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100',
                     {
                       'border-gray-300 bg-white text-gray-700 hover:bg-gray-50':
                         !isEditView,

@@ -1,16 +1,16 @@
-import { Fragment } from 'react';
+// import { Fragment } from 'react';
 import {
-  ChevronDownIcon,
+  // ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  EllipsisHorizontalIcon,
+  // EllipsisHorizontalIcon,
 } from '@heroicons/react/20/solid';
-import { Menu, Transition } from '@headlessui/react';
+// import { Menu, Transition } from '@headlessui/react';
 import { DateTime } from 'luxon';
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+// function classNames(...classes: string[]) {
+//   return classes.filter(Boolean).join(' ');
+// }
 
 type Props = {
   selectedDay: DateTime;
@@ -18,14 +18,15 @@ type Props = {
 };
 
 const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
+  const dateTimeIso = selectedDay.toISO();
   return (
-    <header className="flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
+    <header className="flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6 overflow-hidden bg-white sm:rounded-t-md">
       <div>
         <h1 className="text-lg font-semibold leading-6 text-gray-900">
-          <time dateTime={selectedDay.toISO()} className="sm:hidden">
+          <time dateTime={dateTimeIso} className="sm:hidden">
             {selectedDay.toFormat('MMM d, y')}
           </time>
-          <time dateTime={selectedDay.toISO()} className="hidden sm:inline">
+          <time dateTime={dateTimeIso} className="hidden sm:inline">
             {selectedDay.toFormat('MMMM d, y')}
           </time>
         </h1>

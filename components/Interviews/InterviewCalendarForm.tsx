@@ -4,12 +4,12 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { CREATE_INTERVIEW_MUTATION } from '@gql/mutations/interviews';
 import { Application } from '@gql/types/graphql';
 import FormErrorText from '@components/Generic/FormErrorText';
-import { UIInteviewType } from '@lib/ui-types';
+import { UITimelineEventType } from '@lib/ui-types';
 
 type Props = {
   application: Application;
-  event: UIInteviewType;
-  setEvents: React.Dispatch<React.SetStateAction<UIInteviewType[]>>;
+  event: UITimelineEventType;
+  setEvents: React.Dispatch<React.SetStateAction<UITimelineEventType[]>>;
   closePopover: () => void;
   refetchEvents: () => void;
 };
@@ -33,7 +33,6 @@ const InterviewModalForm = ({
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<InterviewFromInputs>();
 
@@ -49,7 +48,7 @@ const InterviewModalForm = ({
             meetingLink: data.meetingLink,
             title: interviewTitle,
             startsAt: event?.startDate.toISO(),
-            endsAt: event?.startDate.plus({ minutes: data.duration }).toISO(),
+            endsAt: event?.startDate.plus({ hours: event.duration }).toISO(),
             candidateId: application?.candidate?.id as number,
             positionId: application?.position?.id as number,
             recruiterId: currentUser?.recruiterId as number,
@@ -62,9 +61,7 @@ const InterviewModalForm = ({
         closePopover();
       }
     } catch (err: any) {
-      setError('duration', {
-        message: err.message,
-      });
+      console.log(err);
     }
   };
 
@@ -73,7 +70,7 @@ const InterviewModalForm = ({
       action="#"
       method="POST"
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-8"
+      className="space-y-8 z-50"
     >
       <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
         <div className="space-y-6 sm:space-y-5">
@@ -84,35 +81,6 @@ const InterviewModalForm = ({
           </div>
 
           <div className="space-y-6 sm:space-y-5">
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <div className="sm:col-span-6">
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Duration (minutes)
-                </label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <input
-                    type="number"
-                    id="duration"
-                    min={30}
-                    max={480}
-                    step={30}
-                    defaultValue={30}
-                    autoComplete="duration"
-                    className="block w-full min-w-0 flex-1 rounded-md border-gray-300 sm:text-sm"
-                    {...register('duration', {
-                      required: true,
-                      min: 30,
-                      max: 480,
-                      valueAsNumber: true,
-                    })}
-                  />
-                </div>
-                <FormErrorText field={errors.duration} />
-              </div>
-            </div>
             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
               <div className="sm:col-span-6">
                 <label
