@@ -74,30 +74,33 @@ const OpenSidebar = ({ pathname, session }: Props) => {
                 />
               </>
             )}
-            {navigationData.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cx(
-                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
-                  {
-                    'bg-gray-100 text-gray-900': !!item.checkIsActive(pathname),
-                    'text-gray-600 hover:bg-gray-50 hover:text-gray-900':
-                      !item.checkIsActive(pathname),
-                  },
-                )}
-              >
-                <item.icon
-                  className={cx('mr-3 flex-shrink-0 h-6 w-6', {
-                    'text-gray-500': !!item.checkIsActive(pathname),
-                    'text-gray-400 group-hover:text-gray-500':
-                      !item.checkIsActive(pathname),
-                  })}
-                  aria-hidden="true"
-                />
-                {item.name}
-              </Link>
-            ))}
+            {navigationData.map((item) =>
+              item.isVisible(currentUser) ? (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cx(
+                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                    {
+                      'bg-gray-100 text-gray-900':
+                        !!item.checkIsActive(pathname),
+                      'text-gray-600 hover:bg-gray-50 hover:text-gray-900':
+                        !item.checkIsActive(pathname),
+                    },
+                  )}
+                >
+                  <item.icon
+                    className={cx('mr-3 flex-shrink-0 h-6 w-6', {
+                      'text-gray-500': !!item.checkIsActive(pathname),
+                      'text-gray-400 group-hover:text-gray-500':
+                        !item.checkIsActive(pathname),
+                    })}
+                    aria-hidden="true"
+                  />
+                  {item.name}
+                </Link>
+              ) : null,
+            )}
           </nav>
         </div>
         <button

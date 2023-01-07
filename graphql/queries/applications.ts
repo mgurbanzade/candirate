@@ -19,3 +19,21 @@ export const GET_APPLICATION = graphql(`
     }
   }
 `);
+
+export const GET_APPLICATIONS = graphql(`
+  query GetApplications($candidateId: Int!) {
+    getApplications(candidateId: $candidateId) {
+      id
+      uuid
+      status
+      position {
+        id
+        title
+        company {
+          id
+          name
+        }
+      }
+    }
+  }
+`);

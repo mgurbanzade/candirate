@@ -9,3 +9,5 @@ export const profilePath = () => '/profile';
 export const interviewPath = (uuid: string) => `/interviews/${uuid}`;
 export const candidateProfilePath = (uuid: string) => `/candidates/${uuid}`;
 export const positionPath = (uuid: string) => `/positions/${uuid}`;
+export const applicationsPath = () => '/applications';
+export const applicationPath = (uuid: string) => `/applications/${uuid}`;
