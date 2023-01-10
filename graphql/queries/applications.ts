@@ -5,9 +5,18 @@ export const GET_APPLICATION = graphql(`
     getApplication(uuid: $uuid) {
       id
       uuid
+      status
+      currentStep {
+        id
+        title
+      }
       position {
         id
         title
+        hiringSteps {
+          id
+          title
+        }
       }
       candidate {
         id
