@@ -6,11 +6,11 @@ import {
   GetPositionQuery,
   Application,
   Candidate,
+  HiringStep,
 } from '@gql/types/graphql';
 import {
   UPDATE_POSITION_MUTATION,
   PUBLISH_POSITION_MUTATION,
-  // APPLY_POSITION_MUTATION,
 } from '@gql/mutations/positions';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import PositionShowView from '@components/Positions/PositionShowView';
@@ -22,6 +22,7 @@ import ApplicationList from './ApplicationList';
 import { useRouter } from 'next/router';
 import statusIcons from './statusIcons';
 import SuggestedCandidatesList from './SuggestedCandidatesList';
+import HiringSteps from '@components/HiringSteps';
 
 type PositionPageProps = {
   position: Position;
@@ -126,34 +127,6 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
     }
 
     router.push(`${interviewsPath()}?s=enabled&p=${position.uuid}`);
-
-    // try {
-    //   const res = await applyToPosition({
-    //     variables: {
-    //       positionId: position.id,
-    //       candidateId: session?.currentUser.candidateId,
-    //     },
-    //   });
-
-    //   if (res.data?.applyToPosition) {
-    //     refetchPosition();
-    //     setNotification({
-    //       type: 'success',
-    //       title: 'Sucess!',
-    //       description: 'Application sent successfully',
-    //       isVisible: true,
-    //     });
-    //   }
-    // } catch (e: any) {
-    //   if (e.message) {
-    //     setNotification({
-    //       type: 'error',
-    //       title: 'Error',
-    //       description: e.message,
-    //       isVisible: true,
-    //     });
-    //   }
-    // }
   };
 
   const isEditView = viewState === 'edit';
@@ -280,6 +253,15 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
             <PositionShowView position={position} />
           )}
         </div>
+        {session?.currentUser?.type === 'RECRUITER' && (
+          <div className="space-y-6 lg:col-span-2 lg:col-start-1">
+            <HiringSteps
+              positionId={position.id as number}
+              steps={position.hiringSteps as HiringStep[]}
+              refetchPosition={refetchPosition}
+            />
+          </div>
+        )}
         {session?.currentUser?.type === 'RECRUITER' &&
         position.suggestedCandidates?.length ? (
           <div className="space-y-6 lg:col-span-1 lg:col-start-3">

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import cx from 'classnames';
 import { User } from '@gql/types/graphql';
 import ShowSection from './ShowSection';
 import EditSection from './EditSection';

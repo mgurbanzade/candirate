@@ -14,6 +14,11 @@ export const GET_POSITION = graphql(`
       salaryRate
       salaryRateType
       authorId
+      hiringSteps {
+        id
+        title
+        positionId
+      }
       requiredSkills {
         id
         name

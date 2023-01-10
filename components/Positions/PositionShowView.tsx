@@ -9,6 +9,7 @@ const PositionShowView = ({ position }: PositionShowViewProps) => {
   const typeTitle =
     position.type.toLowerCase()[0].toUpperCase() +
     position.type.toLowerCase().slice(1);
+
   return (
     <section aria-labelledby="position-details">
       <div className="bg-white shadow sm:rounded-lg">

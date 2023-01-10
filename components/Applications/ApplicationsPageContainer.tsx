@@ -1,5 +1,5 @@
 import { Application } from '@gql/types/graphql';
-import ApplicationsHeader from './ApplicationsHeader';
+import ApplicationsPageHeader from './ApplicationsPageHeader';
 import ApplicationsList from './ApplicationsList';
 
 type Props = {
@@ -11,7 +11,7 @@ const ApplicationsPageContainer = ({ applications }: Props) => {
     <main className="px-6 py-6">
       <div className="h-96 rounded-lg">
         <div className="overflow-hidden bg-white shadow sm:rounded-md">
-          <ApplicationsHeader />
+          <ApplicationsPageHeader />
           <ApplicationsList applications={applications} />
         </div>
       </div>
