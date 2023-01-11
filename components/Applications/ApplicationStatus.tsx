@@ -101,7 +101,7 @@ const ApplicationStatus = ({ application }: Props) => {
           })}
         </div>
         <div
-          className="h-4 bg-blue-600 rounded-full dark:bg-blue-500"
+          className="h-4 bg-green-500 rounded-full"
           style={{
             width:
               application.status === 'APPLIED'

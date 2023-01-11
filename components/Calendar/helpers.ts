@@ -2,6 +2,7 @@ import {
   TimelineCellType,
   TimelineEventTypes,
   UITimelineEventType,
+  MappedTimeslotType,
 } from '@lib/ui-types';
 import { DateTime, Interval } from 'luxon';
 
@@ -15,7 +16,10 @@ const lastMonthDaysDispatcher = {
   '7': 6,
 };
 
-export const getTimelineForDate = (dateTime: DateTime): TimelineCellType[] => {
+export const getTimelineForDate = (
+  dateTime: DateTime,
+  timeslots?: MappedTimeslotType[],
+): TimelineCellType[] => {
   const hours = [];
 
   for (let i = 0; i <= 23; i++) {
@@ -28,11 +32,19 @@ export const getTimelineForDate = (dateTime: DateTime): TimelineCellType[] => {
   }
 
   return hours.map((hour) => {
+    const isTimeslot = timeslots?.find((timeslot) => {
+      const hourIsBetween =
+        hour >= timeslot.startDate && hour < timeslot.endDate;
+
+      return hourIsBetween;
+    });
+
     return {
       id: hour.toString(),
       hour,
       hourStr: hour.minute === 0 ? hour.toFormat('ha') : hour.toFormat('h:ma'),
       events: [],
+      isFreeTimeslot: !!isTimeslot,
     };
   });
 };
@@ -87,29 +99,6 @@ export const mapInterviewsToTimeline = (
       startStr: start.toFormat('h:mma'),
       endStr: end.toFormat('h:mma'),
       duration: roundToNearestQuarter(end.diff(start, 'minutes').minutes) / 60,
-    };
-  });
-};
-
-export const mapTimeslotsToTimeline = (
-  timeslots: any[],
-): UITimelineEventType[] => {
-  return timeslots.map((timeslot) => {
-    const { startsAt, endsAt, application } = timeslot;
-    const start = DateTime.fromISO(startsAt);
-    const end = DateTime.fromISO(endsAt);
-    const duration = Math.abs(start.diff(end, 'hours').hours);
-
-    return {
-      id: timeslot.id,
-      title: `Free time slot provided by candidate (click to schedule interview)`,
-      startDate: start,
-      endDate: end,
-      startStr: start.toFormat('h:mma'),
-      endStr: start.toFormat('h:mma'),
-      type: TimelineEventTypes.SUBMITTED_SLOT,
-      duration,
-      application,
     };
   });
 };

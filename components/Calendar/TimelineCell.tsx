@@ -1,20 +1,23 @@
-// import cx from 'classnames';
+import cx from 'classnames';
+import { ClockIcon } from '@heroicons/react/20/solid';
 import { DateTime } from 'luxon';
 
 type Props = {
   id: string;
   hourStr: string;
   isNewInterview?: boolean;
-  isTimeslot?: boolean;
+  isTimeslotMode?: boolean;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   setEvents: React.Dispatch<React.SetStateAction<any[]>>;
+  isFreeTimeslot: boolean;
 };
 
 const TimelineCell = ({
   hourStr,
   onClick,
   isNewInterview,
-  isTimeslot,
+  isTimeslotMode,
+  isFreeTimeslot,
 }: Props) => {
   const isWhole = !hourStr.includes(':');
   const nowHourFormat = DateTime.local().toFormat('ha');
@@ -25,10 +28,25 @@ const TimelineCell = ({
 
   const nowHour = DateTime.local().minute === 0 ? nowHourFormat : nowMinutes;
 
-  const onClickHandler = isNewInterview || isTimeslot ? onClick : () => null;
+  const onClickHandler =
+    isNewInterview || isTimeslotMode ? onClick : () => null;
 
   return isWhole ? (
-    <div onClick={onClickHandler} className="relative">
+    <div
+      onClick={onClickHandler}
+      className={cx('relative', {
+        'bg-lime-50': isFreeTimeslot,
+      })}
+      style={{
+        marginLeft: 1,
+      }}
+    >
+      {isFreeTimeslot && (
+        <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
+          <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
+          <div>Free time slot provided by candidate</div>
+        </div>
+      )}
       {nowHour === hourStr && (
         <>
           <div
@@ -48,7 +66,21 @@ const TimelineCell = ({
       </div>
     </div>
   ) : (
-    <div className="relative" onClick={onClickHandler}>
+    <div
+      className={cx('relative', {
+        'bg-lime-50': isFreeTimeslot,
+      })}
+      style={{
+        marginLeft: 1,
+      }}
+      onClick={onClickHandler}
+    >
+      {isFreeTimeslot && (
+        <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
+          <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
+          <div>Free time slot provided by candidate</div>
+        </div>
+      )}
       {nowHour === hourStr && (
         <>
           <div

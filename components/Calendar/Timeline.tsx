@@ -1,6 +1,10 @@
 import { DateTime } from 'luxon';
 import { Application } from '@gql/types/graphql';
-import { TimelineEventTypes, UITimelineEventType } from '@lib/ui-types';
+import {
+  MappedTimeslotType,
+  TimelineEventTypes,
+  UITimelineEventType,
+} from '@lib/ui-types';
 import { getTimelineForDate } from './helpers';
 
 import TimelineCell from './TimelineCell';
@@ -11,7 +15,8 @@ type Props = {
   setEvents: React.Dispatch<React.SetStateAction<UITimelineEventType[]>>;
   application?: Application;
   isNewInterview?: boolean;
-  isTimeslot?: boolean;
+  isTimeslotMode?: boolean;
+  timeslots?: MappedTimeslotType[];
 };
 
 const Timeline = ({
@@ -19,11 +24,13 @@ const Timeline = ({
   selectedDay,
   setEvents,
   isNewInterview,
-  isTimeslot,
+  isTimeslotMode,
   application,
+  timeslots,
 }: Props) => {
   const timelineData = getTimelineForDate(
     DateTime.fromFormat(selectedDay.toISODate(), 'yyyy-MM-dd'),
+    timeslots,
   );
 
   const timeline = timelineData.map((cell) => {
@@ -33,7 +40,9 @@ const Timeline = ({
         type: TimelineEventTypes.NEW_SLOT,
         title: 'New time slot',
         startDate: cell.hour,
+        endDate: cell.hour.plus({ minutes: 15 }),
         startStr: cell.hourStr,
+        endStr: cell.hour.plus({ minutes: 15 }).toFormat('hh:ma'),
         duration: 0.25,
       };
 
@@ -47,7 +56,9 @@ const Timeline = ({
         type: TimelineEventTypes.EVENT,
         title: `${application?.position?.title} Interview with ${application?.candidate?.user?.firstname}`,
         startDate: cell.hour,
+        endDate: cell.hour.plus({ minutes: 15 }),
         startStr: cell.hourStr,
+        endStr: cell.hour.plus({ minutes: 15 }).toFormat('hh:ma'),
         duration: 0.25,
       };
 
@@ -60,10 +71,10 @@ const Timeline = ({
     return (
       <TimelineCell
         key={cell.id}
-        onClick={isTimeslot ? createSlot : createEvent}
+        onClick={isTimeslotMode ? createSlot : createEvent}
         setEvents={setEvents}
         isNewInterview={isNewInterview}
-        isTimeslot={isTimeslot}
+        isTimeslotMode={isTimeslotMode}
         {...cell}
       />
     );

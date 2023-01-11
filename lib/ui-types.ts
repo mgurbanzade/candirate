@@ -5,17 +5,16 @@ export enum TimelineEventTypes {
   INTERVIEW = 'interview',
   EVENT = 'event',
   NEW_SLOT = 'new slot',
-  SUBMITTED_SLOT = 'submitted slot',
 }
 
 export type UITimelineEventType = {
   id: string;
   title: string;
-  duration: number;
-  startDate: DateTime;
-  endDate?: DateTime;
   startStr: string;
   endStr?: string;
+  duration: number;
+  startDate: DateTime;
+  endDate: DateTime;
   type: TimelineEventTypes;
   application?: Application | null;
   description?: string | null;
@@ -33,4 +32,10 @@ export type TimelineCellType = {
   id: string;
   hour: DateTime;
   hourStr: string;
+  isFreeTimeslot: boolean;
+};
+
+export type MappedTimeslotType = {
+  startDate: DateTime;
+  endDate: DateTime;
 };

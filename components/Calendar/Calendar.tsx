@@ -9,14 +9,15 @@ import { useQuery, useMutation } from '@apollo/client';
 import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
 import { Application } from '@gql/types/graphql';
-import { TimelineEventTypes, UITimelineEventType } from '@lib/ui-types';
-import { GET_INTERVIEWS } from '@gql/queries/interviews';
 import {
-  // UPDATE_POSITION_MUTATION,
-  APPLY_POSITION_MUTATION,
-} from '@gql/mutations/positions';
+  MappedTimeslotType,
+  TimelineEventTypes,
+  UITimelineEventType,
+} from '@lib/ui-types';
+import { GET_INTERVIEWS } from '@gql/queries/interviews';
+import { APPLY_POSITION_MUTATION } from '@gql/mutations/positions';
 import { GET_CALENDAR_DAY_TIMESLOTS } from '@gql/queries/timeslots';
-import { mapInterviewsToTimeline, mapTimeslotsToTimeline } from './helpers';
+import { mapInterviewsToTimeline } from './helpers';
 import { useEffect, useRef, useState } from 'react';
 import { positionPath } from '@lib/routes';
 
@@ -33,6 +34,7 @@ export default function Calendar({ application, isNewInterview }: Props) {
   const [today] = useState(DateTime.local());
   const [selectedDay, setSelectedDay] = useState(today);
   const [events, setEvents] = useState<UITimelineEventType[]>([]);
+  const [timeslots, setTimeslots] = useState<MappedTimeslotType[]>([]);
   const isTimeslotMode = router.query?.s === 'enabled';
   const addedTimeSlots = !isTimeslotMode
     ? null
@@ -67,8 +69,12 @@ export default function Calendar({ application, isNewInterview }: Props) {
     },
     skip: !isNewInterview,
     onCompleted: (data) => {
-      const timeslots = mapTimeslotsToTimeline(data.getCalendarDayTimeslots);
-      setEvents(timeslots);
+      setTimeslots(
+        data?.getCalendarDayTimeslots?.map((timeslot) => ({
+          startDate: DateTime.fromISO(timeslot?.startsAt),
+          endDate: DateTime.fromISO(timeslot?.endsAt),
+        })),
+      );
     },
   });
 
@@ -150,17 +156,18 @@ export default function Calendar({ application, isNewInterview }: Props) {
               <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
               <div className="grid flex-auto grid-cols-1 grid-rows-1">
                 <Events
-                  events={events}
+                  events={[...events]}
                   setEvents={setEvents}
                   refetchEvents={refetch}
                 />
                 <Timeline
+                  timeslots={timeslots}
                   setEvents={setEvents}
-                  isTimeslot={isTimeslotMode}
-                  application={application}
                   selectedDay={selectedDay}
-                  containerOffset={containerOffset}
+                  application={application}
+                  isTimeslotMode={isTimeslotMode}
                   isNewInterview={isNewInterview}
+                  containerOffset={containerOffset}
                 />
               </div>
             </div>

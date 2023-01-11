@@ -5,7 +5,6 @@ import NewTimeslot from './NewTimeslot';
 
 import { TimelineEventTypes, UITimelineEventType } from '@lib/ui-types';
 import { interviewPath } from '@lib/routes';
-import SubmittedTimeslot from './SubmittedTimeslot';
 
 type Props = {
   events: UITimelineEventType[];
@@ -42,17 +41,6 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
         />
       );
 
-    if (event.type === TimelineEventTypes.SUBMITTED_SLOT) {
-      return (
-        <SubmittedTimeslot
-          key={event.id}
-          event={event}
-          setEvents={setEvents}
-          refetchEvents={refetchEvents}
-        />
-      );
-    }
-
     return (
       <li
         key={event.id}
@@ -74,9 +62,11 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
               'pl-2': event.duration <= 0.25,
             })}
           >
-            <time dateTime={event.startDate.toISO()}>
+            <time
+              dateTime={event.startDate.toISO()}
+              className="font-semibold text-blue-700"
+            >
               {event.startStr} - {event.endStr}
-              {', '}
             </time>
             {event.duration <= 0.25 && (
               <p className="inline-flex font-semibold text-blue-700">

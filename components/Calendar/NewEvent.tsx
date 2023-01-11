@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Resizable } from 're-resizable';
 import { Application } from '@gql/types/graphql';
 import { Popover, Transition } from '@headlessui/react';
