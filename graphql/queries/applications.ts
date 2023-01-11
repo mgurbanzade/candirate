@@ -25,6 +25,21 @@ export const GET_APPLICATION = graphql(`
           firstname
         }
       }
+      interview {
+        id
+        uuid
+        title
+        description
+        format
+        meetingLink
+        startsAt
+        endsAt
+        questions {
+          id
+          title
+          points
+        }
+      }
     }
   }
 `);

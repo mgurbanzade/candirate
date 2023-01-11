@@ -5,10 +5,15 @@ import { DateTime } from 'luxon';
 
 type Props = {
   interview: Interview;
+  headerTitle: string;
   setViewState: (viewState: 'show' | 'edit') => void;
 };
 
-export default function ShowSection({ interview, setViewState }: Props) {
+export default function ShowSection({
+  interview,
+  setViewState,
+  headerTitle,
+}: Props) {
   const { currentUser } = useSession();
   if (!interview) {
     return null;
@@ -26,7 +31,7 @@ export default function ShowSection({ interview, setViewState }: Props) {
     <>
       <div className="flex justify-between items-center px-4 py-5 sm:px-6">
         <h2 className="text-lg font-medium leading-6 text-gray-900">
-          Interview details
+          {headerTitle}
         </h2>
         {currentUser?.recruiterId && (
           <button

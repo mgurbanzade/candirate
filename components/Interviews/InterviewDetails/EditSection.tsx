@@ -10,6 +10,7 @@ import DateTimePicker from '@components/Generic/DateTimePicker';
 
 type Props = {
   interview: Interview;
+  headerTitle: string;
   setViewState: (viewState: 'show' | 'edit') => void;
   refetchInterview: () => void;
 };
@@ -37,6 +38,7 @@ const getStartDate = (date: DateTime, time: DateTime) => {
 
 export default function EditSection({
   interview,
+  headerTitle,
   setViewState,
   refetchInterview,
 }: Props) {
@@ -97,7 +99,7 @@ export default function EditSection({
     <>
       <div className="flex justify-between items-center px-4 py-5 sm:px-6">
         <h2 className="text-lg font-medium leading-6 text-gray-900">
-          Interview details
+          {headerTitle}
         </h2>
         {currentUser?.recruiterId && (
           <button

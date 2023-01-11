@@ -17,7 +17,7 @@ export default function CareerOverview({ profileData, refetchProfile }: Props) {
   }
 
   return (
-    <section aria-labelledby="user-information">
+    <section>
       <div className="bg-white shadow sm:rounded-lg">
         {isEditView ? (
           <EditSection

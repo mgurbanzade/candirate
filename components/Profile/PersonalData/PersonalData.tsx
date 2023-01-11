@@ -13,7 +13,7 @@ export default function PersonalData({ profileData, refetchProfile }: Props) {
   const isEditView = viewState === 'edit';
 
   return (
-    <section aria-labelledby="user-information">
+    <section>
       <div className="bg-white shadow sm:rounded-lg">
         {isEditView ? (
           <EditSection

@@ -97,7 +97,7 @@ const CandidateProfileContainer = () => {
         </div>
       )}
       <div className="space-y-6 lg:col-span-2 lg:col-start-1">
-        <section aria-labelledby="user-information">
+        <section>
           <div className="bg-white shadow sm:rounded-lg">
             <CareerOverview candidate={data?.getCandidateProfile} />
           </div>

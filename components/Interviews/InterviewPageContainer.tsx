@@ -1,6 +1,5 @@
 import { Interview, Question } from '@gql/types/graphql';
 import InterviewDetails from './InterviewDetails/InterviewDetails';
-import InterviewQuestionItem from './InterviewQuestionsList/InterviewQuestionItem';
 import InterviewQuestionsList from './InterviewQuestionsList/InterviewQuestionsList';
 
 type Props = {
@@ -21,6 +20,7 @@ const InterviewPageContainer = ({ interviewData, refetchInterview }: Props) => {
       <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2 lg:col-start-1">
           <InterviewDetails
+            headerTitle="Interview details"
             interviewData={interviewData}
             refetchInterview={refetchInterview}
           />
