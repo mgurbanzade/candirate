@@ -28,7 +28,19 @@ export const GET_APPLICATION = graphql(`
       }
       position {
         id
+        uuid
         title
+        salaryRateType
+        type
+        description
+        requiredSkills {
+          id
+          name
+        }
+        company {
+          id
+          name
+        }
         hiringSteps {
           id
           title

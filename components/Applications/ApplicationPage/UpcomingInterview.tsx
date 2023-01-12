@@ -1,6 +1,9 @@
+import Link from 'next/link';
 import useSession from '@hooks/useSession';
-import { Interview } from '@gql/types/graphql';
 import { DateTime } from 'luxon';
+import { Interview } from '@gql/types/graphql';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
+import { interviewPath } from '@lib/routes';
 
 type Props = {
   interview: Interview;
@@ -23,11 +26,18 @@ export default function UpcomingInterview({ interview, headerTitle }: Props) {
   return (
     <section>
       <div className="bg-white shadow sm:rounded-lg">
-        <div className="my-6">
+        <div>
           <div className="flex justify-between items-center px-4 py-5 sm:px-6">
             <h2 className="text-lg font-medium leading-6 text-gray-900">
               Upcoming: {headerTitle}
             </h2>
+
+            <Link
+              href={interviewPath(interview.uuid as string)}
+              target="_blank"
+            >
+              <ArrowTopRightOnSquareIcon className="w-6 h-6 text-gray-500" />
+            </Link>
           </div>
           <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
             <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
