@@ -9,6 +9,22 @@ export const GET_APPLICATION = graphql(`
       currentStep {
         id
         title
+        order
+        interview {
+          id
+          uuid
+          title
+          description
+          format
+          meetingLink
+          startsAt
+          endsAt
+          questions {
+            id
+            title
+            points
+          }
+        }
       }
       position {
         id
@@ -16,6 +32,7 @@ export const GET_APPLICATION = graphql(`
         hiringSteps {
           id
           title
+          order
         }
       }
       candidate {
@@ -23,21 +40,6 @@ export const GET_APPLICATION = graphql(`
         positionTitle
         user {
           firstname
-        }
-      }
-      interview {
-        id
-        uuid
-        title
-        description
-        format
-        meetingLink
-        startsAt
-        endsAt
-        questions {
-          id
-          title
-          points
         }
       }
     }

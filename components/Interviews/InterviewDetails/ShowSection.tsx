@@ -2,6 +2,7 @@ import cx from 'classnames';
 import useSession from '@hooks/useSession';
 import { Interview } from '@gql/types/graphql';
 import { DateTime } from 'luxon';
+import { useRouter } from 'next/router';
 
 type Props = {
   interview: Interview;
@@ -14,6 +15,7 @@ export default function ShowSection({
   setViewState,
   headerTitle,
 }: Props) {
+  const router = useRouter();
   const { currentUser } = useSession();
   if (!interview) {
     return null;
@@ -26,14 +28,13 @@ export default function ShowSection({
     interviewDate,
     'minutes',
   ).minutes;
-
   return (
     <>
       <div className="flex justify-between items-center px-4 py-5 sm:px-6">
         <h2 className="text-lg font-medium leading-6 text-gray-900">
           {headerTitle}
         </h2>
-        {currentUser?.recruiterId && (
+        {currentUser?.recruiterId && !router.pathname.includes('application') && (
           <button
             type="button"
             onClick={() => setViewState('edit')}

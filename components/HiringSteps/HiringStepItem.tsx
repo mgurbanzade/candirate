@@ -46,11 +46,6 @@ const HiringStepItem = ({ hiringStep, isLastItem, refetchPosition }: Props) => {
   const handleUpdate = async (data: HiringStepFormInputs) => {
     const { title } = data;
 
-    if (!formState.isDirty) {
-      setViewState('show');
-      return;
-    }
-
     try {
       const res = await updateHiringStep({
         variables: {

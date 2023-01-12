@@ -47,7 +47,7 @@ export const GET_POSITION = graphql(`
           salaryExpectation
           salaryRateType
         }
-        interview {
+        interviews {
           uuid
         }
       }

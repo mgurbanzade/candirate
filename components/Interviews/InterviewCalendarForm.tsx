@@ -1,12 +1,14 @@
-import useSession from '@hooks/useSession';
-import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
+import { Application } from '@gql/types/graphql';
+import { UITimelineEventType } from '@lib/ui-types';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { CREATE_INTERVIEW_MUTATION } from '@gql/mutations/interviews';
-import { Application } from '@gql/types/graphql';
+import { applicationPath } from '@lib/routes';
+
+import Select from '@components/Generic/Select';
+import useSession from '@hooks/useSession';
 import FormErrorText from '@components/Generic/FormErrorText';
-import { UITimelineEventType } from '@lib/ui-types';
-import { applicationPath, interviewPath } from '@lib/routes';
 
 type Props = {
   application: Application;
@@ -17,7 +19,7 @@ type Props = {
 };
 
 type InterviewFromInputs = {
-  description: string;
+  hiringStepId: string;
   meetingLink: string;
   duration: number;
 };
@@ -36,25 +38,29 @@ const InterviewModalForm = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<InterviewFromInputs>();
 
+  const stepOptions = application?.position?.hiringSteps?.map((step) => ({
+    id: String(step?.id) as string,
+    name: step?.title as string,
+  }));
+
   const onSubmit: SubmitHandler<InterviewFromInputs> = async (data) => {
     if (!currentUser) return;
-
     try {
       const res = await createInterview({
         variables: {
           applicationId: application.id as number,
           createInterviewInput: {
-            description: data.description,
-            meetingLink: data.meetingLink,
             title: interviewTitle,
             startsAt: event?.startDate.toISO(),
             endsAt: event?.startDate.plus({ minutes: data.duration }).toISO(),
             candidateId: application?.candidate?.id as number,
             positionId: application?.position?.id as number,
             recruiterId: currentUser?.recruiterId as number,
+            hiringStepId: Number(data.hiringStepId),
           },
         },
       });
@@ -84,6 +90,25 @@ const InterviewModalForm = ({
           </div>
 
           <div className="space-y-6 sm:space-y-5">
+            {stepOptions?.length && (
+              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <div className="sm:col-span-6">
+                  <label
+                    htmlFor="title"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Hiring step
+                  </label>
+                  <Select
+                    fieldName="hiringStepId"
+                    options={stepOptions}
+                    control={control}
+                    wrapperClassnames="w-full"
+                    dropdownClassnames="w-full"
+                  />
+                </div>
+              </div>
+            )}
             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
               <div className="sm:col-span-6">
                 <label
@@ -130,26 +155,6 @@ const InterviewModalForm = ({
                   />
                 </div>
                 <FormErrorText field={errors.meetingLink} />
-              </div>
-            </div>
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <div className="sm:col-span-6">
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Notes for the candidate
-                </label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <textarea
-                    id="description"
-                    rows={3}
-                    placeholder="ex: Please be on time, we will start the interview at 10:00 AM"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    {...register('description')}
-                  />
-                </div>
-                <FormErrorText field={errors.description} />
               </div>
             </div>
           </div>

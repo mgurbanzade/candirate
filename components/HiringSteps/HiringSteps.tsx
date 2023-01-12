@@ -49,6 +49,7 @@ export default function HiringSteps({
             ))}
             {isNewVisible && (
               <NewHiringStep
+                steps={steps}
                 setIsNewVisible={setIsNewVisible}
                 refetchPosition={refetchPosition}
                 positionId={positionId}

@@ -1,7 +1,8 @@
-import InterviewDetails from '@components/Interviews/InterviewDetails/InterviewDetails';
 import { Application } from '@gql/types/graphql';
-import ApplicationPageHeader from './ApplicationPageHeader';
+import InterviewDetails from '@components/Interviews/InterviewDetails/InterviewDetails';
 import ApplicationStatus from './ApplicationStatus';
+import ApplicationPageHeader from './ApplicationPageHeader';
+import UpcomingInterview from './UpcomingInterview';
 
 type Props = {
   application: Application;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 const ApplicationPageContainer = ({ application }: Props) => {
+  const upcomingInterview = application.currentStep?.interview;
   return (
     <main className="px-6 py-6">
       <div className="h-96 rounded-lg">
@@ -16,13 +18,11 @@ const ApplicationPageContainer = ({ application }: Props) => {
           <ApplicationPageHeader />
           <ApplicationStatus application={application} />
         </div>
-        {application.interview && (
-          <div className="my-6">
-            <InterviewDetails
-              headerTitle="Upcoming interview details"
-              interviewData={application.interview}
-            />
-          </div>
+        {upcomingInterview && (
+          <UpcomingInterview
+            interview={upcomingInterview}
+            headerTitle={application.currentStep?.title as string}
+          />
         )}
       </div>
     </main>

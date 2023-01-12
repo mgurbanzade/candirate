@@ -37,11 +37,11 @@ const getStatusItems = (application: Application) => {
       icon: CheckIcon,
       progressPercent: 0,
     },
-    ...(application?.position?.hiringSteps?.map((step, idx) => ({
-      id: step?.id,
+    ...(application?.position?.hiringSteps?.map((step) => ({
+      id: step?.order,
       title: step?.title,
       icon: getStatusIcon(application, step),
-      progressPercent: progressUnit * (idx + 1),
+      progressPercent: progressUnit * (step?.order as number),
     })) || []),
     {
       id: 'hired',
@@ -56,7 +56,7 @@ const ApplicationStatus = ({ application }: Props) => {
   const { currentStep } = application;
   const statusItems = getStatusItems(application);
   const progressPercent = statusItems.find(
-    (item) => item.id === currentStep?.id,
+    (item) => item.id === currentStep?.order,
   )?.progressPercent;
 
   return (
@@ -76,10 +76,10 @@ const ApplicationStatus = ({ application }: Props) => {
                     {
                       'bg-green-500 !border-white':
                         step.id === 'applied' ||
-                        (currentStep?.id as number) > (step?.id as number),
+                        (currentStep?.order as number) > (step?.id as number),
                       '!border-green-500':
                         application.status === 'INVITED' &&
-                        step.id === currentStep?.id,
+                        step.id === currentStep?.order,
                     },
                   )}
                   key={step.id}
@@ -89,8 +89,11 @@ const ApplicationStatus = ({ application }: Props) => {
                       className={cx(
                         'w-4 h-4 text-orange-500 absolute left-0 right-0 top-0 bottom-0 m-auto',
                         {
-                          '!text-white': step.id === 'applied',
-                          '!text-green-500': currentStep?.id === step.id,
+                          '!text-white':
+                            step.id === 'applied' ||
+                            (step.id as number) <
+                              (currentStep?.order as number),
+                          '!text-green-500': currentStep?.order === step.id,
                         },
                       )}
                     />

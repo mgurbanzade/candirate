@@ -1,4 +1,4 @@
-import ApplicationsPageContainer from '@components/Applications';
+import ApplicationsPageContainer from '@components/Applications/ApplicationsIndexPage/ApplicationsPageContainer';
 
 import useSession from '@hooks/useSession';
 import { useQuery } from '@apollo/client';

@@ -1,4 +1,4 @@
-import Page from '@components/Applications/ApplicationPageContainer';
+import Page from '@components/Applications/ApplicationPage';
 
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';

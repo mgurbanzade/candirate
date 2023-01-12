@@ -1,17 +1,17 @@
-import Link from 'next/link';
 import cx from 'classnames';
-import useSession from '@hooks/useSession';
+import Link from 'next/link';
 import Modal from '@components/Generic/Modal';
-import DeclineModalForm from '@components/Applications/DeclineModalForm';
+import useSession from '@hooks/useSession';
+import DeclineModalForm from './DeclineApplicationModalForm';
 import { useState } from 'react';
 import { useModal } from '@hooks/useModal';
+import { useRouter } from 'next/router';
 import { Application } from '@gql/types/graphql';
+import { applicationPath, scheduleInterviewPath } from '@lib/routes';
 import {
   CurrencyDollarIcon,
   CalendarDaysIcon,
 } from '@heroicons/react/20/solid';
-import { applicationPath, scheduleInterviewPath } from '@lib/routes';
-import { useRouter } from 'next/router';
 
 type Props = {
   applications: Application[];
