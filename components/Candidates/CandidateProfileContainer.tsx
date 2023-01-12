@@ -9,6 +9,7 @@ import { PROPOSE_POSITION_MUTATION } from '@gql/mutations/candidates';
 
 import useSession from '@hooks/useSession';
 import CareerOverview from './CareerOverview';
+import { positionPath } from '@lib/routes';
 
 const CandidateProfileContainer = () => {
   const router = useRouter();
@@ -32,14 +33,15 @@ const CandidateProfileContainer = () => {
   if (!data?.getCandidateProfile) return null;
 
   const handleProposePosition = async () => {
+    if (!data.getCandidateProfile?.id) return;
     try {
       const res = await proposePosition({
         variables: {
           proposePositionInput: {
             title: 'Position proposal',
             body: `${currentUser?.firstname} ${currentUser?.lastname} invited you to check out a position`,
-            positionUuid: router.query.position as string,
-            candidateUuid: router.query.uuid as string,
+            redirectPath: positionPath(router.query.position as string),
+            recipientId: data?.getCandidateProfile.id as number,
           },
         },
       });

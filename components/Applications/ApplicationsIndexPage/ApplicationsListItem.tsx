@@ -31,7 +31,7 @@ export default function ApplicationsListItem({ application }: Props) {
               className={cx(
                 'inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800',
                 {
-                  'bg-red-100 text-red-800': application?.status === 'DECLINED',
+                  '!bg-red-500 !text-white': application?.status === 'DECLINED',
                   'bg-yellow-100 text-yellow-800':
                     application?.status === 'APPLIED',
                   'bg-green-100 text-green-800':

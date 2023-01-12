@@ -1,29 +1,30 @@
 import { graphql } from '../types';
 
 export const GET_APPLICATION = graphql(`
-  query GetApplication($uuid: String!) {
-    getApplication(uuid: $uuid) {
+  query GetApplication($uuid: String!, $candidateId: Int) {
+    getApplication(uuid: $uuid, candidateId: $candidateId) {
       id
       uuid
       status
+      declineMessage
       currentStep {
         id
         title
         order
-        interview {
+      }
+      upcomingInterview {
+        id
+        uuid
+        title
+        description
+        format
+        meetingLink
+        startsAt
+        endsAt
+        questions {
           id
-          uuid
           title
-          description
-          format
-          meetingLink
-          startsAt
-          endsAt
-          questions {
-            id
-            title
-            points
-          }
+          points
         }
       }
       position {
@@ -31,6 +32,7 @@ export const GET_APPLICATION = graphql(`
         uuid
         title
         salaryRateType
+        salaryRate
         type
         description
         requiredSkills {

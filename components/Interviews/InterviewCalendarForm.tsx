@@ -29,7 +29,6 @@ const InterviewModalForm = ({
   setEvents,
   event,
   closePopover,
-  refetchEvents,
 }: Props) => {
   const router = useRouter();
   const { currentUser } = useSession();

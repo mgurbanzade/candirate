@@ -1,23 +1,25 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { UPDATE_APPLICATION_MUTATION } from '@gql/mutations/applications';
+import { Application } from '@gql/types/graphql';
+import { DECLINE_APPLICATION_MUTATION } from '@gql/mutations/applications';
+import { applicationPath } from '@lib/routes';
 
 type DeclineFormInputs = {
   declineMessage: string;
 };
 
 type Props = {
-  appId: number;
+  application: Application | null;
   setIsVisible: (isVisible: boolean) => void;
-  setCurrApplicationId: (id: number | null) => void;
+  refetchApplication?: () => void;
 };
 
 const DeclineModalForm = ({
-  appId,
+  application,
   setIsVisible,
-  setCurrApplicationId,
+  refetchApplication,
 }: Props) => {
-  const [updateApplication] = useMutation(UPDATE_APPLICATION_MUTATION);
+  const [declineApplication] = useMutation(DECLINE_APPLICATION_MUTATION);
   const {
     register,
     handleSubmit,
@@ -25,22 +27,23 @@ const DeclineModalForm = ({
   } = useForm<DeclineFormInputs>();
 
   const onSubmit: SubmitHandler<DeclineFormInputs> = async (data) => {
-    if (!appId) {
+    if (!application?.id) {
       return console.error('No application id provided');
     }
-    const res = await updateApplication({
+    const res = await declineApplication({
       variables: {
-        id: appId,
-        updateApplicationInput: {
-          ...data,
-          status: 'DECLINED',
+        id: application.id,
+        declineApplicationInput: {
+          redirectPath: applicationPath(application.uuid as string),
+          declineMessage: data.declineMessage,
+          candidateId: application?.candidate?.id as number,
         },
       },
     });
 
-    if (res.data?.updateApplication.status == 'DECLINED') {
+    if (res.data?.declineApplication.status == 'DECLINED') {
+      if (refetchApplication) refetchApplication();
       setIsVisible(false);
-      setCurrApplicationId(null);
     }
   };
 

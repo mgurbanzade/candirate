@@ -7,7 +7,7 @@ export const GET_NOTIFICATIONS = graphql(`
       title
       body
       isRead
-      positionUuid
+      redirectPath
     }
   }
 `);

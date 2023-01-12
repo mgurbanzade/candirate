@@ -1,4 +1,4 @@
-import Page from '@components/Applications/ApplicationPage';
+import ApplicationPageContainer from '@components/Applications/ApplicationPage';
 
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
@@ -17,7 +17,10 @@ const ApplicationPage = () => {
 
   return (
     application?.uuid && (
-      <Page application={application} refetchApplication={refetch} />
+      <ApplicationPageContainer
+        application={application}
+        refetchApplication={refetch}
+      />
     )
   );
 };

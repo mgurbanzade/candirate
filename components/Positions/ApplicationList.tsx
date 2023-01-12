@@ -1,13 +1,9 @@
 import cx from 'classnames';
 import Link from 'next/link';
-import Modal from '@components/Generic/Modal';
 import useSession from '@hooks/useSession';
-import DeclineModalForm from './DeclineApplicationModalForm';
-import { useState } from 'react';
-import { useModal } from '@hooks/useModal';
 import { useRouter } from 'next/router';
 import { Application } from '@gql/types/graphql';
-import { applicationPath, scheduleInterviewPath } from '@lib/routes';
+import { applicationPath } from '@lib/routes';
 import {
   CurrencyDollarIcon,
   CalendarDaysIcon,
@@ -20,10 +16,6 @@ type Props = {
 const ApplicationList = ({ applications }: Props) => {
   const session = useSession();
   const router = useRouter();
-  const [currApplicationId, setCurrApplicationId] = useState<
-    number | null | undefined
-  >(null);
-  const { setIsVisible } = useModal();
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <div className="px-4 py-5 sm:px-6">
@@ -64,18 +56,6 @@ const ApplicationList = ({ applications }: Props) => {
                     </div>
                     {session?.currentUser?.type === 'RECRUITER' && (
                       <div className="flex items-center justify-end ml-3">
-                        {app.status !== 'INVITED' && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCurrApplicationId(app.id);
-                              setIsVisible(true);
-                            }}
-                            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
-                          >
-                            Decline
-                          </button>
-                        )}
                         <button
                           type="button"
                           className={cx(
@@ -88,18 +68,14 @@ const ApplicationList = ({ applications }: Props) => {
                             },
                           )}
                           onClick={() => {
-                            const path =
-                              app.status === 'INVITED'
-                                ? applicationPath(app?.uuid as string)
-                                : scheduleInterviewPath(
-                                    app?.uuid as string,
-                                    app?.candidate?.uuid as string,
-                                  );
+                            const path = applicationPath(app?.uuid as string);
                             router.push(path);
                           }}
                         >
-                          {app.status === 'INVITED' ? 'Scheduled' : 'Schedule'}
-                          <CalendarDaysIcon className="w-6 h-6 ml-2" />
+                          {app.status === 'INVITED' ? 'Scheduled' : 'Proceed'}
+                          {app.status === 'INVITED' && (
+                            <CalendarDaysIcon className="w-6 h-6 ml-2" />
+                          )}
                         </button>
                       </div>
                     )}
@@ -110,13 +86,6 @@ const ApplicationList = ({ applications }: Props) => {
           </li>
         ))}
       </ul>
-      <Modal>
-        <DeclineModalForm
-          appId={currApplicationId as number}
-          setIsVisible={setIsVisible}
-          setCurrApplicationId={setCurrApplicationId}
-        />
-      </Modal>
     </div>
   );
 };

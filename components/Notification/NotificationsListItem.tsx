@@ -1,7 +1,6 @@
 import cx from 'classnames';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
-import { positionPath } from 'lib/routes';
 import { Notification } from '@gql/types/graphql';
 import { SET_NOTIFICATION_READ } from '@gql/mutations/notifications';
 
@@ -29,12 +28,12 @@ const NotificationsListItem = ({
       if (res.data?.setNotificationRead.isRead) {
         refetchNotifications();
         setIsSlideOverOpen(false);
-        router.push(positionPath(notification?.positionUuid as string));
+        router.push(notification.redirectPath as string);
       }
     } catch (error) {
       console.log(error);
       setIsSlideOverOpen(false);
-      router.push(positionPath(notification?.positionUuid as string));
+      router.push(notification.redirectPath as string);
     }
   };
   return (

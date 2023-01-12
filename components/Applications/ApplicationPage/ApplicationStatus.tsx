@@ -5,6 +5,7 @@ import {
   LockClosedIcon,
   LockOpenIcon,
   CheckIcon,
+  XMarkIcon,
 } from '@heroicons/react/20/solid';
 
 type Props = {
@@ -12,29 +13,34 @@ type Props = {
 };
 
 const getStatusIcon = (application: Application, step: any) => {
-  if (
-    application.status === 'INVITED' &&
-    (application.currentStep?.id as number) > step.id
-  ) {
+  const isDeclined = application.status === 'DECLINED';
+  const isInvited = application.status === 'INVITED';
+
+  if (isDeclined && (application.currentStep?.id as number) === step.id) {
+    return XMarkIcon;
+  }
+
+  if (isInvited && (application.currentStep?.id as number) > step.id) {
     return CheckIcon;
   }
-  if (
-    application.status === 'INVITED' &&
-    (application.currentStep?.id as number) === step.id
-  ) {
+
+  if (isInvited && (application.currentStep?.id as number) === step.id) {
     return LockOpenIcon;
   }
+
   return LockClosedIcon;
 };
 
 const getStatusItems = (application: Application) => {
   const steps = (application?.position?.hiringSteps?.length as number) + 1;
   const progressUnit = 100 / steps;
+  const isImmediatelyDeclined =
+    application.status === 'DECLINED' && !application.currentStep;
   return [
     {
       id: 'applied',
       title: 'Applied',
-      icon: CheckIcon,
+      icon: isImmediatelyDeclined ? XMarkIcon : CheckIcon,
       progressPercent: 0,
     },
     ...(application?.position?.hiringSteps?.map((step) => ({
@@ -58,6 +64,8 @@ const ApplicationStatus = ({ application }: Props) => {
   const progressPercent = statusItems.find(
     (item) => item.id === currentStep?.order,
   )?.progressPercent;
+  const isDeclined = application.status === 'DECLINED';
+  const isDeclinedImmediately = isDeclined && !currentStep;
 
   return (
     <div className="flex items-center p-8">
@@ -74,12 +82,16 @@ const ApplicationStatus = ({ application }: Props) => {
                   className={cx(
                     'w-8 h-8 rounded-full bg-white border border-orange-500 shadow-sm',
                     {
+                      '!bg-red-500 !border-white':
+                        (isDeclined && currentStep?.order === step.id) ||
+                        (isDeclinedImmediately && step.id === 'applied'),
                       'bg-green-500 !border-white':
                         step.id === 'applied' ||
                         (currentStep?.order as number) > (step?.id as number),
                       '!border-green-500':
                         application.status === 'INVITED' &&
-                        step.id === currentStep?.order,
+                        step.id === currentStep?.order &&
+                        !isDeclined,
                     },
                   )}
                   key={step.id}
@@ -92,8 +104,10 @@ const ApplicationStatus = ({ application }: Props) => {
                           '!text-white':
                             step.id === 'applied' ||
                             (step.id as number) <
-                              (currentStep?.order as number),
-                          '!text-green-500': currentStep?.order === step.id,
+                              (currentStep?.order as number) ||
+                            (isDeclined && currentStep?.order === step.id),
+                          '!text-green-500':
+                            currentStep?.order === step.id && !isDeclined,
                         },
                       )}
                     />
@@ -104,10 +118,12 @@ const ApplicationStatus = ({ application }: Props) => {
           })}
         </div>
         <div
-          className="h-4 bg-green-500 rounded-full"
+          className={cx('h-4 bg-green-500 rounded-full', {
+            'bg-red-500': isDeclinedImmediately,
+          })}
           style={{
             width:
-              application.status === 'APPLIED'
+              application.status === 'APPLIED' || isDeclinedImmediately
                 ? `${12.5}%`
                 : `${progressPercent as number}%`,
           }}

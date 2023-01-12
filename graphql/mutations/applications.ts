@@ -13,3 +13,17 @@ export const UPDATE_APPLICATION_MUTATION = graphql(`
     }
   }
 `);
+
+export const DECLINE_APPLICATION_MUTATION = graphql(`
+  mutation DeclineApplication(
+    $id: Int!
+    $declineApplicationInput: DeclineApplicationInput!
+  ) {
+    declineApplication(
+      id: $id
+      declineApplicationInput: $declineApplicationInput
+    ) {
+      status
+    }
+  }
+`);
