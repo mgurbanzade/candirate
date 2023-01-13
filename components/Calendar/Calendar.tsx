@@ -92,16 +92,34 @@ export default function Calendar({ application, isNewInterview }: Props) {
   const applyToPosition = !isTimeslotMode
     ? null
     : async () => {
+        const quarterSlots = addedTimeSlots?.reduce((acc: any, slot) => {
+          const res = [
+            {
+              startsAt: slot.startDate.toISO(),
+              endsAt: slot.startDate.plus({ hours: 0.25 }).toISO(),
+            },
+          ];
+
+          for (let i = 1; i < slot.duration / 0.25; i += 1) {
+            res.push({
+              startsAt: slot.startDate.plus({ hours: i * 0.25 }).toISO(),
+              endsAt: slot.startDate.plus({ hours: i * 0.25 + 0.25 }).toISO(),
+            });
+          }
+
+          return [...acc, ...res];
+        }, []);
+
         try {
           const { data } = await applyToPositionMutation({
             variables: {
               applyToPositionInput: {
                 positionUuid: router?.query?.p as string,
                 candidateId: session?.currentUser?.candidateId as number,
-                timeslots: addedTimeSlots?.map((slot) => ({
-                  startsAt: slot.startDate.toISO(),
-                  endsAt: slot.startDate.plus({ hours: slot.duration }).toISO(),
-                })) as { startsAt: string; endsAt: string }[],
+                timeslots: quarterSlots as {
+                  startsAt: string;
+                  endsAt: string;
+                }[],
               },
             },
           });

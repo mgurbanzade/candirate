@@ -8,12 +8,11 @@ type Props = {
   slot: UITimelineEventType;
   events: UITimelineEventType[];
   setEvents: React.Dispatch<React.SetStateAction<UITimelineEventType[]>>;
-  refetchEvents: () => void;
 };
 
 const CELL_HEIGHT_PX = 24;
 
-const NewTimeslot = ({ slot, events, setEvents, refetchEvents }: Props) => {
+const NewTimeslot = ({ slot, events, setEvents }: Props) => {
   const [size, setSize] = useState({ width: 100, height: CELL_HEIGHT_PX });
   const [duration, setDuration] = useState(slot.duration);
 
