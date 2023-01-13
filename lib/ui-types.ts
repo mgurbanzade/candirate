@@ -15,6 +15,8 @@ export type UITimelineEventType = {
   duration: number;
   startDate: DateTime;
   endDate: DateTime;
+  applicationId?: number;
+  hiringStepId?: number;
   type: TimelineEventTypes;
   application?: Application | null;
   description?: string | null;

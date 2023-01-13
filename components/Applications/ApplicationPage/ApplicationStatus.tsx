@@ -13,18 +13,21 @@ type Props = {
 };
 
 const getStatusIcon = (application: Application, step: any) => {
+  const isFirstStep = step.id === 'applied';
   const isDeclined = application.status === 'DECLINED';
   const isInvited = application.status === 'INVITED';
+  const isPastStep = (application.currentStep?.id as number) > step.id;
+  const isCurrentStep = (application.currentStep?.id as number) === step.id;
 
-  if (isDeclined && (application.currentStep?.id as number) === step.id) {
+  if ((isDeclined && isCurrentStep) || (isFirstStep && isDeclined)) {
     return XMarkIcon;
   }
 
-  if (isInvited && (application.currentStep?.id as number) > step.id) {
+  if (isFirstStep || isPastStep) {
     return CheckIcon;
   }
 
-  if (isInvited && (application.currentStep?.id as number) === step.id) {
+  if (isInvited && isCurrentStep) {
     return LockOpenIcon;
   }
 

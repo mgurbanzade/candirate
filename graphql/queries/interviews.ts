@@ -10,6 +10,9 @@ export const GET_INTERVIEWS = graphql(`
       meetingLink
       startsAt
       endsAt
+      status
+      hiringStepId
+      applicationId
     }
   }
 `);

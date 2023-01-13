@@ -90,7 +90,10 @@ export const mapInterviewsToTimeline = (
     return {
       id: interview.id,
       uuid: interview.uuid,
+      hiringStepId: interview.hiringStepId,
+      status: interview.status,
       application: null,
+      applicationId: interview.applicationId,
       description: interview.description,
       startDate: start,
       endDate: end,

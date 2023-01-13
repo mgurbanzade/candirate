@@ -49,11 +49,20 @@ const ApplicationPageContainer = ({
               headerTitle={application.currentStep?.title as string}
             />
           )}
-          <PositionShowView
-            wrapperClassName="h-full"
-            showLink
-            position={application.position as Position}
-          />
+          <section
+            className={cx('col-span-2 h-full', {
+              'col-span-1':
+                upcomingInterview &&
+                currentUser?.type === 'RECRUITER' &&
+                application.candidate,
+            })}
+          >
+            <PositionShowView
+              position={application.position as Position}
+              wrapperClassName="h-full"
+              showLink
+            />
+          </section>
         </div>
       </div>
     </main>

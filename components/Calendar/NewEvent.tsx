@@ -158,6 +158,7 @@ const NewEvent = ({ event, events, setEvents, refetchEvents }: Props) => {
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative grid gap-6 bg-white px-4 py-4 sm:gap-8">
                   <InterviewCalendarForm
+                    events={events}
                     application={event.application as Application}
                     setEvents={setEvents}
                     event={event}

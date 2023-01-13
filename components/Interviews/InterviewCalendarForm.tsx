@@ -13,6 +13,7 @@ import FormErrorText from '@components/Generic/FormErrorText';
 type Props = {
   application: Application;
   event: UITimelineEventType;
+  events: UITimelineEventType[];
   setEvents: React.Dispatch<React.SetStateAction<UITimelineEventType[]>>;
   closePopover: () => void;
   refetchEvents: () => void;
@@ -28,6 +29,7 @@ const InterviewModalForm = ({
   application,
   setEvents,
   event,
+  events,
   closePopover,
 }: Props) => {
   const router = useRouter();
@@ -41,10 +43,23 @@ const InterviewModalForm = ({
     formState: { errors },
   } = useForm<InterviewFromInputs>();
 
-  const stepOptions = application?.position?.hiringSteps?.map((step) => ({
-    id: String(step?.id) as string,
-    name: step?.title as string,
-  }));
+  const stepOptions = application?.position?.hiringSteps
+    ?.map((step) => ({
+      id: String(step?.id) as string,
+      name: step?.title as string,
+    }))
+    .filter((step) => {
+      return !events
+        .filter((e) => e.type === 'interview')
+        .some((e) => {
+          return (
+            String(e.hiringStepId) === step.id &&
+            application.id === e.applicationId
+          );
+        });
+    });
+
+  console.log(events);
 
   const onSubmit: SubmitHandler<InterviewFromInputs> = async (data) => {
     if (!currentUser) return;

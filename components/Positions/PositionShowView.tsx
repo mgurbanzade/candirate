@@ -20,7 +20,11 @@ const PositionShowView = ({
     position.type.toLowerCase().slice(1);
 
   return (
-    <section aria-labelledby="position-details">
+    <section
+      className={`bg-white shadow sm:rounded-lg${
+        wrapperClassName ? ' ' + wrapperClassName : ''
+      }`}
+    >
       <div
         className={`bg-white shadow sm:rounded-lg${
           wrapperClassName ? ' ' + wrapperClassName : ''
