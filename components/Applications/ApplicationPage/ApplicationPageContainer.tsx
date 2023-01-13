@@ -1,9 +1,11 @@
 import cx from 'classnames';
 import { Application, Position } from '@gql/types/graphql';
 import PositionShowView from '@components/Positions/PositionShowView';
+import CareerOverview from '@components/Candidates/CareerOverview';
 import ApplicationStatus from './ApplicationStatus';
 import ApplicationPageHeader from './ApplicationPageHeader';
 import UpcomingInterview from './UpcomingInterview';
+import useSession from '@hooks/useSession';
 
 type Props = {
   application: Application;
@@ -14,6 +16,7 @@ const ApplicationPageContainer = ({
   application,
   refetchApplication,
 }: Props) => {
+  const { currentUser } = useSession();
   const upcomingInterview = application.upcomingInterview;
 
   return (
@@ -28,9 +31,18 @@ const ApplicationPageContainer = ({
         </div>
         <div
           className={cx('grid', {
-            'grid-cols-2 gap-x-6': !!upcomingInterview,
+            'grid-cols-2 gap-6':
+              !!upcomingInterview ||
+              (currentUser?.type === 'RECRUITER' && application.candidate),
           })}
         >
+          {currentUser?.type === 'RECRUITER' && application.candidate && (
+            <section className="col-span-2">
+              <div className="bg-white shadow sm:rounded-lg">
+                <CareerOverview candidate={application.candidate} showLink />
+              </div>
+            </section>
+          )}
           {upcomingInterview && (
             <UpcomingInterview
               interview={upcomingInterview}

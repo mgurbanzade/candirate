@@ -1,9 +1,11 @@
 import { useModal } from '@hooks/useModal';
+import { useRouter } from 'next/router';
 import useSession from '@hooks/useSession';
 import Tag from '@components/Tags/Tag';
 import Modal from '@components/Generic/Modal';
 import DeclineModalForm from '@components/Positions/DeclineApplicationModalForm';
 import { Application } from '@gql/types/graphql';
+import { scheduleInterviewPath } from '@lib/routes';
 
 type Props = {
   application: Application;
@@ -11,6 +13,7 @@ type Props = {
 };
 
 const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
+  const router = useRouter();
   const { currentUser } = useSession();
   const { setIsVisible } = useModal();
   const isDeclined = application.status === 'DECLINED';
@@ -40,10 +43,20 @@ const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
               Reject
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={() =>
+                router.push(
+                  scheduleInterviewPath(
+                    application.uuid as string,
+                    application.candidate?.uuid as string,
+                  ),
+                )
+              }
               className="ml-3 inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none"
             >
-              Proceed
+              {application.status === 'APPLIED' && !application.currentStep
+                ? 'Schedule'
+                : 'Proceed'}
             </button>
           </div>
         )}

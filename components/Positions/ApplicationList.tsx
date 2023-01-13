@@ -59,7 +59,7 @@ const ApplicationList = ({ applications }: Props) => {
                         <button
                           type="button"
                           className={cx(
-                            'ml-3 inline-flex items-center justify-center rounded-md border border-transparent px-4 pr-3 py-2 text-sm font-medium text-white shadow-sm focus:outline-none',
+                            'ml-3 inline-flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none',
                             {
                               'bg-blue-600 hover:bg-blue-700':
                                 app.status !== 'INVITED',
@@ -72,7 +72,9 @@ const ApplicationList = ({ applications }: Props) => {
                             router.push(path);
                           }}
                         >
-                          {app.status === 'INVITED' ? 'Scheduled' : 'Proceed'}
+                          {app.status === 'INVITED'
+                            ? 'Scheduled'
+                            : 'See details'}
                           {app.status === 'INVITED' && (
                             <CalendarDaysIcon className="w-6 h-6 ml-2" />
                           )}

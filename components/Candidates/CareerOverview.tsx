@@ -1,8 +1,12 @@
+import Link from 'next/link';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { Candidate } from '@gql/types/graphql';
 import Tags from '@components/Tags';
+import { candidateProfilePath } from '@lib/routes';
 
 type Props = {
   candidate: Candidate;
+  showLink?: boolean;
 };
 
 const getSalaryRate = (salaryRateType: string) => {
@@ -13,7 +17,7 @@ const getSalaryRate = (salaryRateType: string) => {
     : 'year';
 };
 
-export default function CareerOverview({ candidate }: Props) {
+export default function CareerOverview({ candidate, showLink }: Props) {
   if (!candidate) {
     return null;
   }
@@ -29,6 +33,14 @@ export default function CareerOverview({ candidate }: Props) {
         >
           {candidate.positionTitle}
         </h2>
+        {showLink && (
+          <Link
+            href={candidateProfilePath(candidate.uuid as string)}
+            target="_blank"
+          >
+            <ArrowTopRightOnSquareIcon className="w-6 h-6 text-gray-500" />
+          </Link>
+        )}
       </div>
       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
