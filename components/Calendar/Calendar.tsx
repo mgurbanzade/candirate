@@ -22,11 +22,16 @@ import { useEffect, useRef, useState } from 'react';
 import { positionPath } from '@lib/routes';
 
 type Props = {
+  isManageTimeslots?: boolean;
   isNewInterview?: boolean;
   application?: Application;
 };
 
-export default function Calendar({ application, isNewInterview }: Props) {
+export default function Calendar({
+  application,
+  isNewInterview,
+  isManageTimeslots,
+}: Props) {
   const [applyToPositionMutation] = useMutation(APPLY_POSITION_MUTATION);
   const router = useRouter();
   const session = useSession();
@@ -67,10 +72,11 @@ export default function Calendar({ application, isNewInterview }: Props) {
         endDate: selectedDay.endOf('day').toISO(),
       },
     },
-    skip: !isNewInterview,
+    skip: !isNewInterview && !isManageTimeslots,
     onCompleted: (data) => {
       setTimeslots(
         data?.getCalendarDayTimeslots?.map((timeslot) => ({
+          id: timeslot?.id as number,
           startDate: DateTime.fromISO(timeslot?.startsAt),
           endDate: DateTime.fromISO(timeslot?.endsAt),
         })),
@@ -159,6 +165,7 @@ export default function Calendar({ application, isNewInterview }: Props) {
         <CalendarHeader
           selectedDay={selectedDay}
           setSelectedDay={setSelectedDay}
+          isManageTimeslots={isManageTimeslots}
         />
         <div className="isolate flex flex-auto overflow-hidden bg-white">
           <div

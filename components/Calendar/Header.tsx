@@ -14,6 +14,7 @@ import { DateTime } from 'luxon';
 
 type Props = {
   selectedDay: DateTime;
+  isManageTimeslots?: boolean;
   setSelectedDay: (date: DateTime) => void;
 };
 
@@ -21,16 +22,20 @@ const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
   const dateTimeIso = selectedDay.toISO();
   return (
     <header className="flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6 overflow-hidden bg-white sm:rounded-t-md">
-      <div>
-        <h1 className="text-lg font-semibold leading-6 text-gray-900">
-          <time dateTime={dateTimeIso} className="sm:hidden">
-            {selectedDay.toFormat('MMM d, y')}
-          </time>
-          <time dateTime={dateTimeIso} className="hidden sm:inline">
-            {selectedDay.toFormat('MMMM d, y')}
-          </time>
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">{selectedDay.weekdayLong}</p>
+      <div className="flex justify-between w-full">
+        <div>
+          <h1 className="text-lg font-semibold leading-6 text-gray-900">
+            <time dateTime={dateTimeIso} className="sm:hidden">
+              {selectedDay.toFormat('MMM d, y')}
+            </time>
+            <time dateTime={dateTimeIso} className="hidden sm:inline">
+              {selectedDay.toFormat('MMMM d, y')}
+            </time>
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            {selectedDay.weekdayLong}
+          </p>
+        </div>
       </div>
       <div className="flex items-center">
         <div className="flex items-center rounded-md shadow-sm md:items-stretch md:hidden">

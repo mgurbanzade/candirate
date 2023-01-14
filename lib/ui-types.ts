@@ -35,9 +35,11 @@ export type TimelineCellType = {
   hour: DateTime;
   hourStr: string;
   isFreeTimeslot: boolean;
+  timeslotId: number;
 };
 
 export type MappedTimeslotType = {
+  id: number;
   startDate: DateTime;
   endDate: DateTime;
 };

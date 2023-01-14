@@ -1,11 +1,25 @@
 import { graphql } from '../types';
 
-// export const GET_CALENDAR_DAY_TIMESLOTS = graphql(`
-//   mutation GetCalendarDayTimeslots($where: TimeslotsWhereInput!) {
-//     getCalendarDayTimeslots(where: $where) {
-//       id
-//       startsAt
-//       endsAt
-//     }
-//   }
-// `);
+export const CREATE_TIMESLOT = graphql(`
+  mutation CreateTimeslot(
+    $createTimeslotInput: CreateTimeslotInput!
+    $candidateId: Int!
+    $applicationId: Int!
+  ) {
+    createTimeslot(
+      createTimeslotInput: $createTimeslotInput
+      candidateId: $candidateId
+      applicationId: $applicationId
+    ) {
+      id
+    }
+  }
+`);
+
+export const DELETE_TIMESLOT = graphql(`
+  mutation DeleteTimeslot($id: Int!) {
+    deleteTimeslot(id: $id) {
+      __typename
+    }
+  }
+`);

@@ -11,3 +11,7 @@ export const candidateProfilePath = (uuid: string) => `/candidates/${uuid}`;
 export const positionPath = (uuid: string) => `/positions/${uuid}`;
 export const applicationsPath = () => '/applications';
 export const applicationPath = (uuid: string) => `/applications/${uuid}`;
+export const manageTimeslotsPath = (
+  applicationUuid: string,
+  candidateUuid: string,
+) => `/applications/${applicationUuid}/timeslots?c=${candidateUuid}`;

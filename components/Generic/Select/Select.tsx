@@ -6,7 +6,7 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 const classNames = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 type OptionType = {
-  id: string;
+  id: string | number;
   name: string;
 };
 

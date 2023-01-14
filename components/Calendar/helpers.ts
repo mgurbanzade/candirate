@@ -45,6 +45,7 @@ export const getTimelineForDate = (
       hourStr: hour.minute === 0 ? hour.toFormat('ha') : hour.toFormat('h:ma'),
       events: [],
       isFreeTimeslot: !!isTimeslot,
+      timeslotId: isTimeslot?.id as number,
     };
   });
 };

@@ -16,6 +16,7 @@ const getStatusIcon = (application: Application, step: any) => {
   const isFirstStep = step.id === 'applied';
   const isDeclined = application.status === 'DECLINED';
   const isInvited = application.status === 'INVITED';
+  const isHired = application.status === 'HIRED';
   const isPastStep = (application.currentStep?.id as number) > step.id;
   const isCurrentStep = (application.currentStep?.id as number) === step.id;
 
@@ -23,7 +24,7 @@ const getStatusIcon = (application: Application, step: any) => {
     return XMarkIcon;
   }
 
-  if (isFirstStep || isPastStep) {
+  if (isFirstStep || isPastStep || isHired) {
     return CheckIcon;
   }
 
@@ -55,7 +56,7 @@ const getStatusItems = (application: Application) => {
     {
       id: 'hired',
       title: 'Hired',
-      icon: LockClosedIcon,
+      icon: application.status === 'HIRED' ? CheckIcon : LockClosedIcon,
       progressPercent: 100,
     },
   ];
@@ -64,9 +65,11 @@ const getStatusItems = (application: Application) => {
 const ApplicationStatus = ({ application }: Props) => {
   const { currentStep } = application;
   const statusItems = getStatusItems(application);
-  const progressPercent = statusItems.find(
-    (item) => item.id === currentStep?.order,
-  )?.progressPercent;
+  const isHired = application.status === 'HIRED';
+  const progressPercent = isHired
+    ? 100
+    : statusItems.find((item) => item.id === currentStep?.order)
+        ?.progressPercent;
   const isDeclined = application.status === 'DECLINED';
   const isDeclinedImmediately = isDeclined && !currentStep;
 
@@ -90,7 +93,8 @@ const ApplicationStatus = ({ application }: Props) => {
                         (isDeclinedImmediately && step.id === 'applied'),
                       'bg-green-500 !border-white':
                         step.id === 'applied' ||
-                        (currentStep?.order as number) > (step?.id as number),
+                        (currentStep?.order as number) > (step?.id as number) ||
+                        isHired,
                       '!border-green-500':
                         application.status === 'INVITED' &&
                         step.id === currentStep?.order &&
@@ -105,12 +109,15 @@ const ApplicationStatus = ({ application }: Props) => {
                         'w-4 h-4 text-orange-500 absolute left-0 right-0 top-0 bottom-0 m-auto',
                         {
                           '!text-white':
+                            isHired ||
                             step.id === 'applied' ||
                             (step.id as number) <
                               (currentStep?.order as number) ||
                             (isDeclined && currentStep?.order === step.id),
                           '!text-green-500':
-                            currentStep?.order === step.id && !isDeclined,
+                            currentStep?.order === step.id &&
+                            !isDeclined &&
+                            !isHired,
                         },
                       )}
                     />

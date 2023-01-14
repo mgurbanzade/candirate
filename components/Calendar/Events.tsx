@@ -37,7 +37,6 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
           slot={event}
           events={events}
           setEvents={setEvents}
-          refetchEvents={refetchEvents}
         />
       );
 

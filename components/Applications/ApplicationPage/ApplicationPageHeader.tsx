@@ -1,11 +1,15 @@
 import { useModal } from '@hooks/useModal';
 import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
 import useSession from '@hooks/useSession';
 import Tag from '@components/Tags/Tag';
 import Modal from '@components/Generic/Modal';
 import DeclineModalForm from '@components/Positions/DeclineApplicationModalForm';
-import { Application } from '@gql/types/graphql';
-import { scheduleInterviewPath } from '@lib/routes';
+import { Application, HiringStep } from '@gql/types/graphql';
+import { manageTimeslotsPath, scheduleInterviewPath } from '@lib/routes';
+import { ClockIcon } from '@heroicons/react/20/solid';
+import Link from 'next/link';
+import { UPDATE_APPLICATION_MUTATION } from '@gql/mutations/applications';
 
 type Props = {
   application: Application;
@@ -14,9 +18,54 @@ type Props = {
 
 const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
   const router = useRouter();
+  const [updateApplication] = useMutation(UPDATE_APPLICATION_MUTATION);
   const { currentUser } = useSession();
   const { setIsVisible } = useModal();
   const isDeclined = application.status === 'DECLINED';
+  const isHired = application.status === 'HIRED';
+  const setApplicationHired = async () => {
+    try {
+      const res = await updateApplication({
+        variables: {
+          id: application.id as number,
+          updateApplicationInput: {
+            status: 'HIRED',
+          },
+        },
+      });
+
+      if (res.data?.updateApplication.status === 'HIRED') {
+        refetchApplication();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleNextStep = () => {
+    const [lastStep] = [
+      ...(application.position?.hiringSteps as HiringStep[]),
+    ].sort((a, b) => ((a?.order as number) > (b?.order as number) ? -1 : 1));
+
+    if (!lastStep) {
+      console.error('No hiring steps found');
+      return;
+    }
+
+    const isLastStep = lastStep?.id === application.currentStep?.id;
+
+    if (isLastStep) {
+      setApplicationHired();
+      return;
+    }
+    router.push(
+      scheduleInterviewPath(
+        application.uuid as string,
+        application.candidate?.uuid as string,
+      ),
+    );
+  };
+
   return (
     <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
       <div className="flex flex-wrap items-center justify-between sm:flex-nowrap">
@@ -33,7 +82,7 @@ const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
             />
           )}
         </h3>
-        {currentUser?.type === 'RECRUITER' && !isDeclined && (
+        {currentUser?.type === 'RECRUITER' && !isDeclined && !isHired && (
           <div>
             <button
               type="submit"
@@ -44,14 +93,7 @@ const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
             </button>
             <button
               type="button"
-              onClick={() =>
-                router.push(
-                  scheduleInterviewPath(
-                    application.uuid as string,
-                    application.candidate?.uuid as string,
-                  ),
-                )
-              }
+              onClick={handleNextStep}
               className="ml-3 inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none"
             >
               {application.status === 'APPLIED' && !application.currentStep
@@ -59,6 +101,18 @@ const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
                 : 'Proceed'}
             </button>
           </div>
+        )}
+        {currentUser?.type === 'CANDIDATE' && !isHired && (
+          <Link
+            href={manageTimeslotsPath(
+              application.uuid as string,
+              application.candidate?.uuid as string,
+            )}
+            className="ml-3 inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-yellow-500 focus:outline-none"
+          >
+            <ClockIcon className="h-5 w-5 mr-2" />
+            Timeslots
+          </Link>
         )}
       </div>
       {application.status === 'DECLINED' && application.declineMessage && (
