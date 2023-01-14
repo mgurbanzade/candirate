@@ -14,6 +14,14 @@ export const UPDATE_APPLICATION_MUTATION = graphql(`
   }
 `);
 
+export const HIRE_APPLICATION_MUTATION = graphql(`
+  mutation HireApplication($id: Int!, $redirectPath: String!) {
+    hireApplication(id: $id, redirectPath: $redirectPath) {
+      status
+    }
+  }
+`);
+
 export const DECLINE_APPLICATION_MUTATION = graphql(`
   mutation DeclineApplication(
     $id: Int!

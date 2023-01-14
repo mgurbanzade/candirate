@@ -36,22 +36,26 @@ const ApplicationPageContainer = ({
               (currentUser?.type === 'RECRUITER' && application.candidate),
           })}
         >
-          {currentUser?.type === 'RECRUITER' && application.candidate && (
-            <section className="col-span-2">
-              <div className="bg-white shadow sm:rounded-lg">
-                <CareerOverview candidate={application.candidate} showLink />
-              </div>
-            </section>
-          )}
           {upcomingInterview && (
             <UpcomingInterview
               interview={upcomingInterview}
               headerTitle={application.currentStep?.title as string}
             />
           )}
+          {currentUser?.type === 'RECRUITER' && application.candidate && (
+            <section
+              className={cx('h-full', {
+                'col-span-1': upcomingInterview,
+              })}
+            >
+              <div className="bg-white shadow sm:rounded-lg h-full">
+                <CareerOverview candidate={application.candidate} showLink />
+              </div>
+            </section>
+          )}
           <section
-            className={cx('col-span-2 h-full', {
-              'col-span-1': upcomingInterview,
+            className={cx('h-full', {
+              'col-span-2': currentUser?.type === 'RECRUITER',
             })}
           >
             <PositionShowView

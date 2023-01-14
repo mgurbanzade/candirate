@@ -6,10 +6,14 @@ import Tag from '@components/Tags/Tag';
 import Modal from '@components/Generic/Modal';
 import DeclineModalForm from '@components/Positions/DeclineApplicationModalForm';
 import { Application, HiringStep } from '@gql/types/graphql';
-import { manageTimeslotsPath, scheduleInterviewPath } from '@lib/routes';
+import {
+  applicationPath,
+  manageTimeslotsPath,
+  scheduleInterviewPath,
+} from '@lib/routes';
 import { ClockIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
-import { UPDATE_APPLICATION_MUTATION } from '@gql/mutations/applications';
+import { HIRE_APPLICATION_MUTATION } from '@gql/mutations/applications';
 
 type Props = {
   application: Application;
@@ -18,23 +22,21 @@ type Props = {
 
 const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
   const router = useRouter();
-  const [updateApplication] = useMutation(UPDATE_APPLICATION_MUTATION);
+  const [hireApplication] = useMutation(HIRE_APPLICATION_MUTATION);
   const { currentUser } = useSession();
   const { setIsVisible } = useModal();
   const isDeclined = application.status === 'DECLINED';
   const isHired = application.status === 'HIRED';
   const setApplicationHired = async () => {
     try {
-      const res = await updateApplication({
+      const res = await hireApplication({
         variables: {
           id: application.id as number,
-          updateApplicationInput: {
-            status: 'HIRED',
-          },
+          redirectPath: applicationPath(application.uuid as string),
         },
       });
 
-      if (res.data?.updateApplication.status === 'HIRED') {
+      if (res.data?.hireApplication.status === 'HIRED') {
         refetchApplication();
       }
     } catch (e) {

@@ -1,8 +1,14 @@
 import Link from 'next/link';
+import { Badge } from 'flowbite-react';
 import useSession from '@hooks/useSession';
 import { DateTime } from 'luxon';
 import { Interview } from '@gql/types/graphql';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
+import {
+  ArrowTopRightOnSquareIcon,
+  ChatBubbleBottomCenterIcon,
+  ClockIcon,
+  MapPinIcon,
+} from '@heroicons/react/20/solid';
 import { interviewPath } from '@lib/routes';
 
 type Props = {
@@ -23,14 +29,22 @@ export default function UpcomingInterview({ interview, headerTitle }: Props) {
     interviewDate,
     'minutes',
   ).minutes;
+  const isPastEvent = interviewDate < DateTime.local();
   return (
     <section>
       <div className="bg-white shadow sm:rounded-lg h-full">
         <div>
           <div className="flex justify-between items-center px-4 py-5 sm:px-6">
-            <h2 className="text-lg font-medium leading-6 text-gray-900">
-              Upcoming: {headerTitle}
-            </h2>
+            <div className="flex items-center">
+              {isPastEvent ? (
+                <Badge color="failure">Completed</Badge>
+              ) : (
+                <Badge color="success">Upcoming</Badge>
+              )}
+              <h2 className="text-lg font-medium leading-6 text-gray-900 ml-2">
+                {headerTitle}
+              </h2>
+            </div>
 
             <Link
               href={interviewPath(interview.uuid as string)}
@@ -40,48 +54,24 @@ export default function UpcomingInterview({ interview, headerTitle }: Props) {
             </Link>
           </div>
           <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
-            <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-              {currentUser?.recruiterId && (
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Interview title
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {interview.title}
-                  </dd>
-                </div>
-              )}
-              <div className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">When</dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {interviewStartTime}
-                </dd>
-              </div>
-              <div className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">
-                  Meeting link
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {interview.meetingLink || 'none'}
-                </dd>
-              </div>
-              <div className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">Duration</dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {durationInMinutes} min
-                </dd>
-              </div>
-              <div className="sm:col-span-2">
-                <dt className="text-sm font-medium text-gray-500">
-                  {currentUser?.recruiterId
-                    ? 'Notes for the candidate'
-                    : `Notes for ${currentUser?.firstname}`}
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {interview.description || 'none'}
-                </dd>
-              </div>
-            </dl>
+            <h3 className="mt-1 text-indigo-700 font-bold">
+              {interview.title}
+            </h3>
+            <p className="text-gray-600 font-medium mb-8">
+              {interviewStartTime}
+            </p>
+            <p className="text-gray-600 flex items-center mb-8">
+              <ClockIcon className="w-4 h-4 text-indigo-700 mr-2" />
+              {durationInMinutes} min
+            </p>
+            <p className="text-gray-600 flex items-center mb-8">
+              <MapPinIcon className="w-4 h-4 text-indigo-700 mr-2" />
+              {interview.meetingLink || 'No meeting link provided'}
+            </p>
+            <p className="text-gray-600 flex items-center mb-8">
+              <ChatBubbleBottomCenterIcon className="w-4 h-4 text-indigo-700 mr-2" />
+              {interview.description || 'No description provided'}
+            </p>
           </div>
         </div>
       </div>

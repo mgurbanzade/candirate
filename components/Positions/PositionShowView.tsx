@@ -25,11 +25,7 @@ const PositionShowView = ({
         wrapperClassName ? ' ' + wrapperClassName : ''
       }`}
     >
-      <div
-        className={`bg-white shadow sm:rounded-lg${
-          wrapperClassName ? ' ' + wrapperClassName : ''
-        }`}
-      >
+      <div className={`${wrapperClassName ? ' ' + wrapperClassName : ''}`}>
         <div className="flex justify-between items-center px-4 py-5 sm:px-6">
           <h2
             id="position-details"

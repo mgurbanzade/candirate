@@ -21,6 +21,7 @@ export const GET_APPLICATION = graphql(`
         meetingLink
         startsAt
         endsAt
+        status
         questions {
           id
           title
