@@ -19,6 +19,7 @@ const TimelineCell = ({ hour, hourStr, isFreeTimeslot, onClick }: Props) => {
     .toFormat('h:mma');
 
   const nowHour = DateTime.local().minute === 0 ? nowHourFormat : nowMinutes;
+  const isToday = hour.hasSame(DateTime.local(), 'day');
 
   return isWhole ? (
     <div
@@ -41,7 +42,7 @@ const TimelineCell = ({ hour, hourStr, isFreeTimeslot, onClick }: Props) => {
           </div>
         </div>
       )}
-      {nowHour === hourStr && (
+      {nowHour === hourStr && isToday && (
         <>
           <div
             className="w-3 h-3 absolute flex items-center bg-green-600 rounded-full -left-1.5"
@@ -80,7 +81,7 @@ const TimelineCell = ({ hour, hourStr, isFreeTimeslot, onClick }: Props) => {
           </div>
         </div>
       )}
-      {nowHour === hourStr && (
+      {nowHour === hourStr && isToday && (
         <>
           <div
             className="w-3 h-3 absolute flex items-center bg-green-600 rounded-full -left-1.5 z-50"

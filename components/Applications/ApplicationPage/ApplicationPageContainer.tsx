@@ -55,7 +55,8 @@ const ApplicationPageContainer = ({
           )}
           <section
             className={cx('h-full', {
-              'col-span-2': currentUser?.type === 'RECRUITER',
+              'col-span-2':
+                currentUser?.type === 'RECRUITER' && upcomingInterview,
             })}
           >
             <PositionShowView

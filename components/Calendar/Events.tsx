@@ -68,12 +68,14 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
               {event.startStr} - {event.endStr}
             </time>
             {event.duration <= 0.25 && (
-              <p className="inline-flex font-semibold text-blue-700">
+              <p className="ml-2 inline-flex font-semibold text-blue-700">
                 {event.title}
               </p>
             )}
           </p>
-          <p className="font-semibold text-blue-700">{event.title}</p>
+          {event.duration > 0.25 && (
+            <p className="font-semibold text-blue-700">{event.title}</p>
+          )}
           {event.duration > 0.5 && (
             <p className="text-blue-500 group-hover:text-blue-700">
               {event.description}

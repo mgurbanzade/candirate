@@ -7,12 +7,14 @@ type Props = {
   hourStr: string;
   isNewInterview?: boolean;
   isTimeslotMode?: boolean;
+  hour: DateTime;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   setEvents: React.Dispatch<React.SetStateAction<any[]>>;
   isFreeTimeslot: boolean;
 };
 
 const TimelineCell = ({
+  hour,
   hourStr,
   onClick,
   isNewInterview,
@@ -31,6 +33,8 @@ const TimelineCell = ({
   const onClickHandler =
     isNewInterview || isTimeslotMode ? onClick : () => null;
 
+  const isToday = hour.hasSame(DateTime.local(), 'day');
+
   return isWhole ? (
     <div
       onClick={onClickHandler}
@@ -47,7 +51,7 @@ const TimelineCell = ({
           <div>Free time slot provided by candidate</div>
         </div>
       )}
-      {nowHour === hourStr && (
+      {nowHour === hourStr && isToday && (
         <>
           <div
             className="w-3 h-3 absolute flex items-center bg-green-600 rounded-full -left-1.5"
@@ -81,7 +85,7 @@ const TimelineCell = ({
           <div>Free time slot provided by candidate</div>
         </div>
       )}
-      {nowHour === hourStr && (
+      {nowHour === hourStr && isToday && (
         <>
           <div
             className="w-3 h-3 absolute flex items-center bg-green-600 rounded-full -left-1.5 z-50"
