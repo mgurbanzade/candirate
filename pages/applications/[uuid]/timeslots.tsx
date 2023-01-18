@@ -1,4 +1,4 @@
-import TimeslotCalendar from '@components/Calendar/TimeslotCalendar/TimeslotCalendar';
+import Calendar from '@components/Calendar/Calendar';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { GET_APPLICATION } from '@gql/queries/applications';
@@ -14,10 +14,11 @@ const TimeslotsPage = () => {
 
   return (
     <main className="px-6 py-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="h-98 rounded-lg">
-          <TimeslotCalendar application={data?.getApplication as Application} />
-        </div>
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-lg">
+        <Calendar
+          application={data?.getApplication as Application}
+          isManageTimeslots
+        />
       </div>
     </main>
   );

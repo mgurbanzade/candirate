@@ -12,12 +12,19 @@ type Props = {
   event: UITimelineEventType;
   events: UITimelineEventType[];
   setEvents: React.Dispatch<React.SetStateAction<UITimelineEventType[]>>;
+  viewType: 'day' | 'week';
   refetchEvents: () => void;
 };
 
 const CELL_HEIGHT_PX = 24;
 
-const NewEvent = ({ event, events, setEvents, refetchEvents }: Props) => {
+const NewEvent = ({
+  event,
+  events,
+  setEvents,
+  refetchEvents,
+  viewType,
+}: Props) => {
   const [size, setSize] = useState({ width: 100, height: CELL_HEIGHT_PX });
   const [duration, setDuration] = useState(event.duration);
 
@@ -116,7 +123,7 @@ const NewEvent = ({ event, events, setEvents, refetchEvents }: Props) => {
             <Popover.Button
               data-headlessui-state="open"
               className={cx(
-                'w-full h-full group inline-flex items-center rounded-md text-base font-mediump-1 p-1 outline-none',
+                'w-full h-full group inline-flex items-center rounded-md text-base font-mediump-1 p-1 outline-none relative mt-px flex z-10',
                 {
                   'text-gray-900': open,
                   'text-gray-500': !open,
@@ -127,13 +134,18 @@ const NewEvent = ({ event, events, setEvents, refetchEvents }: Props) => {
                 className={cx(
                   'w-full h-full text-[12px] leading-[16px] flex justify-center items-center overflow-y-auto rounded-lg bg-blue-50 hover:bg-blue-100 text-xs z-10 p-1',
                 )}
+                style={{
+                  marginLeft: viewType === 'week' ? 3 : 'initial',
+                }}
               >
-                <p className="font-semibold text-blue-700">
-                  <time dateTime={event.startDate.toISO()} className="mr-2">
-                    {startDateStr} - {endDateStr}
-                  </time>
-                  {event.title}
-                </p>
+                {viewType === 'day' ? (
+                  <p className="font-semibold text-blue-700">
+                    <time dateTime={event.startDate.toISO()} className="mr-2">
+                      {startDateStr} - {endDateStr}
+                    </time>
+                  </p>
+                ) : null}
+                <p className="font-semibold text-blue-700">{event.title}</p>
                 <p className="text-blue-500 group-hover:text-blue-700">
                   {event.description}
                 </p>

@@ -7,12 +7,13 @@ import { UITimelineEventType } from '@lib/ui-types';
 type Props = {
   slot: UITimelineEventType;
   events: UITimelineEventType[];
+  viewType: 'day' | 'week';
   setEvents: React.Dispatch<React.SetStateAction<UITimelineEventType[]>>;
 };
 
 const CELL_HEIGHT_PX = 24;
 
-const NewTimeslot = ({ slot, events, setEvents }: Props) => {
+const NewTimeslot = ({ slot, events, setEvents, viewType }: Props) => {
   const [size, setSize] = useState({ width: 100, height: CELL_HEIGHT_PX });
   const [duration, setDuration] = useState(slot.duration);
 
@@ -122,25 +123,31 @@ const NewTimeslot = ({ slot, events, setEvents }: Props) => {
             className={cx(
               'w-full h-full text-[12px] leading-[16px] flex justify-center overflow-y-auto rounded-lg bg-lime-50 hover:bg-lime-100 text-xs z-10',
             )}
+            style={{
+              marginLeft: viewType === 'week' ? 3 : 'initial',
+            }}
           >
             <p className="flex justify-center items-center font-semibold text-lime-700">
-              {duration > 0.25 && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 mr-1 text-lime-500"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              )}
-              Free time slot from {startDateStr} to {endDateStr}
+              {duration > 0.25 ||
+                (viewType === 'day' && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5 mr-1 text-lime-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                ))}
+              {viewType === 'week'
+                ? 'Free time slot'
+                : `Free time slot from ${startDateStr} to ${endDateStr}`}
             </p>
           </div>
         </Resizable>

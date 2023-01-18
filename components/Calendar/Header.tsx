@@ -1,28 +1,34 @@
-// import { Fragment } from 'react';
+import { Fragment } from 'react';
 import {
-  // ChevronDownIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  // EllipsisHorizontalIcon,
 } from '@heroicons/react/20/solid';
-// import { Menu, Transition } from '@headlessui/react';
+import { Menu, Transition } from '@headlessui/react';
 import { DateTime } from 'luxon';
 
-// function classNames(...classes: string[]) {
-//   return classes.filter(Boolean).join(' ');
-// }
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ');
+}
 
 type Props = {
   selectedDay: DateTime;
   isManageTimeslots?: boolean;
   setSelectedDay: (date: DateTime) => void;
+  viewType: 'day' | 'week';
+  setViewType: (viewType: 'day' | 'week') => void;
 };
 
-const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
+const CalendarHeader = ({
+  selectedDay,
+  setSelectedDay,
+  viewType,
+  setViewType,
+}: Props) => {
   const dateTimeIso = selectedDay.toISO();
   return (
-    <header className="flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6 overflow-hidden bg-white sm:rounded-t-md">
-      <div className="flex justify-between w-full">
+    <header className="flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6 bg-white sm:rounded-t-md">
+      <div className="flex justify-between">
         <div>
           <h1 className="text-lg font-semibold leading-6 text-gray-900">
             <time dateTime={dateTimeIso} className="sm:hidden">
@@ -71,13 +77,13 @@ const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
             <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
-        {/* <div className="hidden md:ml-4 md:flex md:items-center">
+        <div className="hidden md:ml-4 md:flex md:items-center">
           <Menu as="div" className="relative">
             <Menu.Button
               type="button"
               className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
             >
-              Day view
+              {viewType === 'day' ? 'Day view' : 'Week view'}
               <ChevronDownIcon
                 className="ml-2 h-5 w-5 text-gray-400"
                 aria-hidden="true"
@@ -93,183 +99,48 @@ const CalendarHeader = ({ selectedDay, setSelectedDay }: Props) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items
+                style={{ zIndex: 60 }}
+                className="absolute right-0 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              >
                 <div className="py-1">
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <button
+                        type="button"
+                        onClick={() => setViewType('day')}
                         className={classNames(
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
+                          'block px-4 py-2 text-sm w-full text-left',
                         )}
                       >
                         Day view
-                      </a>
+                      </button>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <button
+                        type="button"
+                        onClick={() => setViewType('week')}
                         className={classNames(
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
+                          'block px-4 py-2 text-sm w-full text-left',
                         )}
                       >
                         Week view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
-                        )}
-                      >
-                        Month view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
-                        )}
-                      >
-                        Year view
-                      </a>
+                      </button>
                     )}
                   </Menu.Item>
                 </div>
               </Menu.Items>
             </Transition>
           </Menu>
-          {/* <div className="ml-6 h-6 w-px bg-gray-300" />
-          <button
-            type="button"
-            className="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Add event
-          </button> */}
-        {/* </div> */}
-        {/* <Menu as="div" className="relative ml-6 md:hidden">
-          <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
-            <span className="sr-only">Open menu</span>
-            <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
-          </Menu.Button>
-
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="py-1">
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      )}
-                    >
-                      Create event
-                    </a>
-                  )}
-                </Menu.Item>
-              </div>
-              <div className="py-1">
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      )}
-                    >
-                      Go to today
-                    </a>
-                  )}
-                </Menu.Item>
-              </div>
-              <div className="py-1">
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      )}
-                    >
-                      Day view
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      )}
-                    >
-                      Week view
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      )}
-                    >
-                      Month view
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      )}
-                    >
-                      Year view
-                    </a>
-                  )}
-                </Menu.Item>
-              </div>
-            </Menu.Items>
-          </Transition>
-        </Menu> */}
+        </div>
       </div>
     </header>
   );

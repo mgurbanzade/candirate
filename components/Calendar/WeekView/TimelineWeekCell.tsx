@@ -11,15 +11,19 @@ type Props = {
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   setEvents: React.Dispatch<React.SetStateAction<any[]>>;
   isFreeTimeslot: boolean;
+  columnOrder: number;
+  isManageTimeslots: boolean;
 };
 
-const TimelineCell = ({
+const TimelineWeekCell = ({
   hour,
   hourStr,
   onClick,
   isNewInterview,
   isTimeslotMode,
   isFreeTimeslot,
+  columnOrder,
+  isManageTimeslots,
 }: Props) => {
   const isWhole = !hourStr.includes(':');
   const nowHourFormat = DateTime.local().toFormat('ha');
@@ -31,7 +35,9 @@ const TimelineCell = ({
   const nowHour = DateTime.local().minute === 0 ? nowHourFormat : nowMinutes;
 
   const onClickHandler =
-    isNewInterview || isTimeslotMode ? onClick : () => null;
+    isNewInterview || isTimeslotMode || isManageTimeslots
+      ? onClick
+      : () => null;
 
   const isToday = hour.hasSame(DateTime.local(), 'day');
 
@@ -40,6 +46,8 @@ const TimelineCell = ({
       onClick={onClickHandler}
       className={cx('relative', {
         'bg-lime-50': isFreeTimeslot,
+        'cursor-pointer': isManageTimeslots && isFreeTimeslot,
+        'cursor-cell': isManageTimeslots && !isFreeTimeslot,
       })}
       style={{
         marginLeft: 1,
@@ -48,7 +56,7 @@ const TimelineCell = ({
       {isFreeTimeslot && (
         <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
           <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
-          <div>Free time slot provided by candidate</div>
+          <div>Free time slot</div>
         </div>
       )}
       {nowHour === hourStr && isToday && (
@@ -65,14 +73,18 @@ const TimelineCell = ({
           />
         </>
       )}
-      <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-        {hourStr}
-      </div>
+      {columnOrder === 1 && (
+        <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+          {hourStr}
+        </div>
+      )}
     </div>
   ) : (
     <div
       className={cx('relative', {
         'bg-lime-50': isFreeTimeslot,
+        'cursor-pointer': isManageTimeslots && isFreeTimeslot,
+        'cursor-cell': isManageTimeslots && !isFreeTimeslot,
       })}
       style={{
         marginLeft: 1,
@@ -82,7 +94,7 @@ const TimelineCell = ({
       {isFreeTimeslot && (
         <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
           <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
-          <div>Free time slot provided by candidate</div>
+          <div>Free time slot</div>
         </div>
       )}
       {nowHour === hourStr && isToday && (
@@ -103,4 +115,4 @@ const TimelineCell = ({
   );
 };
 
-export default TimelineCell;
+export default TimelineWeekCell;

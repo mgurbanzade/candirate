@@ -50,6 +50,20 @@ export const getTimelineForDate = (
   });
 };
 
+export const getTimelineForWeek = (
+  dateTime: DateTime,
+  timeslots?: MappedTimeslotType[],
+) => {
+  const timeline = [];
+  const start = dateTime.startOf('week');
+  for (let i = 0; i <= 6; i++) {
+    const date = start.plus({ days: i });
+    timeline.push(getTimelineForDate(date, timeslots));
+  }
+
+  return timeline;
+};
+
 export const getDatePickerData = (dateTime: DateTime = DateTime.local()) => {
   const startOfMonth = dateTime.startOf('month');
   const weekDay = startOfMonth.weekday;

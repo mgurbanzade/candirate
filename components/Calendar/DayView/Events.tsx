@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import Link from 'next/link';
-import NewEvent from './NewEvent';
-import NewTimeslot from './NewTimeslot';
+import NewEvent from '../NewEvent';
+import NewTimeslot from '../NewTimeslot';
 
 import { TimelineEventTypes, UITimelineEventType } from '@lib/ui-types';
 import { interviewPath } from '@lib/routes';
@@ -27,6 +27,7 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
           events={events}
           setEvents={setEvents}
           refetchEvents={refetchEvents}
+          viewType="day"
         />
       );
 
@@ -37,6 +38,7 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
           slot={event}
           events={events}
           setEvents={setEvents}
+          viewType="day"
         />
       );
 
@@ -68,9 +70,9 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
               {event.startStr} - {event.endStr}
             </time>
             {event.duration <= 0.25 && (
-              <p className="ml-2 inline-flex font-semibold text-blue-700">
+              <span className="ml-2 inline-flex font-semibold text-blue-700">
                 {event.title}
-              </p>
+              </span>
             )}
           </p>
           {event.duration > 0.25 && (

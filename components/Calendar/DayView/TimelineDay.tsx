@@ -5,9 +5,13 @@ import {
   TimelineEventTypes,
   UITimelineEventType,
 } from '@lib/ui-types';
-import { getTimelineForDate } from './helpers';
+import useNotification from '@hooks/useNotification';
+import { useMutation } from '@apollo/client';
+import { CREATE_TIMESLOT, DELETE_TIMESLOT } from '@gql/mutations/timeslots';
 
-import TimelineCell from './TimelineCell';
+import { getTimelineForDate } from '../helpers';
+
+import TimelineCell from './TimelineDayCell';
 
 type Props = {
   containerOffset: React.RefObject<HTMLDivElement>;
@@ -16,7 +20,10 @@ type Props = {
   application?: Application;
   isNewInterview?: boolean;
   isTimeslotMode?: boolean;
+  isManageTimeslots?: boolean;
   timeslots?: MappedTimeslotType[];
+  refetchInterviews?: () => void;
+  refetchTimeslots?: () => void;
 };
 
 const Timeline = ({
@@ -27,7 +34,63 @@ const Timeline = ({
   isTimeslotMode,
   application,
   timeslots,
+  refetchInterviews,
+  refetchTimeslots,
+  isManageTimeslots,
 }: Props) => {
+  const { setNotification } = useNotification();
+  const [createTimeslot] = useMutation(CREATE_TIMESLOT);
+  const [deleteTimeslot] = useMutation(DELETE_TIMESLOT);
+
+  const handleCreateTimeslot = async (startsAt: DateTime) => {
+    try {
+      const { data } = await createTimeslot({
+        variables: {
+          candidateId: application?.candidate?.id as number,
+          applicationId: application?.id as number,
+          createTimeslotInput: {
+            startsAt: startsAt.toISO(),
+            endsAt: startsAt.plus({ minutes: 15 }).toISO(),
+          },
+        },
+      });
+
+      if (data?.createTimeslot?.id) {
+        if (refetchTimeslots) refetchTimeslots();
+        if (refetchInterviews) refetchInterviews();
+      }
+    } catch (error) {
+      setNotification({
+        isVisible: true,
+        type: 'error',
+        title: 'Something went wrong',
+        description: 'Please try again later.',
+      });
+    }
+  };
+
+  const handleDeleteTimeslot = async (id: number) => {
+    try {
+      const { data } = await deleteTimeslot({
+        variables: {
+          id,
+        },
+      });
+
+      if (data?.deleteTimeslot?.__typename) {
+        if (refetchTimeslots) refetchTimeslots();
+        if (refetchInterviews) refetchInterviews();
+      }
+    } catch (error) {
+      setNotification({
+        isVisible: true,
+        type: 'error',
+        title: 'Something went wrong',
+        description: 'Please try again later.',
+      });
+    }
+  };
+
   const timelineData = getTimelineForDate(
     DateTime.fromFormat(selectedDay.toISODate(), 'yyyy-MM-dd'),
     timeslots,
@@ -68,13 +131,22 @@ const Timeline = ({
       ]);
     };
 
+    const regularClickHandler = isTimeslotMode ? createSlot : createEvent;
+
+    const manageTimeslotsClickHandler = cell.isFreeTimeslot
+      ? () => handleDeleteTimeslot(cell.timeslotId)
+      : () => handleCreateTimeslot(cell.hour);
+
     return (
       <TimelineCell
         key={cell.id}
-        onClick={isTimeslotMode ? createSlot : createEvent}
+        onClick={
+          isManageTimeslots ? manageTimeslotsClickHandler : regularClickHandler
+        }
         setEvents={setEvents}
         isNewInterview={isNewInterview}
         isTimeslotMode={isTimeslotMode}
+        isManageTimeslots={isManageTimeslots}
         {...cell}
       />
     );

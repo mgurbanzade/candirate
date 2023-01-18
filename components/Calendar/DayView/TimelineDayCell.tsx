@@ -4,13 +4,25 @@ import { DateTime } from 'luxon';
 
 type Props = {
   id: string;
-  hour: DateTime;
   hourStr: string;
-  onClick: (data: any) => void;
+  isNewInterview?: boolean;
+  isTimeslotMode?: boolean;
+  hour: DateTime;
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  setEvents: React.Dispatch<React.SetStateAction<any[]>>;
   isFreeTimeslot: boolean;
+  isManageTimeslots?: boolean;
 };
 
-const TimelineCell = ({ hour, hourStr, isFreeTimeslot, onClick }: Props) => {
+const TimelineCell = ({
+  hour,
+  hourStr,
+  onClick,
+  isNewInterview,
+  isTimeslotMode,
+  isFreeTimeslot,
+  isManageTimeslots,
+}: Props) => {
   const isWhole = !hourStr.includes(':');
   const nowHourFormat = DateTime.local().toFormat('ha');
   const nowMinutes = DateTime.local()
@@ -19,14 +31,21 @@ const TimelineCell = ({ hour, hourStr, isFreeTimeslot, onClick }: Props) => {
     .toFormat('h:mma');
 
   const nowHour = DateTime.local().minute === 0 ? nowHourFormat : nowMinutes;
+
+  const onClickHandler =
+    isNewInterview || isTimeslotMode || isManageTimeslots
+      ? onClick
+      : () => null;
+
   const isToday = hour.hasSame(DateTime.local(), 'day');
 
   return isWhole ? (
     <div
-      onClick={onClick}
+      onClick={onClickHandler}
       className={cx('relative', {
-        'bg-lime-50 cursor-pointer': isFreeTimeslot,
-        'cursor-cell': !isFreeTimeslot,
+        'bg-lime-50': isFreeTimeslot,
+        'cursor-pointer': isManageTimeslots && isFreeTimeslot,
+        'cursor-cell': isManageTimeslots && !isFreeTimeslot,
       })}
       style={{
         marginLeft: 1,
@@ -35,11 +54,7 @@ const TimelineCell = ({ hour, hourStr, isFreeTimeslot, onClick }: Props) => {
       {isFreeTimeslot && (
         <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
           <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
-          <div>
-            {hour.toFormat('hh:mma')} -{' '}
-            {hour.plus({ minutes: 15 }).toFormat('hh:mma')} Free time slot
-            (click to remove)
-          </div>
+          <div>Free time slot provided by candidate</div>
         </div>
       )}
       {nowHour === hourStr && isToday && (
@@ -63,22 +78,19 @@ const TimelineCell = ({ hour, hourStr, isFreeTimeslot, onClick }: Props) => {
   ) : (
     <div
       className={cx('relative', {
-        'bg-lime-50 cursor-pointer': isFreeTimeslot,
-        'cursor-cell': !isFreeTimeslot,
+        'bg-lime-50': isFreeTimeslot,
+        'cursor-pointer': isManageTimeslots && isFreeTimeslot,
+        'cursor-cell': isManageTimeslots && !isFreeTimeslot,
       })}
       style={{
         marginLeft: 1,
       }}
-      onClick={onClick}
+      onClick={onClickHandler}
     >
       {isFreeTimeslot && (
         <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
           <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
-          <div>
-            {hour.toFormat('hh:mma')} -{' '}
-            {hour.plus({ minutes: 15 }).toFormat('hh:mma')} Free time slot
-            (click to remove)
-          </div>
+          <div>Free time slot provided by candidate</div>
         </div>
       )}
       {nowHour === hourStr && isToday && (

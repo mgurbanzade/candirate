@@ -6,11 +6,13 @@ import { getDaysForWeek } from './helpers';
 type Props = {
   selectedDay: DateTime;
   setSelectedDay: (date: DateTime) => void;
+  viewType: 'day' | 'week';
+  setViewType: (viewType: 'day' | 'week') => void;
 };
 
 const MobileHeader = forwardRef(
   (
-    { selectedDay, setSelectedDay }: Props,
+    { selectedDay, setSelectedDay, viewType }: Props,
     ref: ForwardedRef<HTMLDivElement>,
   ) => {
     const days = getDaysForWeek(selectedDay);
@@ -50,7 +52,16 @@ const MobileHeader = forwardRef(
     return (
       <div
         ref={ref}
-        className="sticky top-0 z-20 grid flex-none grid-cols-7 bg-white text-xs text-gray-500 shadow ring-1 ring-black ring-opacity-5 md:hidden"
+        className={cx(
+          'sticky top-0 z-20 grid flex-none grid-cols-7 bg-white text-xs text-gray-500',
+          {
+            'md:hidden': viewType === 'day',
+          },
+        )}
+        style={{
+          zIndex: 60,
+          marginLeft: viewType === 'week' ? 'calc(3.5rem + 1.5px)' : '0',
+        }}
       >
         {daysMarkup}
       </div>
