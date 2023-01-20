@@ -5,6 +5,7 @@ import NewTimeslot from '../NewTimeslot';
 
 import { TimelineEventTypes, UITimelineEventType } from '@lib/ui-types';
 import { interviewPath } from '@lib/routes';
+import { DateTime } from 'luxon';
 
 type Props = {
   events: UITimelineEventType[];
@@ -42,6 +43,8 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
         />
       );
 
+    const isExpired = event.startDate < DateTime.local();
+
     return (
       <li
         key={event.id}
@@ -51,35 +54,59 @@ const Events = ({ events, setEvents, refetchEvents }: Props) => {
         <Link
           href={interviewPath(event.uuid as string)}
           className={cx(
-            'group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 text-xs leading-2 hover:bg-blue-100',
+            'group absolute inset-1 flex flex-col overflow-y-auto rounded-lg text-xs leading-2',
             {
               'p-2': event.duration > 0.5,
+              'bg-blue-50 hover:bg-blue-100': !isExpired,
+              'bg-red-50 hover:bg-red-100': isExpired,
               'pl-2 justify-center': event.duration === 0.5,
             },
           )}
         >
           <p
-            className={cx('text-blue-500 group-hover:text-blue-700', {
+            className={cx({
               'pl-2': event.duration <= 0.25,
+              'text-blue-500 group-hover:text-blue-700': !isExpired,
+              'text-red-500 group-hover:text-red-700': isExpired,
             })}
           >
             <time
               dateTime={event.startDate.toISO()}
-              className="font-semibold text-blue-700"
+              className={cx('font-semibold', {
+                'text-blue-700': !isExpired,
+                'text-red-700': isExpired,
+              })}
             >
               {event.startStr} - {event.endStr}
             </time>
             {event.duration <= 0.25 && (
-              <span className="ml-2 inline-flex font-semibold text-blue-700">
+              <span
+                className={cx('ml-2 inline-flex font-semibold', {
+                  'text-red-700': isExpired,
+                  'text-blue-700': !isExpired,
+                })}
+              >
                 {event.title}
               </span>
             )}
           </p>
           {event.duration > 0.25 && (
-            <p className="font-semibold text-blue-700">{event.title}</p>
+            <p
+              className={cx('font-semibold', {
+                'text-red-700': isExpired,
+                'text-blue-700': !isExpired,
+              })}
+            >
+              {event.title}
+            </p>
           )}
           {event.duration > 0.5 && (
-            <p className="text-blue-500 group-hover:text-blue-700">
+            <p
+              className={cx({
+                'text-red-500 group-hover:text-red-700': isExpired,
+                'text-blue-500 group-hover:text-blue-700': !isExpired,
+              })}
+            >
               {event.description}
             </p>
           )}

@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import cx from 'classnames';
 import Link from 'next/link';
 import NewEvent from '../NewEvent';
@@ -47,6 +48,8 @@ const WeekEvents = ({ events, setEvents, refetchEvents }: Props) => {
             />
           );
 
+        const isExpired = event.startDate < DateTime.local();
+
         return (
           <li
             key={event.id}
@@ -59,6 +62,8 @@ const WeekEvents = ({ events, setEvents, refetchEvents }: Props) => {
                 'group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 text-xs leading-2 hover:bg-blue-100',
                 {
                   'p-2': event.duration > 0.5,
+                  'bg-blue-50 hover:bg-blue-100': !isExpired,
+                  'bg-red-50 hover:bg-red-100': isExpired,
                   'pl-2 justify-center': event.duration === 0.5,
                 },
               )}
@@ -69,27 +74,47 @@ const WeekEvents = ({ events, setEvents, refetchEvents }: Props) => {
               <p
                 className={cx('text-blue-500 group-hover:text-blue-700', {
                   'pl-2': event.duration <= 0.25,
+                  'text-blue-500 group-hover:text-blue-700': !isExpired,
+                  'text-red-500 group-hover:text-red-700': isExpired,
                 })}
               >
                 <time
                   dateTime={event.startDate.toISO()}
-                  className="font-semibold text-blue-700"
+                  className={cx('font-semibold', {
+                    'text-blue-700': !isExpired,
+                    'text-red-700': isExpired,
+                  })}
                 >
                   {event.startStr} - {event.endStr}
                 </time>
                 {event.duration <= 0.25 && (
-                  <span className="ml-2 inline-flex font-semibold text-blue-700">
+                  <span
+                    className={cx('ml-2 inline-flex font-semibold', {
+                      'text-red-700': isExpired,
+                      'text-blue-700': !isExpired,
+                    })}
+                  >
                     {event.title}
                   </span>
                 )}
               </p>
               {event.duration > 0.25 && (
-                <p className="font-semibold mt-2 text-blue-700">
+                <p
+                  className={cx('font-semibold', {
+                    'text-red-700': isExpired,
+                    'text-blue-700': !isExpired,
+                  })}
+                >
                   {event.title}
                 </p>
               )}
               {event.duration > 0.5 && (
-                <p className="text-blue-500 group-hover:text-blue-700">
+                <p
+                  className={cx({
+                    'text-red-500 group-hover:text-red-700': isExpired,
+                    'text-blue-500 group-hover:text-blue-700': !isExpired,
+                  })}
+                >
                   {event.description}
                 </p>
               )}
