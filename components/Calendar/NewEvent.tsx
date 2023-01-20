@@ -7,6 +7,7 @@ import { UITimelineEventType } from '@lib/ui-types';
 
 import cx from 'classnames';
 import InterviewCalendarForm from '@components/Interviews/InterviewCalendarForm';
+import { DateTime } from 'luxon';
 
 type Props = {
   event: UITimelineEventType;
@@ -93,6 +94,8 @@ const NewEvent = ({
     });
   }, [duration]);
 
+  const isExpired = event.startDate < DateTime.local();
+
   return (
     <Popover className="relative mt-px flex cursor-pointer" style={{ gridRow }}>
       {({ open, close }) => (
@@ -132,21 +135,42 @@ const NewEvent = ({
             >
               <div
                 className={cx(
-                  'w-full h-full text-[12px] leading-[16px] flex justify-center items-center overflow-y-auto rounded-lg bg-blue-50 hover:bg-blue-100 text-xs z-10 p-1',
+                  'w-full h-full text-[12px] leading-[16px] flex justify-center items-center overflow-y-auto rounded-lg text-xs z-10 p-1',
+                  {
+                    'bg-blue-50 hover:bg-blue-100': !isExpired,
+                    'bg-red-50 hover:bg-red-100': isExpired,
+                  },
                 )}
                 style={{
                   marginLeft: viewType === 'week' ? 3 : 'initial',
                 }}
               >
                 {viewType === 'day' ? (
-                  <p className="font-semibold text-blue-700">
+                  <p
+                    className={cx('font-semibold', {
+                      'text-red-700': isExpired,
+                      'text-blue-700': !isExpired,
+                    })}
+                  >
                     <time dateTime={event.startDate.toISO()} className="mr-2">
                       {startDateStr} - {endDateStr}
                     </time>
                   </p>
                 ) : null}
-                <p className="font-semibold text-blue-700">{event.title}</p>
-                <p className="text-blue-500 group-hover:text-blue-700">
+                <p
+                  className={cx('font-semibold', {
+                    'text-red-700': isExpired,
+                    'text-blue-700': !isExpired,
+                  })}
+                >
+                  {event.title}
+                </p>
+                <p
+                  className={cx({
+                    'text-blue-500 group-hover:text-blue-700': !isExpired,
+                    'text-red-500 group-hover:text-red-700': isExpired,
+                  })}
+                >
                   {event.description}
                 </p>
               </div>
