@@ -38,12 +38,14 @@ const TimelineCell = ({
       : () => null;
 
   const isToday = hour.hasSame(DateTime.local(), 'day');
+  const isExpired = hour < DateTime.local();
 
   return isWhole ? (
     <div
       onClick={onClickHandler}
       className={cx('relative', {
-        'bg-lime-50': isFreeTimeslot,
+        'bg-lime-50': isFreeTimeslot && !isExpired,
+        'bg-red-50': isExpired && isFreeTimeslot,
         'cursor-pointer': isManageTimeslots && isFreeTimeslot,
         'cursor-cell': isManageTimeslots && !isFreeTimeslot,
       })}
@@ -52,9 +54,21 @@ const TimelineCell = ({
       }}
     >
       {isFreeTimeslot && (
-        <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
-          <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
-          <div>Free time slot provided by candidate</div>
+        <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center">
+          <ClockIcon
+            className={cx('w-3 h-3 mr-1', {
+              'text-lime-500': !isExpired,
+              'text-red-500': isExpired,
+            })}
+          />
+          <div
+            className={cx({
+              'text-lime-700': !isExpired,
+              'text-red-700': isExpired,
+            })}
+          >
+            Free time slot provided by candidate
+          </div>
         </div>
       )}
       {nowHour === hourStr && isToday && (
@@ -78,7 +92,8 @@ const TimelineCell = ({
   ) : (
     <div
       className={cx('relative', {
-        'bg-lime-50': isFreeTimeslot,
+        'bg-lime-50': isFreeTimeslot && !isExpired,
+        'bg-red-50': isExpired && isFreeTimeslot,
         'cursor-pointer': isManageTimeslots && isFreeTimeslot,
         'cursor-cell': isManageTimeslots && !isFreeTimeslot,
       })}
@@ -88,9 +103,21 @@ const TimelineCell = ({
       onClick={onClickHandler}
     >
       {isFreeTimeslot && (
-        <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center text-lime-700">
-          <ClockIcon className="w-3 h-3 mr-1 text-lime-500" />
-          <div>Free time slot provided by candidate</div>
+        <div className="flex items-center justify-center absolute top-0 bottom-0 left-0 right-0 m-auto text-xs text-center">
+          <ClockIcon
+            className={cx('w-3 h-3 mr-1', {
+              'text-lime-500': !isExpired,
+              'text-red-500': isExpired,
+            })}
+          />
+          <div
+            className={cx({
+              'text-lime-700': !isExpired,
+              'text-red-700': isExpired,
+            })}
+          >
+            Free time slot provided by candidate
+          </div>
         </div>
       )}
       {nowHour === hourStr && isToday && (

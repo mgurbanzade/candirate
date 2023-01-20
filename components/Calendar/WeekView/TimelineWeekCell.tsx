@@ -46,7 +46,7 @@ const TimelineWeekCell = ({
     <div
       onClick={onClickHandler}
       className={cx('relative', {
-        'bg-lime-50': isFreeTimeslot,
+        'bg-lime-50': isFreeTimeslot && !isExpired,
         '!bg-red-50': isExpired && isFreeTimeslot,
         'cursor-pointer': isManageTimeslots && isFreeTimeslot,
         'cursor-cell': isManageTimeslots && !isFreeTimeslot,
