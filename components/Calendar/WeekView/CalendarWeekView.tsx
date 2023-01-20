@@ -200,11 +200,6 @@ export default function CalendarWeekView({
             <div className="flex flex-auto overflow-y-scroll">
               <div className="sticky left-0 w-14 flex-none bg-white" />
               <div className="grid flex-auto grid-cols-7">
-                <WeekEvents
-                  events={[...events]}
-                  setEvents={setEvents}
-                  refetchEvents={refetchInterviews}
-                />
                 {timelineData.map((line, index) => (
                   <TimelineWeek
                     key={index + Date.now()}
@@ -222,6 +217,11 @@ export default function CalendarWeekView({
                     refetchTimeslots={refetchTimeslots}
                   />
                 ))}
+                <WeekEvents
+                  events={[...events]}
+                  setEvents={setEvents}
+                  refetchEvents={refetchInterviews}
+                />
               </div>
             </div>
           </div>

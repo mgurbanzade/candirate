@@ -101,11 +101,10 @@ const WeekEvents = ({ events, setEvents, refetchEvents }: Props) => {
     return (
       <div
         key={order}
-        className={`col-start-${order} col-end-${
-          order + 1
-        } row-start-1 grid grid-cols-1`}
+        className={`row-start-1 grid`}
         style={{
           gridTemplateRows: '1.75rem repeat(288, minmax(0px, 1fr)) auto',
+          gridColumn: `${order} / span 1`,
         }}
       >
         {eventItems}

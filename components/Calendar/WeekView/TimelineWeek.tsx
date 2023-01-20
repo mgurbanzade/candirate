@@ -149,11 +149,10 @@ const TimelineWeek = ({
 
   return (
     <div
-      className={`col-start-${order} col-end-${
-        order + 1
-      } row-start-1 grid divide-y divide-x divide-gray-100`}
+      className="row-start-1 grid divide-y divide-x divide-gray-100"
       style={{
         gridTemplateRows: 'repeat(96, minmax(1.5rem, 1fr))',
+        gridColumn: `${order} / span 1`,
       }}
     >
       <div ref={containerOffset} className="row-end-1 h-7"></div>
