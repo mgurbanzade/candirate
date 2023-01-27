@@ -3,7 +3,10 @@ import { useMutation } from '@apollo/client';
 import { Application } from '@gql/types/graphql';
 import { UITimelineEventType } from '@lib/ui-types';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { CREATE_INTERVIEW_MUTATION } from '@gql/mutations/interviews';
+import {
+  CREATE_INTERVIEW_MUTATION,
+  UPDATE_INTERVIEW_MUTATION,
+} from '@gql/mutations/interviews';
 import { applicationPath } from '@lib/routes';
 
 import Select from '@components/Generic/Select';
@@ -16,6 +19,7 @@ type Props = {
   setEvents: React.Dispatch<React.SetStateAction<UITimelineEventType[]>>;
   closePopover: () => void;
   refetchEvents: () => void;
+  queryHiringStepId?: string;
 };
 
 type InterviewFromInputs = {
@@ -29,10 +33,12 @@ const InterviewCalendarForm = ({
   setEvents,
   event,
   closePopover,
+  queryHiringStepId,
 }: Props) => {
   const router = useRouter();
   const { currentUser } = useSession();
   const [createInterview] = useMutation(CREATE_INTERVIEW_MUTATION);
+  const [updateInterview] = useMutation(UPDATE_INTERVIEW_MUTATION);
   const interviewTitle = `${application?.position?.title} Interview with ${application?.candidate?.user?.firstname}`;
   const {
     register,
@@ -53,7 +59,7 @@ const InterviewCalendarForm = ({
       name: step?.title as string,
     }));
 
-  const onSubmit: SubmitHandler<InterviewFromInputs> = async (data) => {
+  const handleCreateInterview = async (data: InterviewFromInputs) => {
     if (!currentUser) return;
     try {
       const res = await createInterview({
@@ -66,7 +72,8 @@ const InterviewCalendarForm = ({
             candidateId: application?.candidate?.id as number,
             positionId: application?.position?.id as number,
             recruiterId: currentUser?.recruiterId as number,
-            hiringStepId: Number(data.hiringStepId),
+            hiringStepId:
+              Number(queryHiringStepId) || Number(data.hiringStepId),
           },
         },
       });
@@ -77,6 +84,39 @@ const InterviewCalendarForm = ({
       }
     } catch (err: any) {
       console.log(err);
+    }
+  };
+
+  const handleUpdateInterview = async (data: InterviewFromInputs) => {
+    if (!currentUser || !router?.query?.i) return;
+
+    try {
+      const res = await updateInterview({
+        variables: {
+          id: Number(router?.query?.i) as number,
+          updateInterviewInput: {
+            startsAt: event?.startDate.toISO(),
+            endsAt: event?.startDate.plus({ minutes: data.duration }).toISO(),
+            status: 'SCHEDULED',
+          },
+        },
+      });
+
+      if (res.data?.updateInterview.id) {
+        closePopover();
+        router.push(applicationPath(application.uuid as string));
+      }
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
+  const onSubmit: SubmitHandler<InterviewFromInputs> = async (data) => {
+    if (!currentUser) return;
+    if (router?.query?.i && router?.query?.hs) {
+      handleUpdateInterview(data);
+    } else {
+      handleCreateInterview(data);
     }
   };
 
@@ -96,7 +136,7 @@ const InterviewCalendarForm = ({
           </div>
 
           <div className="space-y-6 sm:space-y-5">
-            {stepOptions?.length && (
+            {stepOptions?.length && !queryHiringStepId ? (
               <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div className="sm:col-span-6">
                   <label
@@ -114,7 +154,7 @@ const InterviewCalendarForm = ({
                   />
                 </div>
               </div>
-            )}
+            ) : null}
             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
               <div className="sm:col-span-6">
                 <label

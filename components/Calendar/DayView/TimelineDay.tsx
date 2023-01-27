@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { useRouter } from 'next/router';
 import { Application } from '@gql/types/graphql';
 import {
   MappedTimeslotType,
@@ -38,6 +39,7 @@ const Timeline = ({
   refetchTimeslots,
   isManageTimeslots,
 }: Props) => {
+  const router = useRouter();
   const { setNotification } = useNotification();
   const [createTimeslot] = useMutation(CREATE_TIMESLOT);
   const [deleteTimeslot] = useMutation(DELETE_TIMESLOT);
@@ -126,7 +128,11 @@ const Timeline = ({
       };
 
       setEvents((prev) => [
-        ...prev.filter((e) => e.type !== TimelineEventTypes.EVENT),
+        ...prev.filter(
+          (e) =>
+            Number(e.id) !== Number(router?.query?.i) &&
+            e.type !== TimelineEventTypes.EVENT,
+        ),
         newEvent,
       ]);
     };

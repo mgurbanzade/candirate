@@ -39,3 +39,14 @@ export const IMPORT_QUESTIONS_MUTATION = graphql(`
     }
   }
 `);
+
+export const DECLINE_INTERVIEW_MUTATION = graphql(`
+  mutation declineInterview(
+    $id: Int!
+    $declineInterviewInput: DeclineInterviewInput!
+  ) {
+    declineInterview(id: $id, declineInterviewInput: $declineInterviewInput) {
+      status
+    }
+  }
+`);

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Badge } from 'flowbite-react';
-import useSession from '@hooks/useSession';
 import { DateTime } from 'luxon';
 import { Interview } from '@gql/types/graphql';
+
 import {
   ArrowTopRightOnSquareIcon,
   ChatBubbleBottomCenterIcon,
@@ -17,7 +17,6 @@ type Props = {
 };
 
 export default function UpcomingInterview({ interview, headerTitle }: Props) {
-  const { currentUser } = useSession();
   if (!interview) {
     return null;
   }
@@ -25,11 +24,13 @@ export default function UpcomingInterview({ interview, headerTitle }: Props) {
   const interviewDate = DateTime.fromISO(interview.startsAt);
   const interviewEndDate = DateTime.fromISO(interview.endsAt);
   const interviewStartTime = interviewDate.toFormat('h:mm a, dd MMM yyyy');
+  const isPastEvent = interviewDate < DateTime.local();
+  const isCancelled = interview.status === 'CANCELLED';
   const durationInMinutes = interviewEndDate.diff(
     interviewDate,
     'minutes',
   ).minutes;
-  const isPastEvent = interviewDate < DateTime.local();
+
   return (
     <section>
       <div className="bg-white shadow sm:rounded-lg h-full">
@@ -38,6 +39,8 @@ export default function UpcomingInterview({ interview, headerTitle }: Props) {
             <div className="flex items-center">
               {isPastEvent ? (
                 <Badge color="failure">Completed</Badge>
+              ) : isCancelled ? (
+                <Badge color="failure">Cancelled</Badge>
               ) : (
                 <Badge color="success">Upcoming</Badge>
               )}

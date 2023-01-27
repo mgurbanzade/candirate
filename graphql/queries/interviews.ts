@@ -28,6 +28,18 @@ export const GET_INTERVIEW = graphql(`
       meetingLink
       startsAt
       endsAt
+      status
+      candidateId
+      recruiterId
+      declineReason
+      declinedBy
+      hiringStepId
+      application {
+        uuid
+        candidate {
+          uuid
+        }
+      }
       questions {
         id
         title

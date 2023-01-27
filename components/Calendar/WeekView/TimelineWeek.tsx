@@ -9,6 +9,7 @@ import TimelineWeekCell from './TimelineWeekCell';
 import useNotification from '@hooks/useNotification';
 import { useMutation } from '@apollo/client';
 import { CREATE_TIMESLOT, DELETE_TIMESLOT } from '@gql/mutations/timeslots';
+import { useRouter } from 'next/router';
 
 type Props = {
   containerOffset: React.RefObject<HTMLDivElement>;
@@ -37,6 +38,7 @@ const TimelineWeek = ({
   refetchTimeslots,
   isManageTimeslots,
 }: Props) => {
+  const router = useRouter();
   const { setNotification } = useNotification();
   const [createTimeslot] = useMutation(CREATE_TIMESLOT);
   const [deleteTimeslot] = useMutation(DELETE_TIMESLOT);
@@ -119,10 +121,16 @@ const TimelineWeek = ({
         duration: 0.25,
       };
 
-      setEvents((prev) => [
-        ...prev.filter((e) => e.type !== TimelineEventTypes.EVENT),
-        newEvent,
-      ]);
+      setEvents((prev) => {
+        return [
+          ...prev.filter(
+            (e) =>
+              Number(e.id) !== Number(router?.query?.i) &&
+              e.type !== TimelineEventTypes.EVENT,
+          ),
+          newEvent,
+        ];
+      });
     };
 
     const regularClickHandler = isTimeslotMode ? createSlot : createEvent;

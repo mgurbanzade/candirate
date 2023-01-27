@@ -48,7 +48,8 @@ const WeekEvents = ({ events, setEvents, refetchEvents }: Props) => {
             />
           );
 
-        const isExpired = event.startDate < DateTime.local();
+        const isExpired =
+          event.startDate < DateTime.local() || event.status === 'CANCELLED';
 
         return (
           <li
@@ -63,7 +64,7 @@ const WeekEvents = ({ events, setEvents, refetchEvents }: Props) => {
                 {
                   'p-2': event.duration > 0.5,
                   'bg-blue-50 hover:bg-blue-100': !isExpired,
-                  'bg-red-50 hover:bg-red-100': isExpired,
+                  'bg-red-50 hover:bg-red-50 opacity-50': isExpired,
                   'pl-2 justify-center': event.duration === 0.5,
                 },
               )}

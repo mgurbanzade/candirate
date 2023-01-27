@@ -18,6 +18,7 @@ export type UITimelineEventType = {
   applicationId?: number;
   hiringStepId?: number;
   type: TimelineEventTypes;
+  status?: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
   application?: Application | null;
   description?: string | null;
   uuid?: string;

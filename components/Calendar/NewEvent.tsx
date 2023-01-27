@@ -4,6 +4,7 @@ import { Application } from '@gql/types/graphql';
 import { Popover, Transition } from '@headlessui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { UITimelineEventType } from '@lib/ui-types';
+import { useRouter } from 'next/router';
 
 import cx from 'classnames';
 import InterviewCalendarForm from '@components/Interviews/InterviewCalendarForm';
@@ -26,6 +27,7 @@ const NewEvent = ({
   refetchEvents,
   viewType,
 }: Props) => {
+  const router = useRouter();
   const [size, setSize] = useState({ width: 100, height: CELL_HEIGHT_PX });
   const [duration, setDuration] = useState(event.duration);
 
@@ -199,6 +201,7 @@ const NewEvent = ({
                     event={event}
                     closePopover={close}
                     refetchEvents={refetchEvents}
+                    queryHiringStepId={router.query.hs as string}
                   />
                 </div>
               </div>

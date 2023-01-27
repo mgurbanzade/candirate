@@ -5,6 +5,22 @@ export const scheduleInterviewPath = (
   appUuid: string | null,
   candidateUuid: string,
 ) => `/interviews/new?a=${appUuid}&c=${candidateUuid}`;
+
+type RescheduleInterviewPathProps = {
+  appUuid: string | null;
+  candidateUuid: string;
+  hiringStepId: number;
+  interviewId: number;
+};
+
+export const rescheduleInterviewPath = ({
+  appUuid,
+  candidateUuid,
+  hiringStepId,
+  interviewId,
+}: RescheduleInterviewPathProps) =>
+  `/interviews/new?a=${appUuid}&c=${candidateUuid}&hs=${hiringStepId}&i=${interviewId}`;
+
 export const profilePath = () => '/profile';
 export const interviewPath = (uuid: string) => `/interviews/${uuid}`;
 export const candidateProfilePath = (uuid: string) => `/candidates/${uuid}`;
