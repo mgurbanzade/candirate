@@ -26,6 +26,9 @@ const CalendarHeader = ({
   setViewType,
 }: Props) => {
   const dateTimeIso = selectedDay.toISO();
+  const isWeekView = viewType === 'week';
+  const isDayView = viewType === 'day';
+
   return (
     <header className="flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6 bg-white sm:rounded-t-md">
       <div className="flex justify-between">
@@ -44,12 +47,15 @@ const CalendarHeader = ({
         </div>
       </div>
       <div className="flex items-center">
-        <div className="flex items-center rounded-md shadow-sm md:items-stretch md:hidden">
+        <div className="flex items-center rounded-md shadow-sm md:items-stretch">
           <button
             type="button"
             onClick={() => {
-              const gap =
-                window.innerWidth < 768 ? { weeks: 1 } : { months: 1 };
+              const gap = isDayView
+                ? { days: 1 }
+                : isWeekView || window.innerWidth < 768
+                ? { weeks: 1 }
+                : { months: 1 };
               setSelectedDay(selectedDay.minus(gap));
             }}
             className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
@@ -59,6 +65,7 @@ const CalendarHeader = ({
           </button>
           <button
             type="button"
+            onClick={() => setSelectedDay(DateTime.local())}
             className="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
           >
             Today
@@ -67,8 +74,11 @@ const CalendarHeader = ({
           <button
             type="button"
             onClick={() => {
-              const gap =
-                window.innerWidth < 768 ? { weeks: 1 } : { months: 1 };
+              const gap = isDayView
+                ? { days: 1 }
+                : isWeekView || window.innerWidth < 768
+                ? { weeks: 1 }
+                : { months: 1 };
               setSelectedDay(selectedDay.plus(gap));
             }}
             className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
