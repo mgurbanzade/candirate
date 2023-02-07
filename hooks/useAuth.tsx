@@ -1,10 +1,12 @@
 import React, { useState, useContext, createContext } from 'react';
+import { createUploadLink } from 'apollo-upload-client';
 import { useRouter } from 'next/router';
 import {
   ApolloProvider,
   ApolloClient,
   InMemoryCache,
   HttpLink,
+  ApolloLink,
 } from '@apollo/client';
 import { LOGIN_MUTATION } from '@gql/mutations/auth';
 import { AuthFormInputs } from '@components/Auth/AuthForm/types';
@@ -43,18 +45,19 @@ const useProvideAuth = () => {
       ? null
       : {
           authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
         };
   };
 
   const createApolloClient = () => {
-    const link = new HttpLink({
+    const link = createUploadLink({
       uri: 'http://localhost:4000/graphql',
-      headers: getAuthHeaders(),
+      headers: getAuthHeaders() as Record<string, string>,
       credentials: 'include',
-    });
+    }) as unknown as ApolloLink;
 
     return new ApolloClient({
-      link,
+      link: ApolloLink.from([link]),
       cache: new InMemoryCache(),
     });
   };

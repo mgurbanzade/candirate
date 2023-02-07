@@ -5,6 +5,7 @@ import Select from '@components/Generic/Select';
 import FormErrorText from '@components/Generic/FormErrorText';
 import { UPDATE_CANDIDATE_MUTATION } from '@gql/mutations/candidates';
 import SkillsEditor from './SkillsEditor';
+import ResumeUploader from './ResumeUploader';
 
 type Props = {
   profileData: User;
@@ -177,6 +178,11 @@ export default function EditSection({
               />
             </dd>
           </div>
+          <ResumeUploader
+            fetchedResumeUrl={profileData.candidate?.resumeUrl as string}
+            candidateId={profileData.candidateId as number}
+            refetchProfile={refetchProfile}
+          />
           <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">About me</dt>
             <dd className="mt-1 text-sm text-gray-900">

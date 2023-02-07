@@ -44,3 +44,21 @@ export const PROPOSE_POSITION_MUTATION = graphql(`
     }
   }
 `);
+
+export const UPLOAD_RESUME_MUTATION = graphql(`
+  mutation UploadResume($candidateId: Int!, $resume: Upload!) {
+    uploadResume(candidateId: $candidateId, resume: $resume) {
+      __typename
+      resumeUrl
+    }
+  }
+`);
+
+export const REMOVE_RESUME_MUTATION = graphql(`
+  mutation RemoveResume($candidateId: Int!, $key: String!) {
+    removeResume(candidateId: $candidateId, key: $key) {
+      __typename
+      resumeUrl
+    }
+  }
+`);
