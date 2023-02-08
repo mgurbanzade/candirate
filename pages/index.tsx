@@ -1,11 +1,7 @@
 // moved to /positions/index.tsx
 
-import Positions from '@components/Positions';
+import LandingPageContainer from '@components/LandingPage';
 
 export default function Home() {
-  return (
-    <main>
-      <Positions />
-    </main>
-  );
+  return <LandingPageContainer />;
 }
