@@ -10,6 +10,7 @@ export const GET_CANDIDATE_PROFILE = graphql(`
       salaryExpectation
       salaryRateType
       about
+      resumeUrl
       skills {
         id
         name

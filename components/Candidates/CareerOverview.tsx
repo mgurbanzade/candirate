@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
-import { Candidate } from '@gql/types/graphql';
 import Tags from '@components/Tags';
+import { PaperClipIcon } from '@heroicons/react/20/solid';
+import { Candidate } from '@gql/types/graphql';
 import { candidateProfilePath } from '@lib/routes';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 
 type Props = {
   candidate: Candidate;
@@ -85,6 +86,38 @@ export default function CareerOverview({ candidate, showLink }: Props) {
               {candidate.about || 'none'}
             </dd>
           </div>
+          {candidate.resumeUrl && (
+            <div className="sm:col-span-2">
+              <dt className="text-sm font-medium text-gray-500">Resume</dt>
+              <dd className="mt-1 text-sm text-gray-900">
+                <div
+                  role="list"
+                  className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                >
+                  <div className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                    <div className="flex w-0 flex-1 items-center">
+                      <PaperClipIcon
+                        className="h-5 w-5 flex-shrink-0 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <span className="ml-2 w-0 flex-1 truncate">
+                        {candidate.resumeUrl?.split('/').pop()}
+                      </span>
+                    </div>
+                    <div className="ml-4 flex-shrink-0">
+                      <a
+                        href={candidate.resumeUrl as string}
+                        target="_blank"
+                        className="font-medium text-blue-600 hover:text-blue-500"
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </dd>
+            </div>
+          )}
         </dl>
       </div>
     </>

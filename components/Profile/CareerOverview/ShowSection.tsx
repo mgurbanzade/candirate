@@ -84,7 +84,7 @@ export default function ShowSection({ candidate, setViewState }: Props) {
           </div>
           {candidate.resumeUrl && (
             <div className="sm:col-span-2">
-              <dt className="text-sm font-medium text-gray-500">Attachments</dt>
+              <dt className="text-sm font-medium text-gray-500">Resume</dt>
               <dd className="mt-1 text-sm text-gray-900">
                 <div
                   role="list"
