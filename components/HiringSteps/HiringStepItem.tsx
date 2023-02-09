@@ -21,7 +21,7 @@ type HiringStepFormInputs = {
 
 const HiringStepItem = ({ hiringStep, isLastItem, refetchPosition }: Props) => {
   const [viewState, setViewState] = useState<'show' | 'edit'>('show');
-  const { register, handleSubmit, formState } = useForm<HiringStepFormInputs>();
+  const { register, handleSubmit } = useForm<HiringStepFormInputs>();
 
   const [updateHiringStep] = useMutation(UPDATE_HIRING_STEP);
   const [deleteHiringStep] = useMutation(DELETE_HIRING_STEP);
@@ -31,6 +31,7 @@ const HiringStepItem = ({ hiringStep, isLastItem, refetchPosition }: Props) => {
       const { errors } = await deleteHiringStep({
         variables: {
           id: hiringStep.id as number,
+          positionId: hiringStep.positionId as number,
         },
       });
 
@@ -50,6 +51,7 @@ const HiringStepItem = ({ hiringStep, isLastItem, refetchPosition }: Props) => {
       const res = await updateHiringStep({
         variables: {
           id: hiringStep.id as number,
+          positionId: hiringStep.positionId as number,
           updateHiringStepInput: {
             title,
           },

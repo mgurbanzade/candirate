@@ -2,13 +2,13 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { CalendarDaysIcon } from '@heroicons/react/20/solid';
 import { CREATE_HIRING_STEP } from '@gql/mutations/hiring-steps';
-import { HiringStep } from '@gql/types/graphql';
+import { HiringStep, Position } from '@gql/types/graphql';
 
 type Props = {
   refetchPosition: () => void;
   setIsNewVisible: (value: boolean) => void;
   steps: HiringStep[];
-  positionId: number;
+  position: Position;
 };
 
 type HiringStepFormInputs = {
@@ -19,7 +19,7 @@ const NewHiringStep = ({
   steps,
   refetchPosition,
   setIsNewVisible,
-  positionId,
+  position,
 }: Props) => {
   const [createHiringStep] = useMutation(CREATE_HIRING_STEP);
   const { register, handleSubmit } = useForm<HiringStepFormInputs>();
@@ -30,9 +30,9 @@ const NewHiringStep = ({
     try {
       const res = await createHiringStep({
         variables: {
+          positionId: position.id as number,
           createHiringStepInput: {
             title,
-            positionId,
             order: steps.length + 1,
           },
         },

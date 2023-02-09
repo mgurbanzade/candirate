@@ -256,7 +256,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
         {session?.currentUser?.type === 'RECRUITER' && (
           <div className="space-y-6 lg:col-span-2 lg:col-start-1">
             <HiringSteps
-              positionId={position.id as number}
+              position={position}
               steps={position.hiringSteps as HiringStep[]}
               refetchPosition={refetchPosition}
             />

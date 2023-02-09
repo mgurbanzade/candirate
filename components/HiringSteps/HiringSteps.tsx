@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/20/solid';
-import { HiringStep } from '@gql/types/graphql';
+import { HiringStep, Position } from '@gql/types/graphql';
 import HiringStepItem from './HiringStepItem';
 import NewHiringStep from './NewHiringStep';
 
 type Props = {
   steps: HiringStep[];
-  positionId: number;
+  position: Position;
   refetchPosition: () => void;
 };
 
 export default function HiringSteps({
   steps,
-  positionId,
+  position,
   refetchPosition,
 }: Props) {
   const [isNewVisible, setIsNewVisible] = useState(false);
@@ -52,7 +52,7 @@ export default function HiringSteps({
                 steps={steps}
                 setIsNewVisible={setIsNewVisible}
                 refetchPosition={refetchPosition}
-                positionId={positionId}
+                position={position}
               />
             )}
           </ul>
