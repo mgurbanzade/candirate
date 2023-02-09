@@ -21,25 +21,25 @@ export default function PositionsListItem({ position }: Props) {
               </>
             )}
           </p>
-          <div className="ml-2 flex flex-shrink-0">
+          <div className="ml-2 flex items-center flex-shrink-0">
+            {position.isRemoteWorldWide && (
+              <div className="sm:flex sm:justify-between mr-4">
+                <div className="sm:flex">
+                  <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                    <MapPinIcon
+                      className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                      aria-hidden="true"
+                    />
+                    Remote
+                  </p>
+                </div>
+              </div>
+            )}
             <p className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
               {position.type}
             </p>
           </div>
         </div>
-        {!position.isRemoteWorldWide && (
-          <div className="mt-2 sm:flex sm:justify-between">
-            <div className="sm:flex">
-              <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                <MapPinIcon
-                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                  aria-hidden="true"
-                />
-                Remote
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </Link>
   );

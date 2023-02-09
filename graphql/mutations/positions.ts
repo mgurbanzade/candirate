@@ -44,8 +44,8 @@ export const APPLY_POSITION_MUTATION = graphql(`
 `);
 
 export const ADD_SKILL_TO_POSITION_MUTATION = graphql(`
-  mutation AddSkillToPosition($positionId: Int!, $skillName: String!) {
-    addSkillToPosition(positionId: $positionId, skillName: $skillName) {
+  mutation AddSkillToPosition($id: Int!, $skillName: String!) {
+    addSkillToPosition(id: $id, skillName: $skillName) {
       requiredSkills {
         id
         name
@@ -55,8 +55,8 @@ export const ADD_SKILL_TO_POSITION_MUTATION = graphql(`
 `);
 
 export const REMOVE_SKILL_FROM_POSITION_MUTATION = graphql(`
-  mutation RemoveSkillFromPosition($positionId: Int!, $skillId: Int!) {
-    removeSkillFromPosition(positionId: $positionId, skillId: $skillId) {
+  mutation RemoveSkillFromPosition($id: Int!, $skillId: Int!) {
+    removeSkillFromPosition(id: $id, skillId: $skillId) {
       requiredSkills {
         id
         name

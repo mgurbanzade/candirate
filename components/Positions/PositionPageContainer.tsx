@@ -130,7 +130,7 @@ const PositionPage = ({ position, refetchPosition }: PositionPageProps) => {
   };
 
   const isEditView = viewState === 'edit';
-  const isUserAuthor = position.authorId === session.currentUser?.id;
+  const isUserAuthor = position.authorId === session.currentUser?.recruiterId;
   const onSubmit: SubmitHandler<PositionFormInputs> = async (data) => {
     if (!isUserAuthor) return handleApply(position);
     return isEditView ? handleUpdate(position, data) : handlePublish(position);

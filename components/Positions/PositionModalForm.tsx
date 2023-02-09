@@ -9,7 +9,11 @@ type PositionFormInputs = {
   description: string;
 };
 
-const PositionModalForm = () => {
+type Props = {
+  refetchPositions: () => void;
+};
+
+const PositionModalForm = ({ refetchPositions }: Props) => {
   const { setIsVisible } = useModal();
   const [createPosition] = useMutation(CREATE_POSITION_MUTATION);
   const { currentUser } = useSession();
@@ -32,6 +36,7 @@ const PositionModalForm = () => {
     });
 
     if (res.data?.createPosition.title) {
+      refetchPositions();
       setIsVisible(false);
     }
   };

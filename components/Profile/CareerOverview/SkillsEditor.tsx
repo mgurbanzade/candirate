@@ -48,7 +48,7 @@ const SkillsEditor = ({
       : removeSkillFromPosition;
 
     const dynamicFields = {
-      [candidateId ? 'candidateId' : 'positionId']: candidateId || positionId,
+      [candidateId ? 'candidateId' : 'id']: candidateId || positionId,
     };
 
     try {
@@ -78,7 +78,7 @@ const SkillsEditor = ({
       : addSkillToPosition;
 
     const dynamicFields = {
-      [candidateId ? 'candidateId' : 'positionId']: candidateId || positionId,
+      [candidateId ? 'candidateId' : 'id']: candidateId || positionId,
     };
 
     if (e.code === 'Comma') {

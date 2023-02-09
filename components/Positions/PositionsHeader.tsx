@@ -2,7 +2,11 @@ import Modal from '@components/Generic/Modal';
 import { useModal } from '@hooks/useModal';
 import PositionModalForm from './PositionModalForm';
 
-const PositionsHeader = () => {
+type Props = {
+  refetchPositions: () => void;
+};
+
+const PositionsHeader = ({ refetchPositions }: Props) => {
   const { setIsVisible } = useModal();
 
   return (
@@ -24,7 +28,7 @@ const PositionsHeader = () => {
         </div>
       </div>
       <Modal>
-        <PositionModalForm />
+        <PositionModalForm refetchPositions={refetchPositions} />
       </Modal>
     </div>
   );

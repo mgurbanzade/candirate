@@ -1,20 +1,11 @@
-// FIX LINE 14
-import { useQuery } from '@apollo/client';
-import { GET_POSITIONS } from '@gql/queries/positions';
 import { Position } from '@gql/types/graphql';
 import PositionsListItem from './PositionsListItem';
 
-export default function PositionsList() {
-  const { data } = useQuery(GET_POSITIONS, {
-    variables: {
-      where: {
-        authorId: 1, // FIX ME
-      },
-    },
-  });
+type Props = {
+  positions: Position[];
+};
 
-  const positions = data?.getAllPositions;
-
+export default function PositionsList({ positions }: Props) {
   return positions ? (
     <ul role="list" className="divide-y divide-gray-200">
       {positions.map((position) => (
