@@ -37,6 +37,7 @@ function App({
       router.push(loginPath());
     }
   };
+
   return (
     <AuthProvider>
       <SessionContext.Provider

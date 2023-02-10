@@ -31,3 +31,5 @@ export const manageTimeslotsPath = (
   applicationUuid: string,
   candidateUuid: string,
 ) => `/applications/${applicationUuid}/timeslots?c=${candidateUuid}`;
+export const onboardingPath = (type?: 'r' | 'c') =>
+  type ? `/signup?type=${type}` : '/signup';

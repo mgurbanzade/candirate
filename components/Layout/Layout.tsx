@@ -14,7 +14,8 @@ export default function Layout({ children }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { pathname } = useRouter();
   const session = useSession();
-  if (pathname === '/') return <>{children}</>;
+  if (pathname === '/' || pathname === '/signup' || pathname === '/login')
+    return <>{children}</>;
   return (
     <div>
       <HiddenSidebar

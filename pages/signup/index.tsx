@@ -1,8 +1,8 @@
 import React from 'react';
-import Signup from '@components/Auth/Signup';
+import Onboarding from '@components/Auth/Signup/Onboarding';
 
 const LoginPage = () => {
-  return <Signup />;
+  return <Onboarding />;
 };
 
 export default LoginPage;

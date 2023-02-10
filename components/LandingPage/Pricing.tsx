@@ -1,3 +1,5 @@
+import { planFeatures } from '@components/Auth/Signup/planFeatures';
+import { onboardingPath } from '@lib/routes';
 import clsx from 'clsx';
 
 import { Button } from './Button';
@@ -135,29 +137,16 @@ export function Pricing() {
             name="Candidate"
             price="Free"
             description="You don't need to pay for this."
-            href="/signup"
-            features={[
-              'Apply to positions',
-              'Publish your professional overview profile',
-              'Track your applications progress',
-              'Create questions for your interviewers',
-              'Leave a review for your interviewers',
-            ]}
+            href={onboardingPath('c')}
+            features={planFeatures.candidate}
           />
           <Plan
             featured
             name="Recruiter"
             price="$15"
             description="Perfect for independent recruiters."
-            href="/signup"
-            features={[
-              'Create unlimited positions',
-              'Schedule unlimited interviews',
-              'Get candidate suggestions',
-              'Manage applications progress',
-              'Sync your calendar with your candidates',
-              'Leave a feedback for your candidates',
-            ]}
+            href={onboardingPath('r')}
+            features={planFeatures.recruiter}
           />
         </div>
       </Container>
