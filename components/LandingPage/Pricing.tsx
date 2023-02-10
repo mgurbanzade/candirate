@@ -74,11 +74,13 @@ function Plan({
           : 'lg:py-8 bg-indigo-600 ',
       )}
     >
-      <h3 className="mt-5 font-display text-lg text-white">{name}</h3>
-      <p className={clsx('mt-2 text-base text-white')}>{description}</p>
-      <p className="order-first font-display text-5xl font-light tracking-tight text-white">
-        {price}
-      </p>
+      <div className="flex justify-between items-center">
+        <h3 className="font-display text-4xl text-white">{name}</h3>
+        <p className="font-display text-3xl font-light tracking-tight text-white">
+          {price}
+        </p>
+      </div>
+      <p className="mt-2 text-base text-white">{description}</p>
       <ul
         role="list"
         className={clsx(

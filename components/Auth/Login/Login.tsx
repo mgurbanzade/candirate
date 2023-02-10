@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useAuth, AuthContextType } from '@hooks/useAuth';
@@ -11,11 +12,20 @@ export type LoginInputs = {
 
 const Login = () => {
   const { loginAction } = useAuth() as AuthContextType;
+  const [credentialsError, setCredentialsError] = useState('');
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginInputs>();
+
+  const handleLogin = async (data: LoginInputs) => {
+    try {
+      await loginAction(data);
+    } catch (error: any) {
+      setCredentialsError(error?.message);
+    }
+  };
 
   return (
     <section className="bg-white dark:bg-gray-900">
@@ -74,7 +84,7 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-center px-4 py-6 lg:py-0 sm:px-0">
           <form
-            onSubmit={handleSubmit(loginAction)}
+            onSubmit={handleSubmit(handleLogin)}
             className="w-full max-w-md space-y-4 md:space-y-6 xl:max-w-xl"
             action="#"
           >
@@ -203,6 +213,11 @@ const Login = () => {
               )}
             </div>
             <div className="flex items-center justify-between">
+              {credentialsError && (
+                <div className="text-red-500 mt-1 text-sm">
+                  {credentialsError}
+                </div>
+              )}
               <div className="flex items-start">
                 {/* <div className="flex items-center h-5">
                   <input
