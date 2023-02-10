@@ -5,15 +5,18 @@ import {
   ApolloProvider,
   ApolloClient,
   InMemoryCache,
-  HttpLink,
   ApolloLink,
 } from '@apollo/client';
 import { LOGIN_MUTATION } from '@gql/mutations/auth';
-import { AuthFormInputs } from '@components/Auth/AuthForm/types';
 import { profilePath } from '@lib/routes';
 
+type LoginFormInputes = {
+  email: string;
+  password: string;
+};
+
 type AuthContextType = {
-  loginAction: (data: AuthFormInputs) => void;
+  loginAction: (data: LoginFormInputes) => void;
   signOut: () => void;
   isSignedIn: () => boolean;
   setAuthToken: (token: string | null) => void;
@@ -62,7 +65,7 @@ const useProvideAuth = () => {
     });
   };
 
-  const loginAction = async (data: AuthFormInputs) => {
+  const loginAction = async (data: LoginFormInputes) => {
     const client = createApolloClient();
     const { email, password } = data;
 

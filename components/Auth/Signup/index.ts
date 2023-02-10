@@ -1,3 +1,3 @@
-import Signup from './Signup';
+import Onboarding from './Onboarding';
 
-export default Signup;
+export default Onboarding;

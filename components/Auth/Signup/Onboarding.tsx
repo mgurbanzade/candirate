@@ -55,6 +55,7 @@ const Onboarding = () => {
     setAccountType,
     accountType,
   );
+
   return (
     <section className="py-8 bg-white dark:bg-gray-900 lg:py-0">
       <div className="lg:flex">
