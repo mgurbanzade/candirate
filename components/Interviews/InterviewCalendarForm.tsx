@@ -65,6 +65,7 @@ const InterviewCalendarForm = ({
       const res = await createInterview({
         variables: {
           applicationId: application.id as number,
+          positionId: application?.position?.id as number,
           createInterviewInput: {
             title: interviewTitle,
             startsAt: event?.startDate.toISO(),
@@ -94,6 +95,7 @@ const InterviewCalendarForm = ({
       const res = await updateInterview({
         variables: {
           id: Number(router?.query?.i) as number,
+          positionId: application?.position?.id as number,
           updateInterviewInput: {
             startsAt: event?.startDate.toISO(),
             endsAt: event?.startDate.plus({ minutes: data.duration }).toISO(),

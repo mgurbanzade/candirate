@@ -13,11 +13,16 @@ const InterviewsList = ({ interviews, selectedQuestionIds }: Props) => {
   const router = useRouter();
   const [importQuestions] = useMutation(IMPORT_QUESTIONS_MUTATION);
 
-  const addToInterview = async (interviewId: number, uuid: string) => {
+  const addToInterview = async (
+    interviewId: number,
+    uuid: string,
+    positionId: number,
+  ) => {
     try {
       const res = await importQuestions({
         variables: {
           interviewId,
+          positionId,
           questionIds: selectedQuestionIds,
         },
       });
@@ -65,6 +70,7 @@ const InterviewsList = ({ interviews, selectedQuestionIds }: Props) => {
                 addToInterview(
                   interview?.id as number,
                   interview.uuid as string,
+                  interview?.positionId as number,
                 )
               }
               className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 ml-3"

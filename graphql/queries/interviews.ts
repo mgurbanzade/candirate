@@ -13,6 +13,7 @@ export const GET_INTERVIEWS = graphql(`
       status
       hiringStepId
       applicationId
+      positionId
     }
   }
 `);
@@ -30,6 +31,7 @@ export const GET_INTERVIEW = graphql(`
       endsAt
       status
       candidateId
+      positionId
       recruiterId
       declineReason
       declinedBy
@@ -45,15 +47,6 @@ export const GET_INTERVIEW = graphql(`
         title
         points
       }
-    }
-  }
-`);
-
-export const GET_RESERVED_TIMESTAMPS = graphql(`
-  query GetReservedTimestamps($timestampInput: TimestampInput!) {
-    getReservedTimestamps(timestampInput: $timestampInput) {
-      startsAt
-      endsAt
     }
   }
 `);

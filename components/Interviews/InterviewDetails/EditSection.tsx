@@ -63,6 +63,7 @@ export default function EditSection({
       const { errors } = await updateInterview({
         variables: {
           id: interview.id as number,
+          positionId: interview.positionId as number,
           updateInterviewInput: {
             title: formData.title,
             description: formData.description,

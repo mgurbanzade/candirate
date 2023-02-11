@@ -40,6 +40,7 @@ const DeclineInterviewModalForm = ({
     const res = await declineInterview({
       variables: {
         id: interview.id,
+        positionId: interview.positionId as number,
         declineInterviewInput: {
           redirectPath: interviewPath(interview.uuid as string),
           declineReason: data.declineReason,
