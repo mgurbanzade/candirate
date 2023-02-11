@@ -74,6 +74,7 @@ const TimelineWeek = ({
     try {
       const { data } = await deleteTimeslot({
         variables: {
+          candidateId: application?.candidate?.id as number,
           id,
         },
       });

@@ -17,8 +17,8 @@ export const CREATE_TIMESLOT = graphql(`
 `);
 
 export const DELETE_TIMESLOT = graphql(`
-  mutation DeleteTimeslot($id: Int!) {
-    deleteTimeslot(id: $id) {
+  mutation DeleteTimeslot($id: Int!, $candidateId: Int!) {
+    deleteTimeslot(id: $id, candidateId: $candidateId) {
       __typename
     }
   }
