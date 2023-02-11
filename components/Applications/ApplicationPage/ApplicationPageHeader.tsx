@@ -33,6 +33,7 @@ const ApplicationPageHeader = ({ application, refetchApplication }: Props) => {
         variables: {
           id: application.id as number,
           redirectPath: applicationPath(application.uuid as string),
+          positionId: application.position?.id as number,
         },
       });
 

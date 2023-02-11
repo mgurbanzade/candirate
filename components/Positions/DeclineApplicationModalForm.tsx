@@ -33,6 +33,7 @@ const DeclineModalForm = ({
     const res = await declineApplication({
       variables: {
         id: application.id,
+        positionId: application?.position?.id as number,
         declineApplicationInput: {
           redirectPath: applicationPath(application.uuid as string),
           declineMessage: data.declineMessage,
