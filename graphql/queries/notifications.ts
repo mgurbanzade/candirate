@@ -8,6 +8,7 @@ export const GET_NOTIFICATIONS = graphql(`
       body
       isRead
       redirectPath
+      recipientId
     }
   }
 `);

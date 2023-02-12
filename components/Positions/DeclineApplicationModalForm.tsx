@@ -37,7 +37,7 @@ const DeclineModalForm = ({
         declineApplicationInput: {
           redirectPath: applicationPath(application.uuid as string),
           declineMessage: data.declineMessage,
-          candidateId: application?.candidate?.id as number,
+          userId: application?.candidate?.userId as number,
         },
       },
     });

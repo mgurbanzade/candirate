@@ -58,6 +58,7 @@ export const GET_APPLICATION = graphql(`
         salaryExpectation
         salaryRateType
         about
+        userId
         skills {
           id
           name

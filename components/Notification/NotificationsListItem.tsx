@@ -22,6 +22,7 @@ const NotificationsListItem = ({
       const res = await setNotificationRead({
         variables: {
           id: notification.id as number,
+          recipientId: notification.recipientId as number,
         },
       });
 

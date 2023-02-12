@@ -22,7 +22,7 @@ const OpenSidebar = ({ pathname, session }: Props) => {
     skip: !currentUser?.candidate?.id,
     variables: {
       where: {
-        recipientId: currentUser?.candidate?.id,
+        recipientId: currentUser?.id,
       },
     },
   });

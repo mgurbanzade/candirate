@@ -1,63 +1,69 @@
-import cx from 'classnames';
-import { useQuery, useMutation } from '@apollo/client';
+// import cx from 'classnames';
+import {
+  useQuery,
+  // useMutation
+} from '@apollo/client';
 import { useRouter } from 'next/router';
 import {
   GET_CANDIDATE_PROFILE,
-  GET_PROPOSAL_STATUS,
+  // GET_PROPOSAL_STATUS,
 } from '@gql/queries/candidates';
-import { PROPOSE_POSITION_MUTATION } from '@gql/mutations/candidates';
+// import { PROPOSE_POSITION_MUTATION } from '@gql/mutations/candidates';
 
-import useSession from '@hooks/useSession';
+// import useSession from '@hooks/useSession';
 import CareerOverview from './CareerOverview';
-import { positionPath } from '@lib/routes';
+// import { positionPath } from '@lib/routes';
 
 const CandidateProfileContainer = () => {
   const router = useRouter();
-  const { currentUser } = useSession();
-  const [proposePosition] = useMutation(PROPOSE_POSITION_MUTATION);
-  const { data: statusData, refetch: refetchStatus } = useQuery(
-    GET_PROPOSAL_STATUS,
-    {
-      skip: !router.query.position,
-      variables: {
-        positionUuid: router.query.position as string,
-        uuid: router.query.uuid as string,
-      },
-    },
-  );
-  const { data, refetch } = useQuery(GET_CANDIDATE_PROFILE, {
+  // const { currentUser } = useSession();
+  // const [proposePosition] = useMutation(PROPOSE_POSITION_MUTATION);
+  // const { data: statusData, refetch: refetchStatus } = useQuery(
+  //   GET_PROPOSAL_STATUS,
+  //   {
+  //     skip: !router.query.position,
+  //     variables: {
+  //       positionUuid: router.query.position as string,
+  //       uuid: router.query.uuid as string,
+  //     },
+  //   },
+  // );
+  const {
+    data,
+    //  refetch
+  } = useQuery(GET_CANDIDATE_PROFILE, {
     skip: !router.query.uuid,
     variables: { uuid: router.query.uuid as string },
   });
 
   if (!data?.getCandidateProfile) return null;
 
-  const handleProposePosition = async () => {
-    if (!data.getCandidateProfile?.id) return;
-    try {
-      const res = await proposePosition({
-        variables: {
-          proposePositionInput: {
-            title: 'Position proposal',
-            body: `${currentUser?.firstname} ${currentUser?.lastname} invited you to check out a position`,
-            redirectPath: positionPath(router.query.position as string),
-            recipientId: data?.getCandidateProfile.id as number,
-          },
-        },
-      });
+  // const handleProposePosition = async () => {
+  //   if (!data.getCandidateProfile?.id) return;
+  //   try {
+  //     const res = await proposePosition({
+  //       variables: {
+  //         proposePositionInput: {
+  //           title: 'Position proposal',
+  //           body: `${currentUser?.firstname} ${currentUser?.lastname} invited you to check out a position`,
+  //           redirectPath: positionPath(router.query.position as string),
+  //           recipientId: data?.getCandidateProfile.id as number,
+  //         },
+  //       },
+  //     });
 
-      if (res?.data?.proposePosition.uuid) {
-        refetch();
-        refetchStatus();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //     if (res?.data?.proposePosition.uuid) {
+  //       refetch();
+  //       refetchStatus();
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <div className="mx-auto grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3 pt-6">
-      {currentUser?.type === 'RECRUITER' && router.query.position && (
+      {/* {currentUser?.type === 'RECRUITER' && router.query.position && (
         <div className="flex space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
           <div className="flex items-start w-full justify-end">
             <button
@@ -97,7 +103,7 @@ const CandidateProfileContainer = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
       <div className="space-y-6 lg:col-span-2 lg:col-start-1">
         <section>
           <div className="bg-white shadow sm:rounded-lg">
