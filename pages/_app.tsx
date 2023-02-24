@@ -100,6 +100,8 @@ App.getInitialProps = async (appCtx: AppContext) => {
       }
     }
   }
+
+  return {};
 };
 
 export default App;

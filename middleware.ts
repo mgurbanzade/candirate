@@ -3,7 +3,9 @@ import type { NextRequest } from 'next/server';
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  const isAuthenticated = !!request.cookies.get('Authentication');
+  const isAuthenticated =
+    !!request.cookies.get('Authentication') || !!request.cookies.get('Refresh');
+
   const isAuthPaths =
     request.nextUrl.pathname === '/login' ||
     request.nextUrl.pathname === '/signup';

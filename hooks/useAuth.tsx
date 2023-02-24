@@ -54,7 +54,7 @@ const useProvideAuth = () => {
 
   const createApolloClient = () => {
     const link = createUploadLink({
-      uri: 'http://localhost:4000/graphql',
+      uri: process.env.NEXT_PUBLIC_API_URL,
       headers: getAuthHeaders() as Record<string, string>,
       credentials: 'include',
     }) as unknown as ApolloLink;

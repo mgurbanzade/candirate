@@ -1,7 +1,7 @@
 import { graphql } from '../types';
 
 export const GET_POSITION = graphql(`
-  query getPosition($uuid: String!, $isCandidate: Boolean!) {
+  query getPosition($uuid: String!) {
     getPosition(uuid: $uuid) {
       id
       uuid
@@ -51,7 +51,7 @@ export const GET_POSITION = graphql(`
           uuid
         }
       }
-      applicationStatus @include(if: $isCandidate)
+      applicationStatus
     }
   }
 `);
