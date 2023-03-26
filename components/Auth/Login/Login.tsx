@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useAuth, AuthContextType } from '@hooks/useAuth';
 import { onboardingPath } from '@lib/routes';
+import { Logo } from '@components/LandingPage/Logo';
 
 export type LoginInputs = {
   email: string;
@@ -32,17 +33,12 @@ const Login = () => {
       <div className="grid lg:h-screen lg:grid-cols-2">
         <div className="flex items-center justify-center px-4 py-6 bg-primary-600 lg:py-0 sm:px-0">
           <div className="max-w-md xl:max-w-xl">
-            <a
-              href="#"
-              className="flex items-center mb-4 text-2xl font-semibold text-white"
+            <Link
+              href="/"
+              className="flex items-center text-2xl font-semibold text-white mb-48"
             >
-              <img
-                className="w-8 h-8 mr-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                alt="logo"
-              />
-              Candirate
-            </a>
+              <Logo color="white" width={300} height={80} />
+            </Link>
             <h1 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-white xl:text-5xl">
               Interviewing made simple for recruiters and candidates
             </h1>

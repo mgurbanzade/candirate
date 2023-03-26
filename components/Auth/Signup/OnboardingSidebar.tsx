@@ -19,7 +19,7 @@ const OnboardingSidebar = () => {
   const typeNotDefined = type !== 'r' && type !== 'c';
   return (
     <div
-      className={cx('block p-8 text-white rounded-lg', {
+      className={cx('block text-white rounded-lg', {
         'bg-primary-500': !typeNotDefined,
       })}
     >

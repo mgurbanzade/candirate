@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import { Button } from './Button';
 import { Container } from './Container';
-// import { Logo } from './Logo';
+import { Logo } from './Logo';
 import { NavLink } from './NavLink';
 
 function MobileNavLink({
@@ -101,8 +101,8 @@ export function Header() {
       <Container>
         <nav className="relative z-50 flex justify-between">
           <div className="flex items-center md:gap-x-12">
-            <Link href="#" aria-label="Home">
-              <h1 className="text-3xl">Candirate</h1>
+            <Link href="/" className="mt-2" aria-label="Home">
+              <Logo />
             </Link>
             <div className="hidden md:flex md:gap-x-6">
               <NavLink href="#features">Features</NavLink>

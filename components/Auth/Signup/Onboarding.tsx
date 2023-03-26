@@ -6,6 +6,7 @@ import OnboardingStep1 from './OnboardingStep1';
 import OnboardingStep2 from './OnboardingStep2';
 import OnboardingStep3 from './OnboardingStep3';
 import { useRouter } from 'next/router';
+import { Logo } from '@components/LandingPage/Logo';
 
 type StepIncrement = Dispatch<SetStateAction<number>>;
 type AccountType = 'CANDIDATE' | 'RECRUITER';
@@ -61,15 +62,8 @@ const Onboarding = () => {
       <div className="lg:flex">
         <div className="hidden w-full max-w-md py-10 px-12 lg:h-screen lg:flex flex-col justify-between bg-primary-600">
           <div className="flex items-center space-x-4">
-            <Link
-              href="/"
-              className="flex items-center text-2xl font-semibold text-white"
-            >
-              <img
-                className="w-8 h-8 mr-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-              />
-              Candirate
+            <Link href="/" className="flex text-2xl font-semibold text-white">
+              <Logo color="white" width={280} height={70} />
             </Link>
           </div>
           <OnboardingSidebar />
