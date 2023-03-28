@@ -9,7 +9,7 @@
   "scripts": {
     "predev": "yarn codegen",
     "dev": "next dev",
-    "build": "yarn codegen && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint \"{components,graphql,pages,hooks,test}/**/*.ts\" --fix",
     "format": "prettier --write \"pages/**/*.ts\" \"components/**/*.ts\" \"graphql/**/*.ts\"",
