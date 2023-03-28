@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const isAuthenticated =
     !!request.cookies.get('Authentication') || !!request.cookies.get('Refresh');
-
+  console.log('headers', request.headers);
   console.log('isAuthenticated', isAuthenticated);
   console.log('isAuthPaths', request.nextUrl.pathname);
   console.log('--------------------------------');
