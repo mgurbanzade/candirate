@@ -6,6 +6,13 @@ export function middleware(request: NextRequest) {
   const isAuthenticated =
     !!request.cookies.get('Authentication') || !!request.cookies.get('Refresh');
 
+  console.log('isAuthenticated', isAuthenticated);
+  console.log('isAuthPaths', request.nextUrl.pathname);
+  console.log('--------------------------------');
+  console.log('cookies', request.cookies);
+  console.log('cookies.auth', request.cookies.get('Authentication'));
+  console.log('cookies.refresh', request.cookies.get('Refresh'));
+
   const isAuthPaths =
     request.nextUrl.pathname === '/login' ||
     request.nextUrl.pathname === '/signup';
