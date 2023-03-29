@@ -9,6 +9,7 @@ import { BellIcon } from '@heroicons/react/24/outline';
 import { Notification } from '@gql/types/graphql';
 import { GET_NOTIFICATIONS } from '@gql/queries/notifications';
 import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { Logo } from '@components/LandingPage/Logo';
 
 type Props = {
   pathname: string;
@@ -74,6 +75,9 @@ const OpenSidebar = ({ pathname, session }: Props) => {
                 />
               </>
             )}
+            <Link href="/" className="flex px-2 mb-2">
+              <Logo width={180} />
+            </Link>
             {navigationData.map((item) =>
               item.isVisible(currentUser) ? (
                 <Link

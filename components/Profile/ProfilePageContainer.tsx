@@ -10,7 +10,7 @@ type Props = {
 
 const ProfilePageContainer = ({ profileData, refetchProfile }: Props) => {
   return (
-    <div className="mx-auto grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3 pt-6">
+    <div className="mx-auto grid max-w-3xl grid-cols-1 gap-6 px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3 pt-6">
       {profileData.type === 'CANDIDATE' && (
         <div className="mt-6 flex space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
           <div className="flex items-start w-full justify-end">

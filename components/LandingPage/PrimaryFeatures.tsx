@@ -71,7 +71,7 @@ export function PrimaryFeatures() {
     <section
       id="features"
       aria-label="Features for running your books"
-      className="relative overflow-hidden bg-blue-600 pt-20 pb-28 sm:py-32"
+      className="relative overflow-hidden bg-blue-600 pt-10 md:pt-15 pb-28 sm:py-32"
     >
       <Image
         className="absolute top-1/2 left-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]"
@@ -82,7 +82,7 @@ export function PrimaryFeatures() {
         unoptimized
       />
       <Container className="relative">
-        <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
+        <div className="max-w-2xl md:mx-auto text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
             Everything you need to handle your interviews.
           </h2>
@@ -98,8 +98,8 @@ export function PrimaryFeatures() {
         >
           {({ selectedIndex }) => (
             <>
-              <div className="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
-                <Tab.List className="relative z-10 flex gap-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal">
+              <div className="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5 scrollbar-hide">
+                <Tab.List className="relative z-10 flex gap-x-4 whitespace-nowrap px-10 sm:px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal">
                   {features.map((feature, featureIndex) => (
                     <div
                       key={feature.title}
@@ -141,12 +141,12 @@ export function PrimaryFeatures() {
                 {features.map((feature) => (
                   <Tab.Panel key={feature.title} unmount={false}>
                     <div className="relative sm:px-6 lg:hidden">
-                      <div className="absolute -inset-x-4 top-[-6.5rem] bottom-[-4.25rem] bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
-                      <p className="relative mx-auto max-w-2xl text-base text-white sm:text-center">
+                      <div className="absolute -inset-x-0 sm:-inset-x-4 top-[-5rem] sm:top-[-6.5rem] bottom-[-2rem] sm:bottom-[-4.25rem] bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
+                      <p className="p-4 sm:p-0 relative mx-auto max-w-2xl text-base text-white sm:text-center">
                         {feature.description}
                       </p>
                     </div>
-                    <div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
+                    <div className="mt-20 sm:mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
                       <Image
                         className="w-full"
                         src={feature.image}

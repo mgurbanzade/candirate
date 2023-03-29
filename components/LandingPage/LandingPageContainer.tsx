@@ -1,14 +1,14 @@
 import Head from 'next/head';
 
 import { CallToAction } from './CallToAction';
-import { Faqs } from './Faqs';
+// import { Faqs } from './Faqs';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Hero } from './Hero';
 import { Pricing } from './Pricing';
 import { PrimaryFeatures } from './PrimaryFeatures';
-import { SecondaryFeatures } from './SecondaryFeatures';
-import { Testimonials } from './Testimonials';
+// import { SecondaryFeatures } from './SecondaryFeatures';
+// import { Testimonials } from './Testimonials';
 
 export default function Home() {
   return (

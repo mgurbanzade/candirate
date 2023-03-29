@@ -68,10 +68,10 @@ function Plan({
   return (
     <section
       className={clsx(
-        'flex flex-col rounded-3xl px-6 sm:px-8 mx-4',
+        'flex flex-col rounded-3xl px-6 mb-6 sm:mb-0 sm:px-8 mx-4',
         featured
           ? 'order-first bg-blue-600 py-8 lg:order-none'
-          : 'lg:py-8 bg-indigo-600 ',
+          : 'py-8 bg-indigo-600 ',
       )}
     >
       <div className="flex justify-between items-center">
@@ -127,7 +127,7 @@ export function Pricing() {
             Pick your side and see how things can become easy.
           </p>
         </div>
-        <div className="-mx-4 mt-16 flex justify-center">
+        <div className="-mx-4 mt-16 flex flex-wrap sm:flex-nowrap justify-center">
           <Plan
             name="Candidate"
             price="Free"
