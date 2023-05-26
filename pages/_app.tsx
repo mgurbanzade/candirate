@@ -13,7 +13,9 @@ import { LOGOUT_MUTATION } from '@gql/mutations/auth';
 import { GET_CURRENT_USER } from '@gql/queries/users';
 import { AppContext, AppProps } from 'next/app';
 import { NotificationProvider } from '@hooks/useNotification';
+import { ToastContainer } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/global.css';
 
 function App({

@@ -33,3 +33,4 @@ export const manageTimeslotsPath = (
 ) => `/applications/${applicationUuid}/timeslots?c=${candidateUuid}`;
 export const onboardingPath = (type?: 'r' | 'c') =>
   type ? `/signup?type=${type}` : '/signup';
+export const resetPasswordPath = () => '/login/reset-password';

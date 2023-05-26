@@ -26,7 +26,6 @@ export default function EditSection({
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isDirty },
   } = useForm<UserFormInputs>();
 

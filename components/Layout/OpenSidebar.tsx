@@ -37,6 +37,9 @@ const OpenSidebar = ({ pathname, session }: Props) => {
       <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white">
         <div className="mt-2 flex flex-grow flex-col">
           <nav className="flex-1 space-y-1 px-2 pb-4">
+            <Link href="/" className="flex px-2 mb-2">
+              <Logo width={180} />
+            </Link>
             {session.currentUser.type === 'CANDIDATE' && (
               <>
                 <button
@@ -75,9 +78,6 @@ const OpenSidebar = ({ pathname, session }: Props) => {
                 />
               </>
             )}
-            <Link href="/" className="flex px-2 mb-2">
-              <Logo width={180} />
-            </Link>
             {navigationData.map((item) =>
               item.isVisible(currentUser) ? (
                 <Link

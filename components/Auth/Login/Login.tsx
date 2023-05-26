@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useAuth, AuthContextType } from '@hooks/useAuth';
-import { onboardingPath } from '@lib/routes';
+import { onboardingPath, resetPasswordPath } from '@lib/routes';
 import { Logo } from '@components/LandingPage/Logo';
 
 export type LoginInputs = {
@@ -233,12 +233,12 @@ const Login = () => {
                   </label>
                 </div> */}
               </div>
-              <a
-                href="#"
+              <Link
+                href={resetPasswordPath()}
                 className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
             <button
               type="submit"
